@@ -63,4 +63,5 @@ a {
 
 .shift {
   left: 0;
+  min-width: 90px;
 }

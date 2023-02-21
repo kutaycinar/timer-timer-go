@@ -44,3 +44,9 @@ export const parseTime = (time: number): string => {
   const seconds = getSeconds(time);
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
+
+export function isSameDay(timestamp: number) {
+  const date1 = new Date(timestamp);
+  const date2 = new Date();
+  return date1.toDateString() == date2.toDateString();
+}

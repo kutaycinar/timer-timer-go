@@ -2,16 +2,16 @@ import { parseTime, TimerType } from "../types";
 
 type TimerProps = TimerType & {
   idx: number;
-  removeTimer: any;
-  makeFocus: any;
+  deleteTimer: any;
+  focusTimer: any;
 };
 
 function Timer({
   name,
   delta,
   total,
-  removeTimer,
-  makeFocus,
+  deleteTimer,
+  focusTimer,
   idx,
 }: TimerProps) {
   return (
@@ -19,11 +19,11 @@ function Timer({
       <div style={{ margin: "auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <strong>{name}</strong>
-          <button className="contrast circ" onClick={() => removeTimer(name)}>
+          <button className="contrast circ" onClick={() => deleteTimer(name)}>
             ✖
           </button>
         </div>
-        <a onClick={() => makeFocus(idx)}>
+        <a onClick={() => focusTimer(idx)}>
           <div>{parseTime(delta)}</div>
           <progress value={delta} max={total}></progress>
         </a>
