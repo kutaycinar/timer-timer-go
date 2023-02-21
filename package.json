@@ -12,6 +12,8 @@
     "@capacitor/cli": "^4.6.3",
     "@capacitor/core": "^4.6.3",
     "@capacitor/ios": "^4.6.3",
+    "@capacitor/preferences": "^4.0.2",
+    "@picocss/pico": "^1.5.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
