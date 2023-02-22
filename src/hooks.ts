@@ -1,0 +1,281 @@
+import { LocalNotifications } from "@capacitor/local-notifications";
+import { Preferences } from "@capacitor/preferences";
+import { useEffect, useState } from "react";
+import { initial, isSameDay, State, TimerType } from "./types";
+
+export function useTimer() {
+  const [state, setState] = useState<State>(initial);
+  const [isLoaded, setLoaded] = useState(false);
+
+  // initial load
+  useEffect(() => {
+    Preferences.get({ key: "state" }).then((res) => {
+      if (res.value) {
+        setState(JSON.parse(res.value));
+        setLoaded(true);
+      }
+    });
+  }, []);
+
+  // runs once after loading state
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    // daily reset check
+    if (!isSameDay) {
+      resetAllTimers();
+    }
+
+    // increment check if not daily reset not happened
+    else if (state.state.active) {
+      const date1 = state.state.date;
+      const date2 = new Date().getTime();
+      const seconds = Math.floor((date2 - date1) / 1000);
+      const newTimers = [...state.state.timers];
+      newTimers[state.state.focus].delta = Math.max(
+        0,
+        newTimers[state.state.focus].delta - seconds
+      );
+      setState((prevState) => {
+        return {
+          state: {
+            date: prevState.state.date,
+            active: prevState.state.active,
+            focus: prevState.state.focus,
+            timers: newTimers,
+          },
+        };
+      });
+    }
+    setLoaded(false);
+  }, [isLoaded, state]);
+
+  // interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      Preferences.set({
+        key: "state",
+        value: JSON.stringify(state),
+      });
+      // check for timer active
+      if (state.state.active) {
+        const newTimers = [...state.state.timers];
+        const delta = newTimers[state.state.focus].delta;
+
+        // timer can be decremented, do that
+        if (delta > 0) {
+          newTimers[state.state.focus].delta -= 1;
+          setState((prevState) => {
+            return {
+              state: {
+                date: new Date().getTime(),
+                active: prevState.state.active,
+                focus: prevState.state.focus,
+                timers: newTimers,
+              },
+            };
+          });
+        }
+        // timer already at 0, set active to false
+        else {
+          setState((prevState) => {
+            return {
+              state: {
+                date: new Date().getTime(),
+                active: false,
+                focus: prevState.state.focus,
+                timers: prevState.state.timers,
+              },
+            };
+          });
+        }
+      }
+      // no decrement -- update date in state
+      else {
+        setState((prevState) => {
+          return {
+            state: {
+              date: new Date().getTime(),
+              active: prevState.state.active,
+              focus: prevState.state.focus,
+              timers: prevState.state.timers,
+            },
+          };
+        });
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [state]);
+
+  // addition
+  function addTimer(props: TimerType) {
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: [...prevState.state.timers, props],
+        },
+      };
+    });
+  }
+
+  // removal
+  function deleteTimer(name: string) {
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: false,
+          focus: -1,
+          timers: prevState.state.timers.filter((t) => t.name !== name),
+        },
+      };
+    });
+  }
+
+  // focus
+  function focusTimer(idx: number) {
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: idx,
+          timers: prevState.state.timers,
+        },
+      };
+    });
+  }
+
+  async function sendNotification() {
+    const notifs = await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: state.state.timers[state.state.focus].name + " Finished!",
+          body: String(state.state.timers[state.state.focus].total),
+          id: 1,
+          schedule: {
+            at: new Date(
+              Date.now() + state.state.timers[state.state.focus].delta * 1000
+            ),
+          },
+          sound: undefined,
+        },
+      ],
+    });
+    console.log("scheduled notifications", notifs);
+  }
+
+  async function cancelNotification() {
+    const notifs = await LocalNotifications.cancel({
+      notifications: [{ id: 1 }],
+    });
+    console.log("scheduled notifications", notifs);
+  }
+
+  // start
+  function signalStart() {
+    // TODO: add notification start
+    // MINUTAE: dont schedule notifications if they are for next day
+    sendNotification();
+
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: true,
+          focus: prevState.state.focus,
+          timers: prevState.state.timers,
+        },
+      };
+    });
+  }
+
+  // pause
+  function signalPause() {
+    // TODO: add notification stop
+    cancelNotification();
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: false,
+          focus: prevState.state.focus,
+          timers: prevState.state.timers,
+        },
+      };
+    });
+  }
+
+  // stop
+  function signalStop() {
+    // TODO: add notification stop
+    cancelNotification();
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: false,
+          focus: -1,
+          timers: prevState.state.timers,
+        },
+      };
+    });
+  }
+
+  // reset
+  function signalReset() {
+    // TODO: add notification stop
+
+    signalPause(); // optional
+    cancelNotification();
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus].delta = newTimers[state.state.focus].total;
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
+    });
+  }
+
+  // reset all
+  function resetAllTimers() {
+    cancelNotification();
+    const newTimers = state.state.timers.map((t) => {
+      return {
+        ...t,
+        delta: t.total,
+      };
+    });
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
+    });
+  }
+
+  return {
+    state,
+    addTimer,
+    deleteTimer,
+    focusTimer,
+    signalStart,
+    signalPause,
+    signalStop,
+    signalReset,
+    resetAllTimers,
+    sendNotification,
+  };
+}

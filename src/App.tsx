@@ -1,32 +1,68 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
+import Add from "./components/Add";
+import Focus from "./components/Focus";
+import Timer from "./components/Timer";
+import { useTimer } from "./hooks";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const {
+    state,
+    addTimer,
+    deleteTimer,
+    focusTimer,
+    signalStart,
+    signalPause,
+    signalStop,
+    signalReset,
+    resetAllTimers,
+    sendNotification,
+  } = useTimer();
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <pre>{JSON.stringify(state, undefined, 2)}</pre>
+      {state.state.focus !== -1 ? (
+        <div>
+          <Focus
+            {...state.state.timers[state.state.focus]}
+            signalStart={signalStart}
+            signalPause={signalPause}
+            signalStop={signalStop}
+            signalReset={signalReset}
+          />
+          <button
+            className="add secondary shift"
+            onClick={() => {
+              console.log("button preseed");
+              sendNotification();
+            }}
+          >
+            Send ntf
+          </button>
+        </div>
+      ) : (
+        <div className="page">
+          {state.state.timers.map((t, idx) => (
+            <Timer
+              key={t.name}
+              {...t}
+              idx={idx}
+              deleteTimer={deleteTimer}
+              focusTimer={focusTimer}
+            />
+          ))}
+          <Add addTimer={addTimer} />
+          <button
+            className="add secondary shift"
+            onClick={() => {
+              console.log("button preseed");
+              sendNotification();
+            }}
+          >
+            Send ntf
+          </button>
+        </div>
+      )}
     </div>
   );
 }
