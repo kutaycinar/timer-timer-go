@@ -1,3 +1,4 @@
+import { LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
 import { useEffect, useState } from "react";
 import { initial, isSameDay, State, TimerType } from "./types";
@@ -16,14 +17,16 @@ export function useTimer() {
     });
   }, []);
 
-  // compare the date when state is updated (only once)
+  // runs once after loading state
   useEffect(() => {
     if (!isLoaded) return;
-    // daily reset check at load
+
+    // daily reset check
     if (!isSameDay) {
       resetAllTimers();
     }
-    // increment check if not daily reset
+
+    // increment check if not daily reset not happened
     else if (state.state.active) {
       const date1 = state.state.date;
       const date2 = new Date().getTime();
@@ -44,7 +47,6 @@ export function useTimer() {
         };
       });
     }
-
     setLoaded(false);
   }, [isLoaded, state]);
 
@@ -55,13 +57,13 @@ export function useTimer() {
         key: "state",
         value: JSON.stringify(state),
       });
-
-      // decrement active timer
+      // check for timer active
       if (state.state.active) {
         const newTimers = [...state.state.timers];
         const delta = newTimers[state.state.focus].delta;
+
+        // timer can be decremented, do that
         if (delta > 0) {
-          // timer can be decremented, do that
           newTimers[state.state.focus].delta -= 1;
           setState((prevState) => {
             return {
@@ -73,8 +75,9 @@ export function useTimer() {
               },
             };
           });
-        } else {
-          // timer already at 0, set active to false
+        }
+        // timer already at 0, set active to false
+        else {
           setState((prevState) => {
             return {
               state: {
@@ -86,8 +89,9 @@ export function useTimer() {
             };
           });
         }
-      } else {
-        // timer already at 0, set active to false
+      }
+      // no decrement -- update date in state
+      else {
         setState((prevState) => {
           return {
             state: {
@@ -145,10 +149,37 @@ export function useTimer() {
     });
   }
 
+  async function sendNotification() {
+    const notifs = await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: state.state.timers[state.state.focus].name + " Finished!",
+          body: String(state.state.timers[state.state.focus].total),
+          id: 1,
+          schedule: {
+            at: new Date(
+              Date.now() + state.state.timers[state.state.focus].delta * 1000
+            ),
+          },
+          sound: undefined,
+        },
+      ],
+    });
+    console.log("scheduled notifications", notifs);
+  }
+
+  async function cancelNotification() {
+    const notifs = await LocalNotifications.cancel({
+      notifications: [{ id: 1 }],
+    });
+    console.log("scheduled notifications", notifs);
+  }
+
   // start
   function signalStart() {
     // TODO: add notification start
     // MINUTAE: dont schedule notifications if they are for next day
+    sendNotification();
 
     setState((prevState) => {
       return {
@@ -165,7 +196,7 @@ export function useTimer() {
   // pause
   function signalPause() {
     // TODO: add notification stop
-
+    cancelNotification();
     setState((prevState) => {
       return {
         state: {
@@ -181,7 +212,7 @@ export function useTimer() {
   // stop
   function signalStop() {
     // TODO: add notification stop
-
+    cancelNotification();
     setState((prevState) => {
       return {
         state: {
@@ -198,8 +229,8 @@ export function useTimer() {
   function signalReset() {
     // TODO: add notification stop
 
-    signalPause(); // maybe?
-
+    signalPause(); // optional
+    cancelNotification();
     const newTimers = [...state.state.timers];
     newTimers[state.state.focus].delta = newTimers[state.state.focus].total;
     setState((prevState) => {
@@ -216,6 +247,7 @@ export function useTimer() {
 
   // reset all
   function resetAllTimers() {
+    cancelNotification();
     const newTimers = state.state.timers.map((t) => {
       return {
         ...t,
@@ -244,5 +276,6 @@ export function useTimer() {
     signalStop,
     signalReset,
     resetAllTimers,
+    sendNotification,
   };
 }
