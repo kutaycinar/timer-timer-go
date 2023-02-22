@@ -111,9 +111,7 @@ function Add({ addTimer }: { addTimer: any }) {
               data-target="modal-example"
               onClick={handleFormSubmit}
               //   to do add disable state
-              disabled={
-                name === "" || (hour === 0 && minutes === 0 && seconds === 0)
-              }
+              disabled={name.trim() === "" || hour + minutes + seconds <= 0}
             >
               Confirm
             </button>
