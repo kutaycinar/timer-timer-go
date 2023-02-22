@@ -1,6 +1,7 @@
 import "./App.css";
 import Add from "./components/Add";
 import Focus from "./components/Focus";
+import Overview from "./components/Overview";
 import Timer from "./components/Timer";
 import { useTimer } from "./hooks";
 
@@ -14,7 +15,7 @@ function App() {
     signalPause,
     signalStop,
     signalReset,
-    resetAllTimers,
+    getOverall,
   } = useTimer();
 
   return (
@@ -31,6 +32,7 @@ function App() {
         </div>
       ) : (
         <div className="page">
+          <Overview {...getOverall()} />
           {state.state.timers.map((t, idx) => (
             <Timer
               key={t.name}

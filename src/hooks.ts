@@ -2,6 +2,7 @@ import { Capacitor } from "@capacitor/core";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
 import { useEffect, useState } from "react";
+import { OverviewProps } from "./components/Overview";
 import { initial, isSameDay, State, TimerType } from "./types";
 
 export function useTimer() {
@@ -270,6 +271,26 @@ export function useTimer() {
     });
   }
 
+  // accumulated timer data
+  function getOverall(): OverviewProps {
+    const reducer = (accumulator: TimerType, currentValue: TimerType) => ({
+      name: "",
+      delta: accumulator.delta + currentValue.delta,
+      total: accumulator.total + currentValue.total,
+    });
+
+    const { delta, total } = state.state.timers.reduce(reducer, {
+      name: "",
+      delta: 0,
+      total: 0,
+    });
+
+    return {
+      delta,
+      total,
+    };
+  }
+
   return {
     state,
     addTimer,
@@ -280,5 +301,6 @@ export function useTimer() {
     signalStop,
     signalReset,
     resetAllTimers,
+    getOverall,
   };
 }
