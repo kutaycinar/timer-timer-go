@@ -15,12 +15,10 @@ function App() {
     signalStop,
     signalReset,
     resetAllTimers,
-    sendNotification,
   } = useTimer();
 
   return (
     <div>
-      <pre>{JSON.stringify(state, undefined, 2)}</pre>
       {state.state.focus !== -1 ? (
         <div>
           <Focus
@@ -30,15 +28,6 @@ function App() {
             signalStop={signalStop}
             signalReset={signalReset}
           />
-          <button
-            className="add secondary shift"
-            onClick={() => {
-              console.log("button preseed");
-              sendNotification();
-            }}
-          >
-            Send ntf
-          </button>
         </div>
       ) : (
         <div className="page">
@@ -52,15 +41,6 @@ function App() {
             />
           ))}
           <Add addTimer={addTimer} />
-          <button
-            className="add secondary shift"
-            onClick={() => {
-              console.log("button preseed");
-              sendNotification();
-            }}
-          >
-            Send ntf
-          </button>
         </div>
       )}
     </div>
