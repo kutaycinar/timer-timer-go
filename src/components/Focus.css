@@ -3,25 +3,26 @@
   flex-direction: column;
   display: flex;
   align-items: center;
-}
-
-.top-row {
-  display: flex;
-  width: 100%;
-  align-items: "center";
+  justify-content: center;
+  height: 100vh;
 }
 
 .back-button {
   background-color: transparent;
   border: none;
-  width: 10%;
-  justify-content: "center";
+  position: absolute;
+  left: -42%;
+  top: 10px;
+}
+
+.play-button {
+  flex-basis: 50px;
+  border-radius: 50%;
 }
 
 .title {
-  width: 90%;
-  text-align: center;
-  align-self: center;
+  position: absolute;
+  top: 20px;
 }
 
 .button-container {
@@ -30,4 +31,16 @@
   width: 100%;
   gap: 5%;
   padding: 5%;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+}
+
+.action-button {
+  flex-basis: 50px;
 }

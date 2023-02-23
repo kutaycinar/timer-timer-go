@@ -1,5 +1,11 @@
 import { parseTime, TimerType } from "../types";
-import { BsPlayFill, BsPauseFill, BsChevronLeft } from "react-icons/bs";
+import {
+  FaUndoAlt,
+  FaPlay,
+  FaPause,
+  FaChevronLeft,
+  FaCog,
+} from "react-icons/fa";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useState } from "react";
 import "./Focus.css";
@@ -25,12 +31,10 @@ function Focus({
   const [key, setKey] = useState(0);
   return (
     <div className="container">
-      <div className="top-row">
-        <button onClick={() => signalStop()} className="back-button">
-          <BsChevronLeft />
-        </button>
-        <h4 className="title">{name}</h4>
-      </div>
+      <button onClick={() => signalStop()} className="back-button">
+        <FaChevronLeft />
+      </button>
+      <h3 className="title">{name}</h3>
       <CountdownCircleTimer
         key={key}
         isPlaying={isRunning}
@@ -40,21 +44,28 @@ function Focus({
       >
         {({ remainingTime }) => parseTime(remainingTime)}
       </CountdownCircleTimer>
-      <br />
-      <br />
+
       <div className="button-container">
-        <button onClick={() => (isRunning ? signalPause() : signalStart())}>
-          {isRunning ? <BsPauseFill /> : <BsPlayFill />}
-        </button>
-        <br />
         <button
-          className="secondary"
+          className="play-button"
+          onClick={() => (isRunning ? signalPause() : signalStart())}
+        >
+          {isRunning ? <FaPause /> : <FaPlay />}
+        </button>
+      </div>
+
+      <div className="footer-buttons">
+        <button
+          className="action-button"
           onClick={() => {
             signalReset();
             setKey(key + 1);
           }}
         >
-          Reset
+          <FaUndoAlt />
+        </button>
+        <button className="action-button">
+          <FaCog />
         </button>
       </div>
     </div>
