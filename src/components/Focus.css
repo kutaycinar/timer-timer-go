@@ -12,7 +12,7 @@
   border: none;
   position: absolute;
   left: -42%;
-  top: 10px;
+  top: 15px;
 }
 
 .play-button {
@@ -22,7 +22,7 @@
 
 .title {
   position: absolute;
-  top: 20px;
+  top: 25px;
 }
 
 .button-container {

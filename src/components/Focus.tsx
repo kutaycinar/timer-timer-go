@@ -29,8 +29,17 @@ function Focus({
   isRunning,
 }: FocusProps) {
   const [key, setKey] = useState(0);
+
   return (
     <div className="container">
+      <svg>
+        <defs>
+          <linearGradient id="testing" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="5%" stopColor="#24DBE4" />
+            <stop offset="95%" stopColor="#5681F6" />
+          </linearGradient>
+        </defs>
+      </svg>
       <button onClick={() => signalStop()} className="back-button">
         <FaChevronLeft />
       </button>
@@ -40,9 +49,15 @@ function Focus({
         isPlaying={isRunning}
         duration={total || 0}
         initialRemainingTime={delta}
-        colors={"#A30000"}
+        colors={"url(#testing)"}
+        size={300}
+        strokeWidth={15}
+        trailStrokeWidth={30}
+        trailColor="#292660"
       >
-        {({ remainingTime }) => parseTime(remainingTime)}
+        {({ remainingTime, color = "A30000" }) => (
+          <h1 color={color}>{parseTime(remainingTime)} </h1>
+        )}
       </CountdownCircleTimer>
 
       <div className="button-container">
