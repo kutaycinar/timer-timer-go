@@ -1,5 +1,5 @@
 import { useReducer, useState } from "react";
-import { TimerType } from "../types";
+import { State, TimerType } from "../types";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
   Array(Math.ceil((stop - start) / step))
@@ -16,7 +16,7 @@ function Add({ addTimer }: { addTimer: any }) {
     hour: 0,
   };
 
-  function reducer(state: any, action: any) {
+  function reducer(state: State, action: any) {
     switch (action.type) {
       default:
         return { ...state, ...action };
@@ -31,7 +31,7 @@ function Add({ addTimer }: { addTimer: any }) {
     setFormValues({ [name]: value });
   }
 
-  function handleFormSubmit(event: any) {
+  function handleFormSubmit() {
     setModal(!modal);
     const params: TimerType = {
       name,
@@ -42,7 +42,7 @@ function Add({ addTimer }: { addTimer: any }) {
     addTimer(params);
     setFormValues(initialValues);
   }
-  function handleFormCancel(event: any) {
+  function handleFormCancel() {
     setFormValues(initialValues);
     setModal(!modal);
   }
@@ -111,9 +111,7 @@ function Add({ addTimer }: { addTimer: any }) {
               data-target="modal-example"
               onClick={handleFormSubmit}
               //   to do add disable state
-              disabled={
-                name === "" || (hour === 0 && minutes === 0 && seconds === 0)
-              }
+              disabled={name.trim() === "" || hour + minutes + seconds <= 0}
             >
               Confirm
             </button>
