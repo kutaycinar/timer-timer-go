@@ -141,7 +141,7 @@ function Add({ addTimer }: { addTimer: any }) {
               </div>
             )}
             <label htmlFor="switch">
-              Reverse
+              Count Down
               <input
                 style={{ marginLeft: 8, marginRight: 8 }}
                 type="checkbox"
@@ -149,6 +149,7 @@ function Add({ addTimer }: { addTimer: any }) {
                 role="switch"
                 onChange={handleFormChange}
               />
+              Count Up
             </label>
             <br />
           </div>

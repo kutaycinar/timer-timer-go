@@ -17,11 +17,12 @@ function App() {
     signalReset,
     getOverall,
     countNext,
+    reverseSelf,
   } = useTimer();
 
   return (
     <div>
-      <pre>{JSON.stringify(state, undefined, 2)}</pre>
+      {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
       {state.state.focus !== -1 ? (
         <div>
           <Focus
@@ -32,6 +33,7 @@ function App() {
             signalReset={signalReset}
             isRunning={state.state.active}
             countNext={countNext}
+            reverseSelf={reverseSelf}
           />
         </div>
       ) : (

@@ -1,4 +1,4 @@
-import { parseTime } from "../types";
+import { parseTime } from "../utils";
 
 export type OverviewProps = {
   delta: number;

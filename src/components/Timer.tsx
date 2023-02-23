@@ -1,4 +1,5 @@
-import { parseTime, TimerType } from "../types";
+import {  TimerType } from "../types";
+import { parseTime } from "../utils";
 
 type TimerProps = TimerType & {
   idx: number;
