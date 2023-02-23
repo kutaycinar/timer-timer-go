@@ -28,6 +28,7 @@ function App() {
             signalPause={signalPause}
             signalStop={signalStop}
             signalReset={signalReset}
+            isRunning={state.state.active}
           />
         </div>
       ) : (
