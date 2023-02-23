@@ -2,6 +2,8 @@ export type TimerType = {
   name: string;
   delta: number;
   total: number;
+  counter: boolean;
+  reverse: boolean;
 };
 
 export type State = {

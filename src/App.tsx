@@ -16,10 +16,12 @@ function App() {
     signalStop,
     signalReset,
     getOverall,
+    countNext,
   } = useTimer();
 
   return (
     <div>
+      <pre>{JSON.stringify(state, undefined, 2)}</pre>
       {state.state.focus !== -1 ? (
         <div>
           <Focus
@@ -28,6 +30,7 @@ function App() {
             signalPause={signalPause}
             signalStop={signalStop}
             signalReset={signalReset}
+            countNext={countNext}
           />
         </div>
       ) : (

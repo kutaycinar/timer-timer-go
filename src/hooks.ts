@@ -187,6 +187,21 @@ export function useTimer() {
     });
   }
 
+  function countNext() {
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus].delta -= 1;
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
+    });
+  }
+
   // start
   function signalStart() {
     sendNotification();
@@ -277,12 +292,16 @@ export function useTimer() {
       name: "",
       delta: accumulator.delta + currentValue.delta,
       total: accumulator.total + currentValue.total,
+      counter: false,
+      reverse: false,
     });
 
     const { delta, total } = state.state.timers.reduce(reducer, {
       name: "",
       delta: 0,
       total: 0,
+      counter: false,
+      reverse: false,
     });
 
     return {
@@ -302,5 +321,6 @@ export function useTimer() {
     signalReset,
     resetAllTimers,
     getOverall,
+    countNext,
   };
 }
