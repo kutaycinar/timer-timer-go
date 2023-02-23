@@ -42,19 +42,21 @@ function Focus({
       </CountdownCircleTimer>
       <br />
       <br />
-      <button onClick={() => (isRunning ? signalPause() : signalStart())}>
-        {isRunning ? <BsPauseFill /> : <BsPlayFill />}
-      </button>
-      <br />
-      <button
-        className="secondary"
-        onClick={() => {
-          signalReset();
-          setKey(key + 1);
-        }}
-      >
-        Reset
-      </button>
+      <div className="button-container">
+        <button onClick={() => (isRunning ? signalPause() : signalStart())}>
+          {isRunning ? <BsPauseFill /> : <BsPlayFill />}
+        </button>
+        <br />
+        <button
+          className="secondary"
+          onClick={() => {
+            signalReset();
+            setKey(key + 1);
+          }}
+        >
+          Reset
+        </button>
+      </div>
     </div>
   );
 }
