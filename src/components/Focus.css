@@ -1,0 +1,53 @@
+.container {
+  margin: 5px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.back-button {
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  width: 50px;
+  height: 50px;
+}
+
+.play-button {
+  flex-basis: 50px;
+  border-radius: 50%;
+}
+
+.title {
+  position: absolute;
+  top: 25px;
+  margin-bottom: 0px;
+}
+
+.timer-text {
+  margin-bottom: 0px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  gap: 5%;
+  padding: 5%;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+}
+
+.action-button {
+  flex-basis: 50px;
+}
