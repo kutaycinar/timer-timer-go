@@ -1,5 +1,8 @@
 import { parseTime, TimerType } from "../types";
 import { BsPlayFill, BsPauseFill, BsChevronLeft } from "react-icons/bs";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useState } from "react";
+import "./Focus.css";
 
 type FocusProps = Partial<TimerType> & {
   signalStart: any;
@@ -19,31 +22,37 @@ function Focus({
   signalReset,
   isRunning,
 }: FocusProps) {
+  const [key, setKey] = useState(0);
   return (
-    <div style={{ margin: "5px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <button
-          onClick={() => signalStop()}
-          style={{ flex: 0, backgroundColor: "transparent", border: "none" }}
-        >
+    <div className="container">
+      <div className="top-row">
+        <button onClick={() => signalStop()} className="back-button">
           <BsChevronLeft />
         </button>
-        <h4 style={{ flex: 1, textAlign: "center" }}>{name}</h4>
+        <h4 className="title">{name}</h4>
       </div>
-      <div>{parseTime(delta!)}</div>
-      <progress value={delta} max={total} />
+      <CountdownCircleTimer
+        key={key}
+        isPlaying={isRunning}
+        duration={total || 0}
+        initialRemainingTime={delta}
+        colors={"#A30000"}
+      >
+        {({ remainingTime }) => parseTime(remainingTime)}
+      </CountdownCircleTimer>
       <br />
       <br />
       <button onClick={() => (isRunning ? signalPause() : signalStart())}>
         {isRunning ? <BsPauseFill /> : <BsPlayFill />}
       </button>
       <br />
-      <button className="secondary" onClick={() => signalReset()}>
+      <button
+        className="secondary"
+        onClick={() => {
+          signalReset();
+          setKey(key + 1);
+        }}
+      >
         Reset
       </button>
     </div>

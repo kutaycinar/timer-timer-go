@@ -1,0 +1,25 @@
+.container {
+  margin: 5px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+
+.top-row {
+  display: flex;
+  width: 100%;
+  align-items: "center";
+}
+
+.back-button {
+  background-color: transparent;
+  border: none;
+  width: 10%;
+  justify-content: "center";
+}
+
+.title {
+  width: 90%;
+  text-align: center;
+  align-self: center;
+}
