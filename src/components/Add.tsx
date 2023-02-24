@@ -136,7 +136,7 @@ function Modal({
                     value={limit}
                     onChange={handleFormChange}
                   >
-                    {range(1, 9, 1).map((n) => (
+                    {range(1, 13, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>

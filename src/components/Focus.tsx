@@ -11,9 +11,8 @@ import {
 import { TimerType } from "../types";
 import "./Focus.css";
 import {
-  buildStyles,
-  CircularProgressbarWithChildren,
   CircularProgressbar,
+  CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import {
@@ -50,6 +49,23 @@ function Focus({
   editTimer,
 }: FocusProps) {
   const [key, setKey] = useState(0);
+
+  function Timer() {
+    return (
+      <CircularProgressbar
+        strokeWidth={5}
+        value={100 - (delta! / total!) * 100}
+        text={`${delta!}`}
+        styles={{
+          path: { stroke: `url(#gradient)`, height: "100%" },
+          trail: {
+            stroke: "#2e2e2e",
+          },
+        }}
+      />
+    );
+  }
+
   const init = {
     name,
     seconds: getSeconds(total!),
@@ -59,51 +75,19 @@ function Focus({
     counter,
   };
 
-  console.log("delta:", delta);
-
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
         <FaChevronLeft />
       </button>
       <h3 className="title">{name}</h3>
-      <div style={{ height: "300px", width: "300px", marginBottom: 100 }}>
+      <div className="timer-container">
         <GradientSVG />
-        {!counter && (
-          <CountdownCircleTimer
-            key={key}
-            isPlaying={isRunning}
-            duration={total || 0}
-            initialRemainingTime={delta}
-            colors={"url(#gradient)"}
-            size={300}
-            strokeWidth={15}
-            trailStrokeWidth={30}
-            trailColor="#292660"
-          >
-            {({ remainingTime, color = "A30000" }) => (
-              <h1 className="timer-text" color={color}>
-                {parseTime(remainingTime)}
-              </h1>
-            )}
-          </CountdownCircleTimer>
-        )}
-        {!counter && (
-          <div className="button-container">
-            <button
-              className="play-button"
-              onClick={() => (isRunning ? signalPause() : signalStart())}
-              disabled={delta === 0}
-            >
-              {isRunning ? <FaPause /> : <FaPlay />}
-            </button>
-          </div>
-        )}
-        {counter && (
+        {counter ? (
           <CircularProgressbarWithChildren
             strokeWidth={5}
-            value={(delta! / total!) * 100}
-            text={`${total! - delta!}`}
+            value={100 - (delta! / total!) * 100}
+            text={`${delta!} left`}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
@@ -111,28 +95,50 @@ function Focus({
               },
             }}
           >
-            <RadialSeparators
-              count={total!}
-              style={{
-                background: "var(--background-color)",
-                border: "1px solid var(--background-color)",
-                width: "18px",
-                height: `18px`,
-              }}
-            />
+            {total !== 1 && (
+              <RadialSeparators
+                count={total!}
+                style={{
+                  background: "var(--background-color)",
+                  border: "1px solid var(--background-color)",
+                  width: "19px",
+                  height: `19px`,
+                }}
+              />
+            )}
           </CircularProgressbarWithChildren>
+        ) : (
+          <CircularProgressbar
+            strokeWidth={5}
+            value={100 - (delta! / total!) * 100}
+            text={`${delta!}`}
+            styles={{
+              path: { stroke: `url(#gradient)`, height: "100%" },
+              trail: {
+                stroke: "#2e2e2e",
+              },
+            }}
+          />
         )}
-        {counter && (
-          <div className="button-container">
-            <button
-              className="play-button"
-              onClick={() => (isRunning ? countNext() : countNext())}
-              // disabled={delta === 0}
-            >
-              {isRunning ? <FaPlus /> : <FaPlus />}
-            </button>
-          </div>
-        )}
+        <br />
+        <br />
+        <div className="button-container">
+          <button
+            className="play-button"
+            onClick={() =>
+              counter ? countNext() : isRunning ? signalPause() : signalStart()
+            }
+            disabled={delta === 0}
+          >
+            {counter ? (
+              <FaPlus />
+            ) : isRunning ? (
+              <FaPause />
+            ) : (
+              <FaPlay style={{ position: "relative", left: "2px" }} />
+            )}
+          </button>
+        </div>
       </div>
       <div className="footer-buttons">
         <button

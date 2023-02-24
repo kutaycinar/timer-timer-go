@@ -1,3 +1,4 @@
+import { FaCog, FaPlus } from "react-icons/fa";
 import "./App.css";
 import Modal from "./components/Add";
 import Focus from "./components/Focus";
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <BrowserWrapper>
-      <pre>{JSON.stringify(state, undefined, 2)}</pre>
+      {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
       {state.state.focus !== -1 ? (
         <div>
           <Focus
@@ -50,7 +51,9 @@ function App() {
             />
           ))}
           <Modal setHook={addTimer}>
-            <button className="add">Add</button>
+            <button className="add">
+              <FaPlus />
+            </button>
           </Modal>
         </div>
       )}
