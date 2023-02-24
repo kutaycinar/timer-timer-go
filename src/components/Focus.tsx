@@ -10,7 +10,10 @@ import {
 } from "react-icons/fa";
 import { TimerType } from "../types";
 import "./Focus.css";
-import { CircularProgressbarWithChildren } from "react-circular-progressbar";
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import {
   getHours,
@@ -49,29 +52,7 @@ function Focus({
 
   function Timer() {
     return (
-      <CountdownCircleTimer
-        key={key}
-        isPlaying={isRunning}
-        duration={total || 0}
-        initialRemainingTime={delta}
-        colors={"url(#gradient)"}
-        size={300}
-        strokeWidth={15}
-        trailStrokeWidth={30}
-        trailColor="#292660"
-      >
-        {({ remainingTime, color = "A30000" }) => (
-          <h1 className="timer-text" color={color}>
-            {parseTime(remainingTime)}{" "}
-          </h1>
-        )}
-      </CountdownCircleTimer>
-    );
-  }
-
-  function Counter() {
-    return (
-      <CircularProgressbarWithChildren
+      <CircularProgressbar
         strokeWidth={5}
         value={100 - (delta! / total!) * 100}
         text={`${delta!}`}
@@ -81,17 +62,7 @@ function Focus({
             stroke: "#2e2e2e",
           },
         }}
-      >
-        <RadialSeparators
-          count={total!}
-          style={{
-            background: "var(--background-color)",
-            border: "1px solid var(--background-color)",
-            width: "19px",
-            height: `19px`,
-          }}
-        />
-      </CircularProgressbarWithChildren>
+      />
     );
   }
 
@@ -112,7 +83,44 @@ function Focus({
       <h3 className="title">{name}</h3>
       <div className="timer-container">
         <GradientSVG />
-        {counter ? <Counter /> : <Timer />}
+        {counter ? (
+          <CircularProgressbarWithChildren
+            strokeWidth={5}
+            value={100 - (delta! / total!) * 100}
+            text={`${delta!} left`}
+            styles={{
+              path: { stroke: `url(#gradient)`, height: "100%" },
+              trail: {
+                stroke: "#2e2e2e",
+              },
+            }}
+          >
+            {total !== 1 && (
+              <RadialSeparators
+                count={total!}
+                style={{
+                  background: "var(--background-color)",
+                  border: "1px solid var(--background-color)",
+                  width: "19px",
+                  height: `19px`,
+                }}
+              />
+            )}
+          </CircularProgressbarWithChildren>
+        ) : (
+          <CircularProgressbar
+            strokeWidth={5}
+            value={100 - (delta! / total!) * 100}
+            text={`${delta!}`}
+            styles={{
+              path: { stroke: `url(#gradient)`, height: "100%" },
+              trail: {
+                stroke: "#2e2e2e",
+              },
+            }}
+          />
+        )}
+        <br />
         <br />
         <div className="button-container">
           <button
@@ -122,7 +130,13 @@ function Focus({
             }
             disabled={delta === 0}
           >
-            {counter ? <FaPlus /> : isRunning ? <FaPause /> : <FaPlay />}
+            {counter ? (
+              <FaPlus />
+            ) : isRunning ? (
+              <FaPause />
+            ) : (
+              <FaPlay style={{ position: "relative", left: "2px" }} />
+            )}
           </button>
         </div>
       </div>

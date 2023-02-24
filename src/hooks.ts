@@ -60,8 +60,8 @@ export function useTimer() {
 
   // interval
   useEffect(() => {
-    const interval = setInterval(() => {
-      Preferences.set({
+    const interval = setInterval(async () => {
+      await Preferences.set({
         key: "state",
         value: JSON.stringify(state),
       });
@@ -69,7 +69,6 @@ export function useTimer() {
       if (state.state.active) {
         const newTimers = [...state.state.timers];
         const delta = newTimers[state.state.focus].delta;
-
         // timer can be decremented, do that
         if (delta > 0) {
           newTimers[state.state.focus].delta -= 1;
@@ -312,8 +311,10 @@ export function useTimer() {
   function getOverall(): OverviewProps {
     const reducer = (accumulator: TimerType, currentValue: TimerType) => ({
       name: "",
-      delta: accumulator.delta + currentValue.delta,
-      total: accumulator.total + currentValue.total,
+      delta:
+        Number(accumulator.delta) +
+        Number(currentValue.delta) / Number(currentValue.total),
+      total: Number(accumulator.total) + 1,
       counter: false,
       reverse: false,
     });
@@ -327,8 +328,8 @@ export function useTimer() {
     });
 
     return {
-      delta,
-      total,
+      delta: (total - delta) / state.state.timers.length,
+      total: total / state.state.timers.length,
     };
   }
 

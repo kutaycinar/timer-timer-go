@@ -1,4 +1,4 @@
-import {  TimerType } from "../types";
+import { TimerType } from "../types";
 import { parseTime } from "../utils";
 
 type TimerProps = TimerType & {
@@ -11,6 +11,7 @@ function Timer({
   name,
   delta,
   total,
+  counter,
   deleteTimer,
   focusTimer,
   idx,
@@ -25,8 +26,12 @@ function Timer({
           </button>
         </div>
         <a onClick={() => focusTimer(idx)}>
-          <div>{parseTime(delta)}</div>
-          <progress value={delta} max={total}></progress>
+          {delta !== 0 ? (
+            <div>{counter ? delta : parseTime(delta)} left</div>
+          ) : (
+            <div>Complete!</div>
+          )}
+          <progress value={total - delta} max={total}></progress>
         </a>
       </div>
     </div>
