@@ -129,6 +129,23 @@ export function useTimer() {
     });
   }
 
+  // edit
+  function editTimer(props: TimerType) {
+    console.log(props);
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus] = props;
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
+    });
+  }
+
   // removal
   function deleteTimer(name: string) {
     setState((prevState) => {
@@ -195,22 +212,6 @@ export function useTimer() {
       0,
       newTimers[state.state.focus].delta
     );
-    setState((prevState) => {
-      return {
-        state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
-          timers: newTimers,
-        },
-      };
-    });
-  }
-
-  function reverseSelf() {
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].reverse =
-      !newTimers[state.state.focus].reverse;
     setState((prevState) => {
       return {
         state: {
@@ -343,6 +344,6 @@ export function useTimer() {
     resetAllTimers,
     getOverall,
     countNext,
-    reverseSelf,
+    editTimer,
   };
 }

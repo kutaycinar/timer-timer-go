@@ -6,17 +6,23 @@ const range = (start: number = 0, stop: number = 31, step = 5) =>
     .fill(start)
     .map((x, y) => x + y * step);
 
-function Add({ addTimer }: { addTimer: any }) {
-  const [modal, setModal] = useState(false);
-
-  const initialValues = {
+function Modal({
+  setHook,
+  children,
+  initialValues = {
     name: "",
     seconds: 0,
     minutes: 0,
     hour: 0,
     limit: 1,
-    reverse: false,
-  };
+    counter: false,
+  },
+}: {
+  setHook: any;
+  children: any;
+  initialValues?: any;
+}) {
+  const [modal, setModal] = useState(false);
 
   function reducer(state: State, action: any) {
     switch (action.type) {
@@ -26,9 +32,9 @@ function Add({ addTimer }: { addTimer: any }) {
   }
   const [formValues, setFormValues] = useReducer(reducer, initialValues);
 
-  const [counter, setCounter] = useState(false);
+  const [counter, setCounter] = useState(initialValues.counter);
 
-  const { name, seconds, minutes, hour, limit, reverse } = formValues;
+  const { name, seconds, minutes, hour, limit } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
@@ -46,9 +52,8 @@ function Add({ addTimer }: { addTimer: any }) {
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : limit,
       counter,
-      reverse,
     };
-    addTimer(params);
+    setHook(params);
     setFormValues(initialValues);
   }
   function handleFormCancel() {
@@ -58,9 +63,7 @@ function Add({ addTimer }: { addTimer: any }) {
 
   return (
     <>
-      <button className="add" onClick={() => setModal(true)}>
-        Add
-      </button>
+      <a onClick={() => setModal(true)}>{children}</a>
       <dialog open={modal}>
         <article className="modal">
           <label>
@@ -140,17 +143,6 @@ function Add({ addTimer }: { addTimer: any }) {
                 </label>
               </div>
             )}
-            <label htmlFor="switch">
-              Count Down
-              <input
-                style={{ marginLeft: 8, marginRight: 8 }}
-                type="checkbox"
-                name="reverse"
-                role="switch"
-                onChange={handleFormChange}
-              />
-              Count Up
-            </label>
             <br />
           </div>
           <footer style={{ display: "flex" }}>
@@ -180,4 +172,4 @@ function Add({ addTimer }: { addTimer: any }) {
   );
 }
 
-export default Add;
+export default Modal;
