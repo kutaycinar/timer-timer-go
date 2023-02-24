@@ -1,5 +1,5 @@
 import "./App.css";
-import Add from "./components/Add";
+import Modal from "./components/Add";
 import Focus from "./components/Focus";
 import Overview from "./components/Overview";
 import Timer from "./components/Timer";
@@ -18,12 +18,12 @@ function App() {
     signalReset,
     getOverall,
     countNext,
-    reverseSelf,
+    editTimer,
   } = useTimer();
 
   return (
     <BrowserWrapper>
-      {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
+      <pre>{JSON.stringify(state, undefined, 2)}</pre>
       {state.state.focus !== -1 ? (
         <div>
           <Focus
@@ -34,7 +34,7 @@ function App() {
             signalReset={signalReset}
             isRunning={state.state.active}
             countNext={countNext}
-            reverseSelf={reverseSelf}
+            editTimer={editTimer}
           />
         </div>
       ) : (
@@ -49,7 +49,9 @@ function App() {
               focusTimer={focusTimer}
             />
           ))}
-          <Add addTimer={addTimer} />
+          <Modal setHook={addTimer}>
+            <button className="add">Add</button>
+          </Modal>
         </div>
       )}
     </BrowserWrapper>

@@ -16,7 +16,15 @@ import {
   CircularProgressbar,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { GradientSVG, parseTime, RadialSeparators } from "../utils";
+import {
+  getHours,
+  getMinutes,
+  getSeconds,
+  GradientSVG,
+  parseTime,
+  RadialSeparators,
+} from "../utils";
+import Modal from "./Add";
 
 type FocusProps = Partial<TimerType> & {
   signalStart: any;
@@ -25,7 +33,7 @@ type FocusProps = Partial<TimerType> & {
   signalReset: any;
   isRunning: boolean;
   countNext: any;
-  reverseSelf: any;
+  editTimer: any;
 };
 
 function Focus({
@@ -33,16 +41,26 @@ function Focus({
   delta,
   total,
   counter,
-  reverse,
   signalPause,
   signalStop,
   signalStart,
   signalReset,
   isRunning,
   countNext,
-  reverseSelf,
+  editTimer,
 }: FocusProps) {
   const [key, setKey] = useState(0);
+  const init = {
+    name,
+    seconds: getSeconds(total!),
+    minutes: getMinutes(total!),
+    hour: getHours(total!),
+    limit: counter ? total : 1,
+    counter,
+  };
+
+  console.log("delta:", delta);
+
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
@@ -65,7 +83,7 @@ function Focus({
           >
             {({ remainingTime, color = "A30000" }) => (
               <h1 className="timer-text" color={color}>
-                {parseTime(remainingTime)}{" "}
+                {parseTime(remainingTime)}
               </h1>
             )}
           </CountdownCircleTimer>
@@ -84,12 +102,8 @@ function Focus({
         {counter && (
           <CircularProgressbarWithChildren
             strokeWidth={5}
-            value={
-              !reverse
-                ? (delta! / total!) * 100
-                : ((total! - delta!) / total!) * 100
-            }
-            text={`${reverse ? total! - delta! : delta}`}
+            value={(delta! / total!) * 100}
+            text={`${total! - delta!}`}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
@@ -130,9 +144,11 @@ function Focus({
         >
           <FaUndoAlt />
         </button>
-        <button className="action-button" onClick={() => reverseSelf()}>
-          <FaCog />
-        </button>
+        <Modal setHook={editTimer} initialValues={init}>
+          <button className="action-button">
+            <FaCog />
+          </button>
+        </Modal>
       </div>
     </div>
   );
