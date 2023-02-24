@@ -23,7 +23,7 @@ function App() {
 
   return (
     <BrowserWrapper>
-      {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
+      <pre>{JSON.stringify(state, undefined, 2)}</pre>
       {state.state.focus !== -1 ? (
         <div>
           <Focus

@@ -131,6 +131,7 @@ export function useTimer() {
 
   // edit
   function editTimer(props: TimerType) {
+    console.log(props);
     const newTimers = [...state.state.timers];
     newTimers[state.state.focus] = props;
     setState((prevState) => {

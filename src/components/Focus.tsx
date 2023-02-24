@@ -58,6 +58,9 @@ function Focus({
     limit: counter ? total : 1,
     counter,
   };
+
+  console.log("delta:", delta);
+
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
@@ -80,7 +83,7 @@ function Focus({
           >
             {({ remainingTime, color = "A30000" }) => (
               <h1 className="timer-text" color={color}>
-                {parseTime(remainingTime)}{" "}
+                {parseTime(remainingTime)}
               </h1>
             )}
           </CountdownCircleTimer>
@@ -144,7 +147,7 @@ function Focus({
         <Modal setHook={editTimer} initialValues={init}>
           <button className="action-button">
             <FaCog />
-          </button> 
+          </button>
         </Modal>
       </div>
     </div>
