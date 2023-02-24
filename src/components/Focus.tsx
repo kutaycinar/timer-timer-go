@@ -96,31 +96,18 @@ function Focus({
       <div className="timer-container">
         <GradientSVG />
         {counter ? <Counter /> : <Timer />}
-
-        {!counter && (
-          <div className="button-container">
-            <button
-              className="play-button"
-              onClick={() => (isRunning ? signalPause() : signalStart())}
-              disabled={delta === 0}
-            >
-              {isRunning ? <FaPause /> : <FaPlay />}
-            </button>
-          </div>
-        )}
-
         <br />
-        {counter && (
-          <div className="button-container">
-            <button
-              className="play-button"
-              onClick={() => countNext()}
-              disabled={delta === 0}
-            >
-              <FaPlus />
-            </button>
-          </div>
-        )}
+        <div className="button-container">
+          <button
+            className="play-button"
+            onClick={() =>
+              counter ? countNext() : isRunning ? signalPause() : signalStart()
+            }
+            disabled={delta === 0}
+          >
+            {counter ? <FaPlus /> : isRunning ? <FaPause /> : <FaPlay />}
+          </button>
+        </div>
       </div>
       <div className="footer-buttons">
         <button
