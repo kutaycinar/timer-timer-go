@@ -1,0 +1,10 @@
+.iPhoneX {
+  /* this is the render are dimension */
+  /* media queries look up to this */
+  max-width: 1000px;
+  max-height: 2436px;
+  transform-origin: 0 0;
+  margin: auto;
+  border-radius: 5em;
+  border-color: black;
+}
