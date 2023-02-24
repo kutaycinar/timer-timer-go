@@ -207,22 +207,6 @@ export function useTimer() {
     });
   }
 
-  function reverseSelf() {
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].reverse =
-      !newTimers[state.state.focus].reverse;
-    setState((prevState) => {
-      return {
-        state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
-          timers: newTimers,
-        },
-      };
-    });
-  }
-
   // start
   function signalStart() {
     sendNotification();
@@ -343,6 +327,5 @@ export function useTimer() {
     resetAllTimers,
     getOverall,
     countNext,
-    reverseSelf,
   };
 }

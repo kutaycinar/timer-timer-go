@@ -18,7 +18,6 @@ function App() {
     signalReset,
     getOverall,
     countNext,
-    reverseSelf,
   } = useTimer();
 
   return (
@@ -34,7 +33,6 @@ function App() {
             signalReset={signalReset}
             isRunning={state.state.active}
             countNext={countNext}
-            reverseSelf={reverseSelf}
           />
         </div>
       ) : (

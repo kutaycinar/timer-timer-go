@@ -15,7 +15,6 @@ function Add({ addTimer }: { addTimer: any }) {
     minutes: 0,
     hour: 0,
     limit: 1,
-    reverse: false,
   };
 
   function reducer(state: State, action: any) {
@@ -28,7 +27,7 @@ function Add({ addTimer }: { addTimer: any }) {
 
   const [counter, setCounter] = useState(false);
 
-  const { name, seconds, minutes, hour, limit, reverse } = formValues;
+  const { name, seconds, minutes, hour, limit } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
@@ -46,7 +45,6 @@ function Add({ addTimer }: { addTimer: any }) {
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : limit,
       counter,
-      reverse,
     };
     addTimer(params);
     setFormValues(initialValues);
@@ -140,17 +138,6 @@ function Add({ addTimer }: { addTimer: any }) {
                 </label>
               </div>
             )}
-            <label htmlFor="switch">
-              Count Down
-              <input
-                style={{ marginLeft: 8, marginRight: 8 }}
-                type="checkbox"
-                name="reverse"
-                role="switch"
-                onChange={handleFormChange}
-              />
-              Count Up
-            </label>
             <br />
           </div>
           <footer style={{ display: "flex" }}>

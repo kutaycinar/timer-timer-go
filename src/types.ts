@@ -3,7 +3,6 @@ export type TimerType = {
   delta: number;
   total: number;
   counter: boolean;
-  reverse: boolean;
 };
 
 export type State = {
@@ -23,4 +22,3 @@ export const initial: State = {
     timers: [],
   },
 };
-

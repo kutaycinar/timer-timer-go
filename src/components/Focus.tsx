@@ -25,7 +25,6 @@ type FocusProps = Partial<TimerType> & {
   signalReset: any;
   isRunning: boolean;
   countNext: any;
-  reverseSelf: any;
 };
 
 function Focus({
@@ -33,14 +32,12 @@ function Focus({
   delta,
   total,
   counter,
-  reverse,
   signalPause,
   signalStop,
   signalStart,
   signalReset,
   isRunning,
   countNext,
-  reverseSelf,
 }: FocusProps) {
   const [key, setKey] = useState(0);
   return (
@@ -84,12 +81,8 @@ function Focus({
         {counter && (
           <CircularProgressbarWithChildren
             strokeWidth={5}
-            value={
-              !reverse
-                ? (delta! / total!) * 100
-                : ((total! - delta!) / total!) * 100
-            }
-            text={`${reverse ? total! - delta! : delta}`}
+            value={(delta! / total!) * 100}
+            text={`${total! - delta!}`}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
@@ -130,7 +123,7 @@ function Focus({
         >
           <FaUndoAlt />
         </button>
-        <button className="action-button" onClick={() => reverseSelf()}>
+        <button className="action-button" onClick={() => void 0}>
           <FaCog />
         </button>
       </div>
