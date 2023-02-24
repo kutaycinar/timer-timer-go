@@ -16,7 +16,15 @@ import {
   CircularProgressbar,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { GradientSVG, parseTime, RadialSeparators } from "../utils";
+import {
+  getHours,
+  getMinutes,
+  getSeconds,
+  GradientSVG,
+  parseTime,
+  RadialSeparators,
+} from "../utils";
+import Modal from "./Add";
 
 type FocusProps = Partial<TimerType> & {
   signalStart: any;
@@ -25,6 +33,7 @@ type FocusProps = Partial<TimerType> & {
   signalReset: any;
   isRunning: boolean;
   countNext: any;
+  editTimer: any;
 };
 
 function Focus({
@@ -38,8 +47,17 @@ function Focus({
   signalReset,
   isRunning,
   countNext,
+  editTimer,
 }: FocusProps) {
   const [key, setKey] = useState(0);
+  const init = {
+    name,
+    seconds: getSeconds(total!),
+    minutes: getMinutes(total!),
+    hour: getHours(total!),
+    limit: counter ? total : 1,
+    counter,
+  };
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
@@ -123,9 +141,11 @@ function Focus({
         >
           <FaUndoAlt />
         </button>
-        <button className="action-button" onClick={() => void 0}>
-          <FaCog />
-        </button>
+        <Modal setHook={editTimer} initialValues={init}>
+          <button className="action-button">
+            <FaCog />
+          </button> 
+        </Modal>
       </div>
     </div>
   );

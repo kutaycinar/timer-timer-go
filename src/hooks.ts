@@ -129,6 +129,22 @@ export function useTimer() {
     });
   }
 
+  // edit
+  function editTimer(props: TimerType) {
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus] = props;
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
+    });
+  }
+
   // removal
   function deleteTimer(name: string) {
     setState((prevState) => {
@@ -327,5 +343,6 @@ export function useTimer() {
     resetAllTimers,
     getOverall,
     countNext,
+    editTimer,
   };
 }
