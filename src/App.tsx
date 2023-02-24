@@ -3,6 +3,7 @@ import Add from "./components/Add";
 import Focus from "./components/Focus";
 import Overview from "./components/Overview";
 import Timer from "./components/Timer";
+import BrowserWrapper from "./components/Wrapper";
 import { useTimer } from "./hooks";
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
   } = useTimer();
 
   return (
-    <div>
+    <BrowserWrapper>
       {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
       {state.state.focus !== -1 ? (
         <div>
@@ -51,7 +52,7 @@ function App() {
           <Add addTimer={addTimer} />
         </div>
       )}
-    </div>
+    </BrowserWrapper>
   );
 }
 

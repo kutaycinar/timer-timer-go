@@ -1,0 +1,9 @@
+.iPhoneX {
+  position: relative;
+  max-width: 1000px;
+  max-height: 2436px;
+  height: 100vh;
+  transform-origin: 0 0;
+  margin: auto;
+  box-shadow: 10px;
+}
