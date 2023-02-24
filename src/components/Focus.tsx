@@ -47,6 +47,8 @@ function Focus({
 }: FocusProps) {
   const [key, setKey] = useState(0);
 
+  console.log("test");
+
   function Timer() {
     return (
       <CountdownCircleTimer
