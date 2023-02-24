@@ -16,6 +16,18 @@ const pad = (time: number): string => {
   return String(time).padStart(2, "0");
 };
 
+export const prettyTime = (time: number) => {
+  const hours = getHours(time);
+  const minutes = getMinutes(time);
+  const seconds = getSeconds(time);
+  var text = "";
+  text += hours ? hours + "h" : "";
+  text += minutes ? minutes + "m" : "";
+  text += seconds ? seconds + "s" : "";
+  text = text || "complete!";
+  return text;
+};
+
 export const parseTime = (time: number): string => {
   const hours = getHours(time);
   const minutes = getMinutes(time);

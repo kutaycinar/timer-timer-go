@@ -328,8 +328,8 @@ export function useTimer() {
     });
 
     return {
-      delta: (total - delta) / state.state.timers.length,
-      total: total / state.state.timers.length,
+      delta: (total - delta) / state.state.timers.length || 0,
+      total: total / state.state.timers.length || 0,
     };
   }
 

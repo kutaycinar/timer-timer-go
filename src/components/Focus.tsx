@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
 import {
   FaChevronLeft,
   FaCog,
@@ -7,6 +8,7 @@ import {
   FaPlay,
   FaUndoAlt,
   FaPlus,
+  FaTrash,
 } from "react-icons/fa";
 import { TimerType } from "../types";
 import "./Focus.css";
@@ -21,9 +23,18 @@ import {
   getSeconds,
   GradientSVG,
   parseTime,
+  prettyTime,
   RadialSeparators,
 } from "../utils";
 import Modal from "./Add";
+
+const confettiProps: ConfettiProps = {
+  force: 0.6,
+  duration: 2500,
+  particleCount: 100,
+  width: 1000,
+  colors: ["#041E43", "#1471BF", "#5BB4DC", "#FC027B", "#66D805"],
+};
 
 type FocusProps = Partial<TimerType> & {
   signalStart: any;
@@ -33,6 +44,7 @@ type FocusProps = Partial<TimerType> & {
   isRunning: boolean;
   countNext: any;
   editTimer: any;
+  deleteTimer: any;
 };
 
 function Focus({
@@ -47,24 +59,9 @@ function Focus({
   isRunning,
   countNext,
   editTimer,
+  deleteTimer,
 }: FocusProps) {
   const [key, setKey] = useState(0);
-
-  function Timer() {
-    return (
-      <CircularProgressbar
-        strokeWidth={5}
-        value={100 - (delta! / total!) * 100}
-        text={`${delta!}`}
-        styles={{
-          path: { stroke: `url(#gradient)`, height: "100%" },
-          trail: {
-            stroke: "#2e2e2e",
-          },
-        }}
-      />
-    );
-  }
 
   const init = {
     name,
@@ -87,7 +84,7 @@ function Focus({
           <CircularProgressbarWithChildren
             strokeWidth={5}
             value={100 - (delta! / total!) * 100}
-            text={`${delta!} left`}
+            text={delta ? `${delta!} left` : "complete!"}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
@@ -111,7 +108,7 @@ function Focus({
           <CircularProgressbar
             strokeWidth={5}
             value={100 - (delta! / total!) * 100}
-            text={`${delta!}`}
+            text={`${prettyTime(delta!)}`}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
@@ -119,6 +116,11 @@ function Focus({
               },
             }}
           />
+        )}
+        {delta === 0 && (
+          <div style={{ position: "absolute", left: "50%", top: "50%" }}>
+            <ConfettiExplosion {...confettiProps} />
+          </div>
         )}
         <br />
         <br />
@@ -149,6 +151,14 @@ function Focus({
           }}
         >
           <FaUndoAlt />
+        </button>
+        <button
+          className="action-button"
+          onClick={() => {
+            deleteTimer(name);
+          }}
+        >
+          <FaTrash />
         </button>
         <Modal setHook={editTimer} initialValues={init}>
           <button className="action-button">

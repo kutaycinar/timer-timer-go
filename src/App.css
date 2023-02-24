@@ -14,8 +14,14 @@ a {
   margin: 1rem;
   padding: 1rem;
   color: whitesmoke;
-  border: 1px solid #ffffff59;
-  border-radius: 25px;
+  /* border: 1px solid #ffffff59;
+  border-radius: 25px; */
+}
+
+.timer-title {
+  margin-bottom: 8px;
+  font-size: 18px;
+  text-align: center;
 }
 
 .add {
@@ -77,4 +83,5 @@ a {
 }
 .CircularProgressbar .CircularProgressbar-text {
   fill: #c4c4c4 !important;
+  font-size: 12px !important;
 }

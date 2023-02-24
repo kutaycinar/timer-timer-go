@@ -1,5 +1,9 @@
+import {
+  CircularProgressbarWithChildren,
+  CircularProgressbar,
+} from "react-circular-progressbar";
 import { TimerType } from "../types";
-import { parseTime } from "../utils";
+import { GradientSVG, prettyTime, RadialSeparators } from "../utils";
 
 type TimerProps = TimerType & {
   idx: number;
@@ -18,22 +22,21 @@ function Timer({
 }: TimerProps) {
   return (
     <div className="timer">
-      <div style={{ margin: "auto" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <a onClick={() => focusTimer(idx)}>
+        <div className="timer-title">
           <strong>{name}</strong>
-          <button className="contrast circ" onClick={() => deleteTimer(name)}>
-            ✖
-          </button>
         </div>
-        <a onClick={() => focusTimer(idx)}>
-          {delta !== 0 ? (
-            <div>{counter ? delta : parseTime(delta)} left</div>
-          ) : (
-            <div>Complete!</div>
-          )}
-          <progress value={total - delta} max={total}></progress>
-        </a>
-      </div>
+        <CircularProgressbarWithChildren
+          value={((total - delta) / total) * 100}
+          text={
+            counter
+              ? delta
+                ? `${delta} left`
+                : "complete!"
+              : `${prettyTime(delta)}`
+          }
+        ></CircularProgressbarWithChildren>
+      </a>
     </div>
   );
 }
