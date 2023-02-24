@@ -17,10 +17,12 @@ function Modal({
     limit: 1,
     counter: false,
   },
+  reset = false,
 }: {
   setHook: any;
   children: any;
   initialValues?: any;
+  reset?: boolean;
 }) {
   const [modal, setModal] = useState(false);
 
@@ -52,13 +54,14 @@ function Modal({
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : limit,
       counter,
+      reverse: false,
     };
     setHook(params);
-    setFormValues(initialValues);
+    if (reset) setFormValues(initialValues);
   }
   function handleFormCancel() {
-    setFormValues(initialValues);
     setModal(!modal);
+    setFormValues(initialValues);
   }
 
   return (

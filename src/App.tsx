@@ -1,4 +1,4 @@
-import { FaCog, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import "./App.css";
 import Modal from "./components/Add";
 import Focus from "./components/Focus";
@@ -36,6 +36,7 @@ function App() {
             isRunning={state.state.active}
             countNext={countNext}
             editTimer={editTimer}
+            deleteTimer={deleteTimer}
           />
         </div>
       ) : (
@@ -50,7 +51,7 @@ function App() {
               focusTimer={focusTimer}
             />
           ))}
-          <Modal setHook={addTimer}>
+          <Modal setHook={addTimer} reset={true}>
             <button className="add">
               <FaPlus />
             </button>

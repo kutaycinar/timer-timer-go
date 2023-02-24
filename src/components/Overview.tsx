@@ -6,11 +6,11 @@ export type OverviewProps = {
 };
 
 function Overview({ delta, total }: OverviewProps) {
-  console.log(delta, total);
   return (
     <div className="overview">
       <h2 style={{ marginBottom: 15 }}> Overview </h2>
-      Overall completion <strong>{Math.round((delta / total) * 100)} %</strong>
+      Overall completion{" "}
+      <strong>{Math.round((delta / total) * 100) || 0} %</strong>
       <progress value={delta} max={total} />
     </div>
   );
