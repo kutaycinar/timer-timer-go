@@ -17,7 +17,7 @@ a {
 }
 
 .add {
-  position: fixed;
+  position: absolute;
   min-width: 80px;
   bottom: 0;
   right: 0;
