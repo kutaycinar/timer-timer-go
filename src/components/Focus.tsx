@@ -38,6 +38,55 @@ function Focus({
   reverseSelf,
 }: FocusProps) {
   const [key, setKey] = useState(0);
+
+  function Timer() {
+    return (
+      <CountdownCircleTimer
+        key={key}
+        isPlaying={isRunning}
+        duration={total || 0}
+        initialRemainingTime={delta}
+        colors={"url(#gradient)"}
+        size={300}
+        strokeWidth={15}
+        trailStrokeWidth={30}
+        trailColor="#292660"
+      >
+        {({ remainingTime, color = "A30000" }) => (
+          <h1 className="timer-text" color={color}>
+            {parseTime(remainingTime)}{" "}
+          </h1>
+        )}
+      </CountdownCircleTimer>
+    );
+  }
+
+  function Counter() {
+    return (
+      <CircularProgressbarWithChildren
+        strokeWidth={5}
+        value={100 - (delta! / total!) * 100}
+        text={`${delta!}`}
+        styles={{
+          path: { stroke: `url(#gradient)`, height: "100%" },
+          trail: {
+            stroke: "#2e2e2e",
+          },
+        }}
+      >
+        <RadialSeparators
+          count={total!}
+          style={{
+            background: "var(--background-color)",
+            border: "1px solid var(--background-color)",
+            width: "19px",
+            height: `19px`,
+          }}
+        />
+      </CircularProgressbarWithChildren>
+    );
+  }
+
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
@@ -46,25 +95,8 @@ function Focus({
       <h3 className="title">{name}</h3>
       <div className="timer-container">
         <GradientSVG />
-        {!counter && (
-          <CountdownCircleTimer
-            key={key}
-            isPlaying={isRunning}
-            duration={total || 0}
-            initialRemainingTime={delta}
-            colors={"url(#gradient)"}
-            size={300}
-            strokeWidth={15}
-            trailStrokeWidth={30}
-            trailColor="#292660"
-          >
-            {({ remainingTime, color = "A30000" }) => (
-              <h1 className="timer-text" color={color}>
-                {parseTime(remainingTime)}{" "}
-              </h1>
-            )}
-          </CountdownCircleTimer>
-        )}
+        {counter ? <Counter /> : <Timer />}
+
         {!counter && (
           <div className="button-container">
             <button
@@ -76,35 +108,13 @@ function Focus({
             </button>
           </div>
         )}
-        {counter && (
-          <CircularProgressbarWithChildren
-            strokeWidth={5}
-            value={100 - (delta! / total!) * 100}
-            text={`${delta!}`}
-            styles={{
-              path: { stroke: `url(#gradient)`, height: "100%" },
-              trail: {
-                stroke: "#2e2e2e",
-              },
-            }}
-          >
-            <RadialSeparators
-              count={total!}
-              style={{
-                background: "var(--background-color)",
-                border: "1px solid var(--background-color)",
-                width: "19px",
-                height: `19px`,
-              }}
-            />
-          </CircularProgressbarWithChildren>
-        )}
+
         <br />
         {counter && (
           <div className="button-container">
             <button
               className="play-button"
-              onClick={() => (isRunning ? countNext() : countNext())}
+              onClick={() => countNext()}
               disabled={delta === 0}
             >
               <FaPlus />
