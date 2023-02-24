@@ -14,6 +14,8 @@ function Add({ addTimer }: { addTimer: any }) {
     seconds: 0,
     minutes: 0,
     hour: 0,
+    limit: 1,
+    reverse: false,
   };
 
   function reducer(state: State, action: any) {
@@ -24,7 +26,9 @@ function Add({ addTimer }: { addTimer: any }) {
   }
   const [formValues, setFormValues] = useReducer(reducer, initialValues);
 
-  const { name, seconds, minutes, hour } = formValues;
+  const [counter, setCounter] = useState(false);
+
+  const { name, seconds, minutes, hour, limit, reverse } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
@@ -35,10 +39,15 @@ function Add({ addTimer }: { addTimer: any }) {
     setModal(!modal);
     const params: TimerType = {
       name,
-      delta: Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds),
-      total: Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds),
+      delta: !counter
+        ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
+        : limit,
+      total: !counter
+        ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
+        : limit,
+      counter,
+      reverse,
     };
-    console.log(params);
     addTimer(params);
     setFormValues(initialValues);
   }
@@ -65,38 +74,84 @@ function Add({ addTimer }: { addTimer: any }) {
             />
           </label>
           <div className="inline">
-            <label>
-              Hour
-              <select name="hour" value={hour} onChange={handleFormChange}>
-                {range(0, 23).map((n) => (
-                  <option key={n}>{n}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Minutes
-              <select
-                name="minutes"
-                value={minutes}
+            Type:
+            <button
+              className={counter ? "secondary" : ""}
+              onClick={() => setCounter(!counter)}
+            >
+              Timer
+            </button>
+            <button
+              className={!counter ? "secondary" : ""}
+              onClick={() => setCounter(!counter)}
+            >
+              Counter
+            </button>
+          </div>
+          <div style={{ height: 98 }}>
+            {!counter ? (
+              <div className="inline">
+                <label>
+                  Hour
+                  <select name="hour" value={hour} onChange={handleFormChange}>
+                    {range(0, 23).map((n) => (
+                      <option key={n}>{n}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Minutes
+                  <select
+                    name="minutes"
+                    value={minutes}
+                    onChange={handleFormChange}
+                  >
+                    {range().map((n) => (
+                      <option key={n}>{n}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Seconds
+                  <select
+                    name="seconds"
+                    value={seconds}
+                    onChange={handleFormChange}
+                  >
+                    {range().map((n) => (
+                      <option key={n}>{n}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            ) : (
+              <div>
+                <label>
+                  Limit
+                  <select
+                    name="limit"
+                    value={limit}
+                    onChange={handleFormChange}
+                  >
+                    {range(1, 9, 1).map((n) => (
+                      <option key={n}>{n}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            )}
+            <label htmlFor="switch">
+              Count Down
+              <input
+                style={{ marginLeft: 8, marginRight: 8 }}
+                type="checkbox"
+                name="reverse"
+                role="switch"
                 onChange={handleFormChange}
-              >
-                {range().map((n) => (
-                  <option key={n}>{n}</option>
-                ))}
-              </select>
+              />
+              Count Up
             </label>
-            <label>
-              Seconds
-              <select
-                name="seconds"
-                value={seconds}
-                onChange={handleFormChange}
-              >
-                {range().map((n) => (
-                  <option key={n}>{n}</option>
-                ))}
-              </select>
-            </label>
+            <br />
           </div>
           <footer style={{ display: "flex" }}>
             <button
@@ -111,7 +166,10 @@ function Add({ addTimer }: { addTimer: any }) {
               data-target="modal-example"
               onClick={handleFormSubmit}
               //   to do add disable state
-              disabled={name.trim() === "" || hour + minutes + seconds <= 0}
+              disabled={
+                name.trim() === "" ||
+                (counter ? false : hour + minutes + seconds <= 0)
+              }
             >
               Confirm
             </button>

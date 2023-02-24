@@ -1,14 +1,22 @@
-import { parseTime, TimerType } from "../types";
+import { useState } from "react";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import {
-  FaUndoAlt,
-  FaPlay,
-  FaPause,
   FaChevronLeft,
   FaCog,
+  FaPause,
+  FaPlay,
+  FaUndoAlt,
+  FaPlus,
 } from "react-icons/fa";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useState } from "react";
+import { TimerType } from "../types";
 import "./Focus.css";
+import {
+  buildStyles,
+  CircularProgressbarWithChildren,
+  CircularProgressbar,
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { GradientSVG, parseTime, RadialSeparators } from "../utils";
 
 type FocusProps = Partial<TimerType> & {
   signalStart: any;
@@ -16,58 +24,101 @@ type FocusProps = Partial<TimerType> & {
   signalStop: any;
   signalReset: any;
   isRunning: boolean;
+  countNext: any;
+  reverseSelf: any;
 };
 
 function Focus({
   name,
   delta,
   total,
+  counter,
+  reverse,
   signalPause,
   signalStop,
   signalStart,
   signalReset,
   isRunning,
+  countNext,
+  reverseSelf,
 }: FocusProps) {
   const [key, setKey] = useState(0);
-
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
         <FaChevronLeft />
       </button>
       <h3 className="title">{name}</h3>
-      <svg style={{ width: "0px", height: "0px" }}>
-        <defs>
-          <linearGradient id="gradient" x1="1" y1="0" x2="0" y2="0">
-            <stop offset="5%" stopColor="#24DBE4" />
-            <stop offset="95%" stopColor="#5681F6" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <CountdownCircleTimer
-        key={key}
-        isPlaying={isRunning}
-        duration={total || 0}
-        initialRemainingTime={delta}
-        colors={"url(#gradient)"}
-        size={300}
-        strokeWidth={15}
-        trailStrokeWidth={30}
-        trailColor="#292660"
-      >
-        {({ remainingTime, color = "A30000" }) => (
-          <h1 className="timer-text" color={color}>
-            {parseTime(remainingTime)}{" "}
-          </h1>
+      <div style={{ height: "300px", width: "300px", marginBottom: 100 }}>
+        <GradientSVG />
+        {!counter && (
+          <CountdownCircleTimer
+            key={key}
+            isPlaying={isRunning}
+            duration={total || 0}
+            initialRemainingTime={delta}
+            colors={"url(#gradient)"}
+            size={300}
+            strokeWidth={15}
+            trailStrokeWidth={30}
+            trailColor="#292660"
+          >
+            {({ remainingTime, color = "A30000" }) => (
+              <h1 className="timer-text" color={color}>
+                {parseTime(remainingTime)}{" "}
+              </h1>
+            )}
+          </CountdownCircleTimer>
         )}
-      </CountdownCircleTimer>
-      <div className="button-container">
-        <button
-          className="play-button"
-          onClick={() => (isRunning ? signalPause() : signalStart())}
-        >
-          {isRunning ? <FaPause /> : <FaPlay />}
-        </button>
+        {!counter && (
+          <div className="button-container">
+            <button
+              className="play-button"
+              onClick={() => (isRunning ? signalPause() : signalStart())}
+              disabled={delta === 0}
+            >
+              {isRunning ? <FaPause /> : <FaPlay />}
+            </button>
+          </div>
+        )}
+        {counter && (
+          <CircularProgressbarWithChildren
+            strokeWidth={5}
+            value={
+              !reverse
+                ? (delta! / total!) * 100
+                : ((total! - delta!) / total!) * 100
+            }
+            text={`${reverse ? total! - delta! : delta}`}
+            styles={{
+              path: { stroke: `url(#gradient)`, height: "100%" },
+              trail: {
+                stroke: "#2e2e2e",
+              },
+            }}
+          >
+            <RadialSeparators
+              count={total!}
+              style={{
+                background: "var(--background-color)",
+                border: "1px solid var(--background-color)",
+                width: "18px",
+                height: `18px`,
+              }}
+            />
+          </CircularProgressbarWithChildren>
+        )}
+        {counter && (
+          <div className="button-container">
+            <button
+              className="play-button"
+              onClick={() => (isRunning ? countNext() : countNext())}
+              // disabled={delta === 0}
+            >
+              {isRunning ? <FaPlus /> : <FaPlus />}
+            </button>
+          </div>
+        )}
       </div>
       <div className="footer-buttons">
         <button
@@ -79,7 +130,7 @@ function Focus({
         >
           <FaUndoAlt />
         </button>
-        <button className="action-button">
+        <button className="action-button" onClick={() => reverseSelf()}>
           <FaCog />
         </button>
       </div>

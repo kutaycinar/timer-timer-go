@@ -3,7 +3,8 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
 import { useEffect, useState } from "react";
 import { OverviewProps } from "./components/Overview";
-import { initial, isSameDay, State, TimerType } from "./types";
+import { initial, State, TimerType } from "./types";
+import { isSameDay } from "./utils";
 
 export function useTimer() {
   const [state, setState] = useState<State>(initial);
@@ -182,8 +183,43 @@ export function useTimer() {
   }
 
   async function cancelNotification() {
-    const notifs = await LocalNotifications.cancel({
+    await LocalNotifications.cancel({
       notifications: [{ id: 1 }],
+    });
+  }
+
+  function countNext() {
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus].delta -= 1;
+    newTimers[state.state.focus].delta = Math.max(
+      0,
+      newTimers[state.state.focus].delta
+    );
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
+    });
+  }
+
+  function reverseSelf() {
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus].reverse =
+      !newTimers[state.state.focus].reverse;
+    setState((prevState) => {
+      return {
+        state: {
+          date: prevState.state.date,
+          active: prevState.state.active,
+          focus: prevState.state.focus,
+          timers: newTimers,
+        },
+      };
     });
   }
 
@@ -277,12 +313,16 @@ export function useTimer() {
       name: "",
       delta: accumulator.delta + currentValue.delta,
       total: accumulator.total + currentValue.total,
+      counter: false,
+      reverse: false,
     });
 
     const { delta, total } = state.state.timers.reduce(reducer, {
       name: "",
       delta: 0,
       total: 0,
+      counter: false,
+      reverse: false,
     });
 
     return {
@@ -302,5 +342,7 @@ export function useTimer() {
     signalReset,
     resetAllTimers,
     getOverall,
+    countNext,
+    reverseSelf,
   };
 }
