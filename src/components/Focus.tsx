@@ -10,11 +10,7 @@ import {
 } from "react-icons/fa";
 import { TimerType } from "../types";
 import "./Focus.css";
-import {
-  buildStyles,
-  CircularProgressbarWithChildren,
-  CircularProgressbar,
-} from "react-circular-progressbar";
+import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { GradientSVG, parseTime, RadialSeparators } from "../utils";
 
@@ -33,7 +29,6 @@ function Focus({
   delta,
   total,
   counter,
-  reverse,
   signalPause,
   signalStop,
   signalStart,
@@ -49,7 +44,7 @@ function Focus({
         <FaChevronLeft />
       </button>
       <h3 className="title">{name}</h3>
-      <div style={{ height: "300px", width: "300px", marginBottom: 100 }}>
+      <div className="timer-container">
         <GradientSVG />
         {!counter && (
           <CountdownCircleTimer
@@ -84,12 +79,8 @@ function Focus({
         {counter && (
           <CircularProgressbarWithChildren
             strokeWidth={5}
-            value={
-              !reverse
-                ? (delta! / total!) * 100
-                : ((total! - delta!) / total!) * 100
-            }
-            text={`${reverse ? total! - delta! : delta}`}
+            value={100 - (delta! / total!) * 100}
+            text={`${delta!}`}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
@@ -102,20 +93,21 @@ function Focus({
               style={{
                 background: "var(--background-color)",
                 border: "1px solid var(--background-color)",
-                width: "18px",
-                height: `18px`,
+                width: "19px",
+                height: `19px`,
               }}
             />
           </CircularProgressbarWithChildren>
         )}
+        <br />
         {counter && (
           <div className="button-container">
             <button
               className="play-button"
               onClick={() => (isRunning ? countNext() : countNext())}
-              // disabled={delta === 0}
+              disabled={delta === 0}
             >
-              {isRunning ? <FaPlus /> : <FaPlus />}
+              <FaPlus />
             </button>
           </div>
         )}
