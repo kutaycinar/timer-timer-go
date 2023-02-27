@@ -24,8 +24,8 @@ function App() {
   } = useTimer();
 
   return (
-    <BrowserWrapper>
-      <ThemeProvider>
+    <ThemeProvider>
+      <BrowserWrapper>
         {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
         {state.state.focus !== -1 ? (
           <div>
@@ -60,8 +60,8 @@ function App() {
             </Modal>
           </div>
         )}
-      </ThemeProvider>
-    </BrowserWrapper>
+      </BrowserWrapper>
+    </ThemeProvider>
   );
 }
 

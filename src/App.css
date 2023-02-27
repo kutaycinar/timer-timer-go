@@ -19,6 +19,7 @@ a {
 }
 
 .timer-title {
+  color: var(--text-primary);
   margin-bottom: 8px;
   font-size: 18px;
   text-align: center;
@@ -82,6 +83,6 @@ a {
   padding: 0 24px;
 }
 .CircularProgressbar .CircularProgressbar-text {
-  fill: #c4c4c4 !important;
+  fill: var(--text-secondary) !important;
   font-size: 12px !important;
 }
