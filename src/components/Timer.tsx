@@ -35,6 +35,9 @@ function Timer({
                 : "Complete!"
               : `${prettyTime(delta)}`
           }
+          styles={buildStyles({
+            trailColor: "var(--text-secondary)",
+          })}
         ></CircularProgressbarWithChildren>
       </a>
     </div>
