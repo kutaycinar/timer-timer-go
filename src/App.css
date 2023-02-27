@@ -30,6 +30,7 @@ a {
   bottom: 0;
   right: 0;
   margin: 25px;
+  margin-bottom: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,4 +86,17 @@ a {
 .CircularProgressbar .CircularProgressbar-text {
   fill: var(--text-secondary) !important;
   font-size: 12px !important;
+}
+
+.navbar {
+  display:flex;
+  width: 100%;
+  position: absolute;
+  bottom: 24px;
+  justify-content: center !important;
+  gap: 8px;
+}
+
+.selected {
+  background: #FFFFFF1F;
 }

@@ -155,6 +155,7 @@ function Focus({
           className="action-button"
           onClick={() => {
             signalReset();
+            setTaskOver(false);
             setKey(key + 1);
           }}
         >
