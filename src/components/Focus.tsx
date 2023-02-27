@@ -100,17 +100,18 @@ function Focus({
               },
             }}
           >
-            {total !== 1 && (
+            {/* {total !== 1 && (
               <RadialSeparators
                 count={total!}
                 style={{
                   background: "var(--background-color)",
                   border: "1px solid var(--background-color)",
                   width: "19px",
-                  height: `19px`,
+                  height: `25px`,
+                  marginTop: "-5px",
                 }}
               />
-            )}
+            )} */}
           </CircularProgressbarWithChildren>
         ) : (
           <CircularProgressbar

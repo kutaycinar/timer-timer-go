@@ -69,7 +69,7 @@ export function RadialSeparators(props: any) {
 export function GradientSVG() {
   const gradientTransform = `rotate(0)`;
   return (
-    <svg style={{ height: 0 }}>
+    <svg style={{ height: 0, display: "hidden" }}>
       <defs>
         <linearGradient id={"gradient"} gradientTransform={gradientTransform}>
           <stop offset="5%" stopColor="#24DBE4" />
