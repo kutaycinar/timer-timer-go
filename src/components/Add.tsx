@@ -14,7 +14,7 @@ function Modal({
     seconds: 0,
     minutes: 0,
     hour: 0,
-    limit: 1,
+    goal: 1,
     counter: false,
   },
   reset = false,
@@ -36,7 +36,7 @@ function Modal({
 
   const [counter, setCounter] = useState(initialValues.counter);
 
-  const { name, seconds, minutes, hour, limit } = formValues;
+  const { name, seconds, minutes, hour, goal } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
@@ -49,10 +49,10 @@ function Modal({
       name,
       delta: !counter
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
-        : limit,
+        : goal,
       total: !counter
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
-        : limit,
+        : goal,
       counter,
       reverse: false,
     };
@@ -133,12 +133,8 @@ function Modal({
             ) : (
               <div>
                 <label>
-                  Limit
-                  <select
-                    name="limit"
-                    value={limit}
-                    onChange={handleFormChange}
-                  >
+                  Goal
+                  <select name="goal" value={goal} onChange={handleFormChange}>
                     {range(1, 13, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
