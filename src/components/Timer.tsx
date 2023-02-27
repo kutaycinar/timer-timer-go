@@ -1,9 +1,9 @@
 import {
+  buildStyles,
   CircularProgressbarWithChildren,
-  CircularProgressbar,
 } from "react-circular-progressbar";
 import { TimerType } from "../types";
-import { GradientSVG, prettyTime, RadialSeparators } from "../utils";
+import { prettyTime } from "../utils";
 
 type TimerProps = TimerType & {
   idx: number;
@@ -32,9 +32,12 @@ function Timer({
             counter
               ? delta
                 ? `${delta} left`
-                : "complete!"
+                : "Complete!"
               : `${prettyTime(delta)}`
           }
+          styles={buildStyles({
+            trailColor: "var(--text-secondary)",
+          })}
         ></CircularProgressbarWithChildren>
       </a>
     </div>
