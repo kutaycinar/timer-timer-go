@@ -24,7 +24,7 @@ export const prettyTime = (time: number) => {
   text += hours ? hours + "h" : "";
   text += minutes ? minutes + "m" : "";
   text += seconds ? seconds + "s" : "";
-  text = text || "complete!";
+  text = text || "Complete!";
   return text;
 };
 

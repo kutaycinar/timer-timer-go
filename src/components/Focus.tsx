@@ -84,7 +84,7 @@ function Focus({
           <CircularProgressbarWithChildren
             strokeWidth={5}
             value={100 - (delta! / total!) * 100}
-            text={delta ? `${delta!} left` : "complete!"}
+            text={delta ? `${delta!} Left` : "Complete!"}
             styles={{
               path: { stroke: `url(#gradient)`, height: "100%" },
               trail: {
