@@ -120,7 +120,8 @@ function Focus({
             value={100 - (delta! / total!) * 100}
             text={`${prettyTime(delta!)}`}
             styles={{
-              path: { stroke: `url(#gradient)`, height: "100%" },
+              // path: { stroke: `url(#gradient)`, height: "100%" },
+              path: { stroke: "var(--primary-hover)", height: "100%" },
               trail: {
                 stroke: "#2e2e2e",
               },
