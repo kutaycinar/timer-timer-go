@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useEffect, useState } from "react";
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
 import {
   FaChevronLeft,
@@ -62,13 +61,22 @@ function Focus({
   deleteTimer,
 }: FocusProps) {
   const [key, setKey] = useState(0);
+  const [prevDelta, setPrevDelta] = useState(delta);
+  const [taskOver, setTaskOver] = useState(false);
+
+  useEffect(() => {
+    if (delta === 0 && prevDelta !== 0) {
+      setTaskOver(true);
+    }
+    setPrevDelta(delta);
+  }, [delta]);
 
   const init = {
     name,
     seconds: getSeconds(total!),
     minutes: getMinutes(total!),
     hour: getHours(total!),
-    limit: counter ? total : 1,
+    goal: counter ? total : 1,
     counter,
   };
 
@@ -117,7 +125,7 @@ function Focus({
             }}
           />
         )}
-        {delta === 0 && (
+        {taskOver && (
           <div style={{ position: "absolute", left: "50%", top: "50%" }}>
             <ConfettiExplosion {...confettiProps} />
           </div>
