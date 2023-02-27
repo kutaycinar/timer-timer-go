@@ -1,49 +1,49 @@
-import { Capacitor } from "@capacitor/core";
-import { LocalNotifications } from "@capacitor/local-notifications";
-import { Preferences } from "@capacitor/preferences";
-import { useEffect, useState } from "react";
-import { OverviewProps } from "./components/Overview";
-import { initial, State, TimerType } from "./types";
-import { isSameDay } from "./utils";
+import { Capacitor } from "@capacitor/core"
+import { LocalNotifications } from "@capacitor/local-notifications"
+import { Preferences } from "@capacitor/preferences"
+import { useEffect, useState } from "react"
+import { OverviewProps } from "./components/Overview"
+import { initial, State, TimerType } from "./types"
+import { isSameDay } from "./utils"
 
 export function useTimer() {
-  const [state, setState] = useState<State>(initial);
-  const [isLoaded, setLoaded] = useState(false);
+  const [state, setState] = useState<State>(initial)
+  const [isLoaded, setLoaded] = useState(false)
 
   // ask for notification permission
   if (Capacitor.isNativePlatform()) {
-    LocalNotifications.requestPermissions();
+    LocalNotifications.requestPermissions()
   }
 
   // initial load
   useEffect(() => {
     Preferences.get({ key: "state" }).then((res) => {
       if (res.value) {
-        setState(JSON.parse(res.value));
-        setLoaded(true);
+        setState(JSON.parse(res.value))
+        setLoaded(true)
       }
-    });
-  }, []);
+    })
+  }, [])
 
   // runs once after loading state
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded) return
 
     // daily reset check
     if (!isSameDay(state.state.date, new Date().getTime())) {
-      resetAllTimers();
+      resetAllTimers()
     }
 
     // increment check if not daily reset not happened
     else if (state.state.active) {
-      const date1 = state.state.date;
-      const date2 = new Date().getTime();
-      const seconds = Math.floor((date2 - date1) / 1000);
-      const newTimers = [...state.state.timers];
+      const date1 = state.state.date
+      const date2 = new Date().getTime()
+      const seconds = Math.floor((date2 - date1) / 1000)
+      const newTimers = [...state.state.timers]
       newTimers[state.state.focus].delta = Math.max(
         0,
         newTimers[state.state.focus].delta - seconds
-      );
+      )
       setState((prevState) => {
         return {
           state: {
@@ -52,11 +52,11 @@ export function useTimer() {
             focus: prevState.state.focus,
             timers: newTimers,
           },
-        };
-      });
+        }
+      })
     }
-    setLoaded(false);
-  }, [isLoaded, state]);
+    setLoaded(false)
+  }, [isLoaded, state])
 
   // interval
   useEffect(() => {
@@ -64,14 +64,20 @@ export function useTimer() {
       await Preferences.set({
         key: "state",
         value: JSON.stringify(state),
-      });
+      })
+
+      // daily reset check
+      if (!isSameDay(state.state.date, new Date().getTime())) {
+        resetAllTimers()
+      }
+
       // check for timer active
       if (state.state.active) {
-        const newTimers = [...state.state.timers];
-        const delta = newTimers[state.state.focus].delta;
+        const newTimers = [...state.state.timers]
+        const delta = newTimers[state.state.focus].delta
         // timer can be decremented, do that
         if (delta > 0) {
-          newTimers[state.state.focus].delta -= 1;
+          newTimers[state.state.focus].delta -= 1
           setState((prevState) => {
             return {
               state: {
@@ -80,8 +86,8 @@ export function useTimer() {
                 focus: prevState.state.focus,
                 timers: newTimers,
               },
-            };
-          });
+            }
+          })
         }
         // timer already at 0, set active to false
         else {
@@ -93,8 +99,8 @@ export function useTimer() {
                 focus: prevState.state.focus,
                 timers: prevState.state.timers,
               },
-            };
-          });
+            }
+          })
         }
       }
       // no decrement -- update date in state
@@ -107,12 +113,12 @@ export function useTimer() {
               focus: prevState.state.focus,
               timers: prevState.state.timers,
             },
-          };
-        });
+          }
+        })
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [state]);
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [state])
 
   // addition
   function addTimer(props: TimerType) {
@@ -124,15 +130,15 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: [...prevState.state.timers, props],
         },
-      };
-    });
+      }
+    })
   }
 
   // edit
   function editTimer(props: TimerType) {
-    console.log(props);
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus] = props;
+    console.log(props)
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus] = props
     setState((prevState) => {
       return {
         state: {
@@ -141,8 +147,8 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // removal
@@ -155,8 +161,8 @@ export function useTimer() {
           focus: -1,
           timers: prevState.state.timers.filter((t) => t.name !== name),
         },
-      };
-    });
+      }
+    })
   }
 
   // focus
@@ -169,17 +175,17 @@ export function useTimer() {
           focus: idx,
           timers: prevState.state.timers,
         },
-      };
-    });
+      }
+    })
   }
 
   async function sendNotification() {
-    const now = new Date().getTime();
+    const now = new Date().getTime()
     const future = new Date(
       now + state.state.timers[state.state.focus].delta * 1000
-    ).getTime();
+    ).getTime()
 
-    if (!isSameDay(now, future)) return;
+    if (!isSameDay(now, future)) return
 
     await LocalNotifications.schedule({
       notifications: [
@@ -195,22 +201,22 @@ export function useTimer() {
           sound: undefined,
         },
       ],
-    });
+    })
   }
 
   async function cancelNotification() {
     await LocalNotifications.cancel({
       notifications: [{ id: 1 }],
-    });
+    })
   }
 
   function countNext() {
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].delta -= 1;
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus].delta -= 1
     newTimers[state.state.focus].delta = Math.max(
       0,
       newTimers[state.state.focus].delta
-    );
+    )
     setState((prevState) => {
       return {
         state: {
@@ -219,13 +225,13 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // start
   function signalStart() {
-    sendNotification();
+    sendNotification()
     setState((prevState) => {
       return {
         state: {
@@ -234,13 +240,13 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: prevState.state.timers,
         },
-      };
-    });
+      }
+    })
   }
 
   // pause
   function signalPause() {
-    cancelNotification();
+    cancelNotification()
     setState((prevState) => {
       return {
         state: {
@@ -249,13 +255,13 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: prevState.state.timers,
         },
-      };
-    });
+      }
+    })
   }
 
   // stop
   function signalStop() {
-    cancelNotification();
+    cancelNotification()
     setState((prevState) => {
       return {
         state: {
@@ -264,16 +270,16 @@ export function useTimer() {
           focus: -1,
           timers: prevState.state.timers,
         },
-      };
-    });
+      }
+    })
   }
 
   // reset
   function signalReset() {
-    signalPause();
-    cancelNotification();
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].delta = newTimers[state.state.focus].total;
+    signalPause()
+    cancelNotification()
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus].delta = newTimers[state.state.focus].total
     setState((prevState) => {
       return {
         state: {
@@ -282,19 +288,19 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // reset all
   function resetAllTimers() {
-    cancelNotification();
+    cancelNotification()
     const newTimers = state.state.timers.map((t) => {
       return {
         ...t,
         delta: t.total,
-      };
-    });
+      }
+    })
     setState((prevState) => {
       return {
         state: {
@@ -303,8 +309,8 @@ export function useTimer() {
           focus: prevState.state.focus,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // accumulated timer data
@@ -317,7 +323,7 @@ export function useTimer() {
       total: Number(accumulator.total) + 1,
       counter: false,
       reverse: false,
-    });
+    })
 
     const { delta, total } = state.state.timers.reduce(reducer, {
       name: "",
@@ -325,12 +331,12 @@ export function useTimer() {
       total: 0,
       counter: false,
       reverse: false,
-    });
+    })
 
     return {
       delta: (total - delta) / state.state.timers.length || 0,
       total: total / state.state.timers.length || 0,
-    };
+    }
   }
 
   return {
@@ -346,5 +352,5 @@ export function useTimer() {
     getOverall,
     countNext,
     editTimer,
-  };
+  }
 }
