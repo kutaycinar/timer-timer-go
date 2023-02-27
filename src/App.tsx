@@ -87,7 +87,9 @@ function App() {
         {tab === TabType.Analytics && (
           <div>
             Analytics
-            <pre>{JSON.stringify(state.state.saves, undefined, 2)}</pre>
+            <pre style={{ height: "63vh" }}>
+              {JSON.stringify(state.state.saves, undefined, 2)}
+            </pre>
             <button onClick={() => saveAllTimers()}>Save</button>
             <button onClick={() => clearSaves()}>Clear Saves</button>
           </div>

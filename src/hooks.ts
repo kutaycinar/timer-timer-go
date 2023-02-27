@@ -274,10 +274,8 @@ export function useTimer() {
   }
 
   function saveAllTimers() {
-    // const newSave = new Map<string, TimerType[]>();
-    // newSave.set(String(state.state.date), state.state.timers);
     const newSave: any = state.state.saves;
-    newSave[state.state.date] = state.state.timers;
+    newSave[new Date(state.state.date).toLocaleString()] = state.state.timers;
     setState((prevState) => {
       return {
         state: {
