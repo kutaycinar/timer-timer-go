@@ -12,6 +12,7 @@ export type State = {
     active: boolean;
     focus: number;
     timers: TimerType[];
+    saves: Map<string, object>;
   };
 };
 
@@ -21,5 +22,6 @@ export const initial: State = {
     active: false,
     focus: -1,
     timers: [],
+    saves: new Map<string, object>(),
   },
 };
