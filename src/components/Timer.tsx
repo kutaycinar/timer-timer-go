@@ -45,7 +45,7 @@ function Timer({
               style={{
                 // background: "var(--background-color)",
                 background: "#11191f",
-                width: "12px",
+                width: "15px",
                 height: `25px`,
                 marginTop: "-5px",
               }}
