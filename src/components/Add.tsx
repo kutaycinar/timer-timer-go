@@ -54,7 +54,6 @@ function Modal({
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : goal,
       counter,
-      reverse: false,
     };
     setHook(params);
     if (reset) setFormValues(initialValues);

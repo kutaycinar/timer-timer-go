@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   FaAtom,
   FaChartBar,
@@ -8,15 +8,15 @@ import {
   FaPlus,
   FaTimes,
   FaTimesCircle,
-} from "react-icons/fa"
-import "./App.css"
-import Modal from "./components/Add"
-import Focus from "./components/Focus"
-import Overview from "./components/Overview"
-import ThemeProvider from "./components/ThemeProvider"
-import Timer from "./components/Timer"
-import BrowserWrapper from "./components/Wrapper"
-import { useTimer } from "./hooks"
+} from "react-icons/fa";
+import "./App.css";
+import Modal from "./components/Add";
+import Focus from "./components/Focus";
+import Overview from "./components/Overview";
+import ThemeProvider from "./components/ThemeProvider";
+import Timer from "./components/Timer";
+import BrowserWrapper from "./components/Wrapper";
+import { useTimer } from "./hooks";
 
 function App() {
   const {
@@ -31,7 +31,9 @@ function App() {
     getOverall,
     countNext,
     editTimer,
-  } = useTimer()
+    saveAllTimers,
+    clearSaves,
+  } = useTimer();
 
   enum TabType {
     Main,
@@ -39,7 +41,7 @@ function App() {
     Settings,
   }
 
-  const [tab, setTab] = useState(TabType.Main)
+  const [tab, setTab] = useState(TabType.Main);
 
   return (
     <ThemeProvider>
@@ -62,7 +64,7 @@ function App() {
                 />
               </div>
             ) : (
-              <div className='page'>
+              <div className="page">
                 <Overview {...getOverall()} />
                 {state.state.timers.map((t, idx) => (
                   <Timer
@@ -74,7 +76,7 @@ function App() {
                   />
                 ))}
                 <Modal setHook={addTimer} reset={true}>
-                  <button className='add'>
+                  <button className="add">
                     <FaPlus />
                   </button>
                 </Modal>
@@ -82,14 +84,21 @@ function App() {
             )}
           </div>
         )}
-        {tab === TabType.Analytics && <div>Analytics</div>}
+        {tab === TabType.Analytics && (
+          <div>
+            Analytics
+            <pre>{JSON.stringify(state.state.saves, undefined, 2)}</pre>
+            <button onClick={() => saveAllTimers()}>Save</button>
+            <button onClick={() => clearSaves()}>Clear Saves</button>
+          </div>
+        )}
         {tab === TabType.Settings && <div>Settings</div>}
         {state.state.focus === -1 && (
-          <nav className='navbar'>
+          <nav className="navbar">
             <ul>
               <li>
                 <a
-                  href='#'
+                  href="#"
                   className={`${tab === TabType.Main && "selected"}`}
                   onClick={() => setTab(TabType.Main)}
                 >
@@ -100,7 +109,7 @@ function App() {
             <ul>
               <li>
                 <a
-                  href='#'
+                  href="#"
                   className={`${tab === TabType.Analytics && "selected"}`}
                   onClick={() => setTab(TabType.Analytics)}
                 >
@@ -111,7 +120,7 @@ function App() {
             <ul>
               <li>
                 <a
-                  href='#'
+                  href="#"
                   className={`${tab === TabType.Settings && "selected"}`}
                   onClick={() => setTab(TabType.Settings)}
                 >
@@ -123,7 +132,7 @@ function App() {
         )}
       </BrowserWrapper>
     </ThemeProvider>
-  )
+  );
 }
 
-export default App
+export default App;

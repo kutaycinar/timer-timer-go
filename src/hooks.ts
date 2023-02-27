@@ -31,6 +31,7 @@ export function useTimer() {
 
     // daily reset check
     if (!isSameDay(state.state.date, new Date().getTime())) {
+      saveAllTimers();
       resetAllTimers();
     }
 
@@ -66,6 +67,7 @@ export function useTimer() {
 
       // daily reset check
       if (!isSameDay(state.state.date, new Date().getTime())) {
+        saveAllTimers();
         resetAllTimers();
       }
 
@@ -135,7 +137,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           timers: newTimers,
         },
       };
@@ -148,7 +149,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           active: false,
           focus: -1,
           timers: prevState.state.timers.filter((t) => t.name !== name),
@@ -163,7 +163,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           focus: idx,
         },
       };
@@ -212,7 +211,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           timers: newTimers,
         },
       };
@@ -226,7 +224,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           active: true,
         },
       };
@@ -240,7 +237,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           active: false,
         },
       };
@@ -254,7 +250,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           active: false,
           focus: -1,
         },
@@ -272,8 +267,33 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           timers: newTimers,
+        },
+      };
+    });
+  }
+
+  function saveAllTimers() {
+    // const newSave = new Map<string, TimerType[]>();
+    // newSave.set(String(state.state.date), state.state.timers);
+    const newSave: any = state.state.saves;
+    newSave[state.state.date] = state.state.timers;
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          saves: newSave,
+        },
+      };
+    });
+  }
+
+  function clearSaves() {
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          saves: {},
         },
       };
     });
@@ -292,7 +312,6 @@ export function useTimer() {
       return {
         state: {
           ...prevState.state,
-
           timers: newTimers,
         },
       };
@@ -338,5 +357,7 @@ export function useTimer() {
     getOverall,
     countNext,
     editTimer,
+    saveAllTimers,
+    clearSaves,
   };
 }
