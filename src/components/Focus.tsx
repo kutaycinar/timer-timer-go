@@ -90,17 +90,18 @@ function Focus({
         <GradientSVG />
         {counter ? (
           <CircularProgressbarWithChildren
-            strokeWidth={5}
+            strokeWidth={6}
             value={100 - (delta! / total!) * 100}
             text={delta ? `${delta!} Left` : "Complete!"}
             styles={{
-              path: { stroke: `url(#gradient)`, height: "100%" },
+              // path: { stroke: "url(#gradient)", height: "100%" },
+              path: { stroke: "var(--primary-hover)", height: "100%" },
               trail: {
                 stroke: "#2e2e2e",
               },
             }}
           >
-            {/* {total !== 1 && (
+            {total != 1 && (
               <RadialSeparators
                 count={total!}
                 style={{
@@ -111,7 +112,7 @@ function Focus({
                   marginTop: "-5px",
                 }}
               />
-            )} */}
+            )}
           </CircularProgressbarWithChildren>
         ) : (
           <CircularProgressbar
