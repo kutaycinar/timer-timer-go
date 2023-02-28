@@ -22,8 +22,6 @@ function Heatmap({ data }: { data: Save[] }) {
         if (!value) {
           return "color-empty";
         }
-        console.log(Math.round(value.count / 25));
-
         return `color-scale-${Math.round(value.count / 25)}`;
       }}
     />

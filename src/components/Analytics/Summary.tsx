@@ -8,9 +8,12 @@ function Summary({ data }: { data: Save[] }) {
   });
 
   return (
-    <div>
+    <div style={{ display: "flex", gap: "10px" }}>
       {lastWeek.map((save: Save) => (
-        <CircularProgressbarWithChildren value={save.completion} />
+        <CircularProgressbarWithChildren
+          value={save.completion}
+          text={dayjs(save.date).format("ddd")}
+        />
       ))}
     </div>
   );

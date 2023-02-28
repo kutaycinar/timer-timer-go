@@ -20,6 +20,7 @@ import { Save } from "./types";
 import "./Analytics.css";
 import "react-calendar-heatmap/dist/styles.css";
 import Heatmap from "./components/Analytics/Heatmap";
+import Summary from "./components/Analytics/Summary";
 
 ChartJS.register(
   CategoryScale,
@@ -49,6 +50,7 @@ function Analytics({ saves }: { saves: Save[] }) {
           {calculateTotalCompletions(saves)}
         </h2>
       </div>
+      <Summary data={saves} />
       <Heatmap data={saves} />
     </div>
   );
