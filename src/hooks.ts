@@ -31,6 +31,7 @@ export function useTimer() {
 
     // daily reset check
     if (!isSameDay(state.state.date, new Date().getTime())) {
+      saveAllTimers();
       resetAllTimers();
     }
 
@@ -47,9 +48,7 @@ export function useTimer() {
       setState((prevState) => {
         return {
           state: {
-            date: prevState.state.date,
-            active: prevState.state.active,
-            focus: prevState.state.focus,
+            ...prevState.state,
             timers: newTimers,
           },
         };
@@ -65,6 +64,13 @@ export function useTimer() {
         key: "state",
         value: JSON.stringify(state),
       });
+
+      // daily reset check
+      if (!isSameDay(state.state.date, new Date().getTime())) {
+        saveAllTimers();
+        resetAllTimers();
+      }
+
       // check for timer active
       if (state.state.active) {
         const newTimers = [...state.state.timers];
@@ -75,9 +81,8 @@ export function useTimer() {
           setState((prevState) => {
             return {
               state: {
+                ...prevState.state,
                 date: new Date().getTime(),
-                active: prevState.state.active,
-                focus: prevState.state.focus,
                 timers: newTimers,
               },
             };
@@ -88,10 +93,9 @@ export function useTimer() {
           setState((prevState) => {
             return {
               state: {
+                ...prevState.state,
                 date: new Date().getTime(),
                 active: false,
-                focus: prevState.state.focus,
-                timers: prevState.state.timers,
               },
             };
           });
@@ -102,10 +106,8 @@ export function useTimer() {
         setState((prevState) => {
           return {
             state: {
+              ...prevState.state,
               date: new Date().getTime(),
-              active: prevState.state.active,
-              focus: prevState.state.focus,
-              timers: prevState.state.timers,
             },
           };
         });
@@ -119,9 +121,7 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
+          ...prevState.state,
           timers: [...prevState.state.timers, props],
         },
       };
@@ -136,9 +136,7 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
+          ...prevState.state,
           timers: newTimers,
         },
       };
@@ -150,7 +148,7 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
+          ...prevState.state,
           active: false,
           focus: -1,
           timers: prevState.state.timers.filter((t) => t.name !== name),
@@ -164,10 +162,8 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
+          ...prevState.state,
           focus: idx,
-          timers: prevState.state.timers,
         },
       };
     });
@@ -214,9 +210,7 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
+          ...prevState.state,
           timers: newTimers,
         },
       };
@@ -229,10 +223,8 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
+          ...prevState.state,
           active: true,
-          focus: prevState.state.focus,
-          timers: prevState.state.timers,
         },
       };
     });
@@ -244,10 +236,8 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
+          ...prevState.state,
           active: false,
-          focus: prevState.state.focus,
-          timers: prevState.state.timers,
         },
       };
     });
@@ -259,10 +249,9 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
+          ...prevState.state,
           active: false,
           focus: -1,
-          timers: prevState.state.timers,
         },
       };
     });
@@ -277,10 +266,32 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
+          ...prevState.state,
           timers: newTimers,
+        },
+      };
+    });
+  }
+
+  function saveAllTimers() {
+    const newSave: any = state.state.saves;
+    newSave[new Date(state.state.date).toLocaleString()] = state.state.timers;
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          saves: newSave,
+        },
+      };
+    });
+  }
+
+  function clearSaves() {
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          saves: {},
         },
       };
     });
@@ -298,9 +309,7 @@ export function useTimer() {
     setState((prevState) => {
       return {
         state: {
-          date: prevState.state.date,
-          active: prevState.state.active,
-          focus: prevState.state.focus,
+          ...prevState.state,
           timers: newTimers,
         },
       };
@@ -346,5 +355,7 @@ export function useTimer() {
     getOverall,
     countNext,
     editTimer,
+    saveAllTimers,
+    clearSaves,
   };
 }
