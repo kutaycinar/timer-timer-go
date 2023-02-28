@@ -1,14 +1,14 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
   BarController,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
 } from "chart.js";
 import dayjs from "dayjs";
 import { Bar } from "react-chartjs-2";
@@ -28,12 +28,10 @@ ChartJS.register(
 
 function Analytics({ saves }: { saves: Save[] }) {
   const lastWeek = saves.filter((save: Save) => {
-    // console.log(dayjs(save.date).diff(dayjs(), "days"));
-    return dayjs(save.date).diff(dayjs(), "days") < 7;
+    return Math.abs(dayjs().diff(dayjs(save.date), "days")) < 7;
   });
   const data = {
     labels: lastWeek.map((s: Save) => {
-      console.log(dayjs(s.date).format("dddd"));
       return dayjs(s.date).format("dddd");
     }),
     datasets: [
@@ -50,7 +48,26 @@ function Analytics({ saves }: { saves: Save[] }) {
     <div>
       <>
         <h1>Analytics</h1>
-        <Bar data={data} />
+        <Bar
+          data={data}
+          options={{
+            scales: {
+              y: {
+                suggestedMax: 100,
+                position: "left",
+                ticks: {
+                  count: 5,
+                },
+              },
+              x: {
+                position: "bottom",
+                ticks: {
+                  count: 7,
+                },
+              },
+            },
+          }}
+        />
         {/* {lastWeek.forEach((s: Save) => console.log(s))} */}
         {/* {console.log(data.labels)} */}
       </>
