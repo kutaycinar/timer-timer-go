@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
+import Analytics from "./Analytics";
 import "./App.css";
 import Modal from "./components/Add";
 import Focus from "./components/Focus";
@@ -36,7 +37,7 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserWrapper>
-        <pre>{JSON.stringify(state, undefined, 2)}</pre>
+        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
         {tab === TabType.Main && (
           <div>
             {state.state.focus !== -1 ? (
@@ -76,10 +77,7 @@ function App() {
         )}
         {tab === TabType.Analytics && (
           <div>
-            Analytics
-            <pre style={{ height: "63vh" }}>
-              {JSON.stringify(state.state.saves, undefined, 2)}
-            </pre>
+            <Analytics />
             <button onClick={() => clearSaves()}>Clear Saves</button>
           </div>
         )}
