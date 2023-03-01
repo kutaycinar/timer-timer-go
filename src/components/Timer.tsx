@@ -33,7 +33,7 @@ function Timer({
           strokeWidth={10}
           styles={buildStyles({
             pathColor: "var(--primary-hover)",
-
+            strokeLinecap: "butt",
             trailColor: "#2e2e2e",
             backgroundColor: delta ? "transparent" : "rgba(26, 179, 230, 0.4)",
           })}
@@ -49,7 +49,7 @@ function Timer({
             <RadialSeparators
               count={total!}
               style={{
-                background: "var(--background)",
+                background: "#11191f",
                 width: "10px",
                 height: `${10}%`,
               }}
