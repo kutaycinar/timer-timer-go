@@ -8,7 +8,7 @@ export type OverviewProps = {
 function Overview({ delta, total }: OverviewProps) {
   return (
     <div className="overview">
-      <h2 style={{ marginBottom: 15 }}> Overview </h2>
+      <h2 style={{ marginBottom: 15 }}> Today </h2>
       Overall completion{" "}
       <strong>{Math.round((delta / total) * 100) || 0} %</strong>
       <progress value={delta} max={total} />

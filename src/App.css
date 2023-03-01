@@ -4,7 +4,6 @@ a {
 }
 
 .page {
-  padding-top: 50px;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -99,4 +98,12 @@ a {
 
 .selected {
   background: #ffffff1f;
+}
+
+.heading {
+  margin-bottom: -12px;
+  margin-left: 24px;
+  padding-top: 16px; /* text-align-last: center; */
+  font-size: 48px;
+  padding-top: 40px;
 }
