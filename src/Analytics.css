@@ -1,0 +1,25 @@
+.stat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+}
+
+.stat {
+  margin: auto;
+}
+
+.react-calendar-heatmap .color-scale-1 {
+  fill: #00ffee;
+}
+.react-calendar-heatmap .color-scale-2 {
+  fill: #00bbff;
+}
+.react-calendar-heatmap .color-scale-3 {
+  fill: #0055ff;
+}
+.react-calendar-heatmap .color-scale-4 {
+  fill: hsl(232, 100%, 50%);
+}

@@ -89,7 +89,7 @@ a {
 }
 
 .navbar {
-  display:flex;
+  display: flex;
   width: 100%;
   position: absolute;
   bottom: 24px;
@@ -98,5 +98,5 @@ a {
 }
 
 .selected {
-  background: #FFFFFF1F;
+  background: #ffffff1f;
 }

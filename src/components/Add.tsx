@@ -16,6 +16,7 @@ function Modal({
     hour: 0,
     goal: 1,
     counter: false,
+    color: "#1bb3e6",
   },
   reset = false,
 }: {
@@ -36,7 +37,7 @@ function Modal({
 
   const [counter, setCounter] = useState(initialValues.counter);
 
-  const { name, seconds, minutes, hour, goal } = formValues;
+  const { name, seconds, minutes, hour, goal, color } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
@@ -54,6 +55,7 @@ function Modal({
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : goal,
       counter,
+      color,
     };
     setHook(params);
     if (reset) setFormValues(initialValues);
@@ -77,6 +79,15 @@ function Modal({
               onChange={handleFormChange}
               autoComplete="off"
             />
+          </label>
+          <label>
+            Color
+            <input
+              type="color"
+              onChange={handleFormChange}
+              name="color"
+              value={color}
+            ></input>
           </label>
           <div className="inline">
             Type:
@@ -141,6 +152,7 @@ function Modal({
                 </label>
               </div>
             )}
+
             <br />
           </div>
           <footer style={{ display: "flex" }}>

@@ -1,3 +1,4 @@
+import { Dayjs } from "dayjs";
 import _ from "lodash";
 
 export const getSeconds = (time: number) => {
@@ -34,12 +35,6 @@ export const parseTime = (time: number): string => {
   const seconds = getSeconds(time);
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
-
-export function isSameDay(timestamp1: number, timestamp2: number) {
-  const date1 = new Date(timestamp1);
-  const date2 = new Date(timestamp2);
-  return date1.toDateString() == date2.toDateString();
-}
 
 function Separator(props: any) {
   return (

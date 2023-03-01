@@ -1,14 +1,6 @@
 import { useState } from "react";
-import {
-  FaAtom,
-  FaChartBar,
-  FaChartLine,
-  FaClock,
-  FaCog,
-  FaPlus,
-  FaTimes,
-  FaTimesCircle,
-} from "react-icons/fa";
+import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
+import Analytics from "./Analytics";
 import "./App.css";
 import Modal from "./components/Add";
 import Focus from "./components/Focus";
@@ -31,7 +23,6 @@ function App() {
     getOverall,
     countNext,
     editTimer,
-    saveAllTimers,
     clearSaves,
   } = useTimer();
 
@@ -73,6 +64,7 @@ function App() {
                     idx={idx}
                     deleteTimer={deleteTimer}
                     focusTimer={focusTimer}
+                    color={t.color}
                   />
                 ))}
                 <Modal setHook={addTimer} reset={true}>
@@ -86,15 +78,16 @@ function App() {
         )}
         {tab === TabType.Analytics && (
           <div>
-            Analytics
-            <pre style={{ height: "63vh" }}>
-              {JSON.stringify(state.state.saves, undefined, 2)}
-            </pre>
-            <button onClick={() => saveAllTimers()}>Save</button>
+            <Analytics saves={state.state.saves} />
+            {/* <pre>{JSON.stringify(state.state.saves, undefined, 2)}</pre> */}
+          </div>
+        )}
+        {tab === TabType.Settings && (
+          <div>
+            Settings
             <button onClick={() => clearSaves()}>Clear Saves</button>
           </div>
         )}
-        {tab === TabType.Settings && <div>Settings</div>}
         {state.state.focus === -1 && (
           <nav className="navbar">
             <ul>
