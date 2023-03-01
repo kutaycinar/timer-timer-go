@@ -64,6 +64,7 @@ function App() {
                     idx={idx}
                     deleteTimer={deleteTimer}
                     focusTimer={focusTimer}
+                    color={t.color}
                   />
                 ))}
                 <Modal setHook={addTimer} reset={true}>

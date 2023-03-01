@@ -5,6 +5,7 @@ export type TimerType = {
   delta: number;
   total: number;
   counter: boolean;
+  color: string;
 };
 
 export type State = {

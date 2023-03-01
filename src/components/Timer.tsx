@@ -20,6 +20,7 @@ function Timer({
   deleteTimer,
   focusTimer,
   idx,
+  color,
 }: TimerProps) {
   return (
     <div className="timer">
@@ -30,12 +31,14 @@ function Timer({
         <CircularProgressbarWithChildren
           value={((total - delta) / total) * 100}
           background
+          // backgroundPadding={delta == 0 ? 100 : 0}
           strokeWidth={10}
           styles={buildStyles({
-            pathColor: "var(--primary-hover)",
+            pathColor: color,
             strokeLinecap: "butt",
-            trailColor: "#2e2e2e",
-            backgroundColor: delta ? "transparent" : "rgba(26, 179, 230, 0.4)",
+            trailColor: color + "20",
+            // trailColor: "#2e2e2e",
+            backgroundColor: delta ? "transparent" : color + "A0",
           })}
         >
           {delta ? (
@@ -50,8 +53,9 @@ function Timer({
               count={total!}
               style={{
                 background: "#11191f",
-                width: "10px",
-                height: `${10}%`,
+                width: "5px",
+                height: `${15}%`,
+                margin: "-1px",
               }}
             />
           )}

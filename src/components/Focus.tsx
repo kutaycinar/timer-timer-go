@@ -9,10 +9,12 @@ import {
   FaPlus,
   FaTrash,
   FaForward,
+  FaCheck,
 } from "react-icons/fa";
 import { TimerType } from "../types";
 import "./Focus.css";
 import {
+  buildStyles,
   CircularProgressbar,
   CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
@@ -22,7 +24,6 @@ import {
   getMinutes,
   getSeconds,
   GradientSVG,
-  parseTime,
   prettyTime,
   RadialSeparators,
 } from "../utils";
@@ -52,6 +53,7 @@ function Focus({
   delta,
   total,
   counter,
+  color,
   signalPause,
   signalStop,
   signalStart,
@@ -67,7 +69,9 @@ function Focus({
 
   useEffect(() => {
     if (delta === 0 && prevDelta !== 0) {
-      setTaskOver(true);
+      setTimeout(() => {
+        setTaskOver(true);
+      }, 150);
     }
     setPrevDelta(delta);
   }, [delta]);
@@ -79,6 +83,7 @@ function Focus({
     hour: getHours(total!),
     goal: counter ? total : 1,
     counter,
+    color,
   };
 
   return (
@@ -89,46 +94,38 @@ function Focus({
       <h3 className="title">{name}</h3>
       <div className="timer-container">
         <GradientSVG />
-        {counter ? (
-          <CircularProgressbarWithChildren
-            strokeWidth={6}
-            value={100 - (delta! / total!) * 100}
-            text={delta ? `${delta!} Left` : "Complete!"}
-            styles={{
-              // path: { stroke: "url(#gradient)", height: "100%" },
-              path: { stroke: "var(--primary-hover)", height: "100%" },
-              trail: {
-                stroke: "#2e2e2e",
-              },
-            }}
-          >
-            {total != 1 && (
-              <RadialSeparators
-                count={total!}
-                style={{
-                  background: "var(--background-color)",
-                  border: "1px solid var(--background-color)",
-                  width: "19px",
-                  height: `25px`,
-                  marginTop: "-5px",
-                }}
-              />
-            )}
-          </CircularProgressbarWithChildren>
-        ) : (
-          <CircularProgressbar
-            strokeWidth={5}
-            value={100 - (delta! / total!) * 100}
-            text={`${prettyTime(delta!)}`}
-            styles={{
-              // path: { stroke: `url(#gradient)`, height: "100%" },
-              path: { stroke: "var(--primary-hover)", height: "100%" },
-              trail: {
-                stroke: "#2e2e2e",
-              },
-            }}
-          />
-        )}
+        <CircularProgressbarWithChildren
+          strokeWidth={6}
+          background
+          // backgroundPadding={delta == 0 ? 100 : 0}
+          value={100 - (delta! / total!) * 100}
+          styles={buildStyles({
+            pathColor: color,
+            strokeLinecap: "butt",
+            trailColor: "#2e2e2e",
+            backgroundColor: delta ? "transparent" : color + "A0",
+          })}
+        >
+          {delta ? (
+            <h1 style={{ margin: "auto" }}>
+              {counter ? `${delta} left` : `${prettyTime(delta)}`}
+            </h1>
+          ) : (
+            <FaCheck fontSize={100} color="var(--text-primary)" />
+          )}
+          {counter && total != 1 && delta != 0 && (
+            <RadialSeparators
+              count={total!}
+              style={{
+                background: "var(--background-color)",
+                border: "1px solid var(--background-color)",
+                width: "19px",
+                height: `25px`,
+                marginTop: "-5px",
+              }}
+            />
+          )}
+        </CircularProgressbarWithChildren>
         {taskOver && (
           <div style={{ position: "absolute", left: "50%", top: "50%" }}>
             <ConfettiExplosion {...confettiProps} />
