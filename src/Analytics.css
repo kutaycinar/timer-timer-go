@@ -1,6 +1,9 @@
 .stat-container {
   display: flex;
   justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
 }
 
 .react-calendar-heatmap .color-scale-1 {

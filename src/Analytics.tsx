@@ -21,6 +21,7 @@ import "./Analytics.css";
 import "react-calendar-heatmap/dist/styles.css";
 import Heatmap from "./components/Analytics/Heatmap";
 import Summary from "./components/Analytics/Summary";
+import Card from "./components/Analytics/Card";
 
 ChartJS.register(
   CategoryScale,
@@ -39,19 +40,27 @@ function Analytics({ saves }: { saves: Save[] }) {
     <div style={{ padding: "15px" }}>
       <h1>Analytics</h1>
       <div style={{ display: "flex" }}>
-        <h2 className="stat-container">
-          LifeTime Average
-          <br />
-          {calculateAverageCompletion(saves) + "%"}
-        </h2>
-        <h2 className="stat-container">
-          Total Completions
-          <br />
-          {calculateTotalCompletions(saves)}
-        </h2>
+        <Card>
+          <h4 className="stat-container">
+            LifeTime Average
+            <br />
+            {calculateAverageCompletion(saves) + "%"}
+          </h4>
+        </Card>
+        <Card>
+          <h4 className="stat-container">
+            Total Completions
+            <br />
+            {calculateTotalCompletions(saves)}
+          </h4>
+        </Card>
       </div>
-      <Summary data={saves} />
-      <Heatmap data={saves} />
+      <Card title="Last Week">
+        <Summary data={saves} />
+      </Card>
+      <Card title="Summary">
+        <Heatmap data={saves} />
+      </Card>
     </div>
   );
 }
