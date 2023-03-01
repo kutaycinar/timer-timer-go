@@ -356,6 +356,7 @@ export function useTimer() {
       total: Number(accumulator.total) + 1,
       counter: false,
       reverse: false,
+      color: "",
     });
 
     const { delta, total } = state.state.timers.reduce(reducer, {
@@ -364,6 +365,7 @@ export function useTimer() {
       total: 0,
       counter: false,
       reverse: false,
+      color: "",
     });
 
     return {
