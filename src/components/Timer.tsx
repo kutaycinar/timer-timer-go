@@ -1,4 +1,8 @@
-import { CircularProgressbarWithChildren } from "react-circular-progressbar";
+import {
+  buildStyles,
+  CircularProgressbarWithChildren,
+} from "react-circular-progressbar";
+import { FaCheck, FaPlus } from "react-icons/fa";
 import { TimerType } from "../types";
 import { prettyTime, RadialSeparators } from "../utils";
 
@@ -25,29 +29,29 @@ function Timer({
         </div>
         <CircularProgressbarWithChildren
           value={((total - delta) / total) * 100}
-          text={
-            counter
-              ? delta
-                ? `${delta} left`
-                : "Complete!"
-              : `${prettyTime(delta)}`
-          }
-          styles={{
-            path: { stroke: "var(--primary-hover)" },
-            trail: {
-              stroke: "#2e2e2e",
-            },
-          }}
+          background
+          strokeWidth={10}
+          styles={buildStyles({
+            pathColor: "var(--primary-hover)",
+
+            trailColor: "#2e2e2e",
+            backgroundColor: delta ? "transparent" : "rgba(26, 179, 230, 0.4)",
+          })}
         >
-          {counter && total != 1 && (
+          {delta ? (
+            <h3 style={{ margin: "auto" }}>
+              {counter ? `${delta} left` : `${prettyTime(delta)}`}
+            </h3>
+          ) : (
+            <FaCheck fontSize={32} color="var(--text-primary)" />
+          )}
+          {counter && delta !== 0 && total != 1 && (
             <RadialSeparators
               count={total!}
               style={{
-                // background: "var(--background-color)",
-                background: "#11191f",
-                width: "15px",
-                height: `25px`,
-                marginTop: "-5px",
+                background: "var(--background)",
+                width: "10px",
+                height: `${10}%`,
               }}
             />
           )}
