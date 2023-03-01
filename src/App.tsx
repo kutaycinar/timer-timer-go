@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
 import Analytics from "./Analytics";
 import "./App.css";
@@ -24,6 +25,7 @@ function App() {
     countNext,
     editTimer,
     clearSaves,
+    clearAllData,
   } = useTimer();
 
   enum TabType {
@@ -86,6 +88,15 @@ function App() {
                 </div>
               ) : (
                 <div className="page">
+                  {state.state.timers.length === 0 && (
+                    <div className="timer">
+                      <Modal setHook={addTimer} reset={true}>
+                        <CircularProgressbarWithChildren value={0}>
+                          <FaPlus size={32} />
+                        </CircularProgressbarWithChildren>
+                      </Modal>
+                    </div>
+                  )}
                   {state.state.timers.map((t, idx) => (
                     <Timer
                       key={t.name}
@@ -108,12 +119,22 @@ function App() {
           {tab === TabType.Analytics && (
             <div>
               <Analytics saves={state.state.saves} />
-              {/* <pre>{JSON.stringify(state.state.saves, undefined, 2)}</pre> */}
             </div>
           )}
           {tab === TabType.Settings && (
             <div>
-              <button onClick={() => clearSaves()}>Clear Saves</button>
+              <button
+                style={{ width: "87%", margin: "32px 24px" }}
+                onClick={() => clearSaves()}
+              >
+                Clear Saves
+              </button>
+              <button
+                style={{ width: "87%", margin: "32px 24px" }}
+                onClick={() => clearAllData()}
+              >
+                Clear All Data
+              </button>
             </div>
           )}
           {state.state.focus === -1 && (
