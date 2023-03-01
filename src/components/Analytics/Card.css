@@ -14,3 +14,7 @@
   margin: auto;
   padding-bottom: 5px;
 }
+
+.span2 {
+  grid-column: span 2;
+}

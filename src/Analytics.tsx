@@ -10,8 +10,6 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import dayjs from "dayjs";
-import { Bar } from "react-chartjs-2";
 import {
   calculateAverageCompletion,
   calculateTotalCompletions,
@@ -37,28 +35,29 @@ ChartJS.register(
 
 function Analytics({ saves }: { saves: Save[] }) {
   return (
-    <div style={{ padding: "15px" }}>
-      <h1>Analytics</h1>
-      <div style={{ display: "flex" }}>
-        <Card>
-          <h4 className="stat-container">
-            LifeTime Average
-            <br />
-            {calculateAverageCompletion(saves) + "%"}
-          </h4>
-        </Card>
-        <Card>
-          <h4 className="stat-container">
-            Total Completions
-            <br />
-            {calculateTotalCompletions(saves)}
-          </h4>
-        </Card>
-      </div>
-      <Card title="Last Week">
+    <div
+      style={{
+        padding: "15px",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+      }}
+    >
+      <Card>
+        <div className="stat-container">
+          <h2 className="stat">{calculateAverageCompletion(saves) + "%"}</h2>
+          <h4 className="stat">Average</h4>
+        </div>
+      </Card>
+      <Card>
+        <div className="stat-container">
+          <h2 className="stat">{calculateTotalCompletions(saves)}</h2>
+          <h4 className="stat">Completions</h4>
+        </div>
+      </Card>
+      <Card title="Last Week" span2>
         <Summary data={saves} />
       </Card>
-      <Card title="Summary">
+      <Card title="Summary" span2>
         <Heatmap data={saves} />
       </Card>
     </div>
