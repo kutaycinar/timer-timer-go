@@ -253,6 +253,10 @@ export function useTimer() {
     });
   }
 
+  function clearAllData() {
+    setState(initial);
+  }
+
   // stop
   function signalStop() {
     cancelNotification();
@@ -389,5 +393,6 @@ export function useTimer() {
     editTimer,
     saveAllTimers,
     clearSaves,
+    clearAllData,
   };
 }

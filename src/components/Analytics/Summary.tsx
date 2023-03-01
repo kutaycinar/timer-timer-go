@@ -8,10 +8,19 @@ function Summary({ data }: { data: Save[] }) {
   });
 
   return (
-    <div style={{ display: "flex", gap: "4px", marginBottom: "10px" }}>
+    <div
+      style={{
+        display: "flex",
+        gap: "4px",
+        marginBottom: "10px",
+        maxHeight: "40px",
+      }}
+    >
       {lastWeek.map((save: Save, idx: number) => (
         <CircularProgressbarWithChildren value={save.completion} key={idx}>
-          <h6 style={{ margin: "auto" }}>{dayjs(save.date).format("ddd")}</h6>
+          <h6 style={{ marginTop: "32px" }}>
+            {dayjs(save.date).format("ddd")}
+          </h6>
         </CircularProgressbarWithChildren>
       ))}
     </div>
