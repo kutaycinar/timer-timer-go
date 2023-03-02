@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
+const ConfettiExplosion = await import("react-confetti-explosion").then(
+  (module) => module.default
+);
 import {
   FaChevronLeft,
   FaCog,
@@ -28,6 +30,7 @@ import {
   RadialSeparators,
 } from "../utils";
 import Modal from "./Add";
+import { ConfettiProps } from "react-confetti-explosion";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
