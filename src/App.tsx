@@ -7,6 +7,7 @@ import Modal from "./components/Add";
 import Confirmation from "./components/Confirmation";
 import Focus from "./components/Focus";
 import Overview from "./components/Overview";
+import Purchases from "./components/Purchases";
 import ThemeProvider from "./components/ThemeProvider";
 import Timer from "./components/Timer";
 import BrowserWrapper from "./components/Wrapper";
@@ -56,6 +57,7 @@ function App() {
 
   return (
     <ThemeProvider>
+      <Purchases />
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
           style={{
