@@ -4,6 +4,7 @@ import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
 import Analytics from "./Analytics";
 import "./App.css";
 import Modal from "./components/Add";
+import Confirmation from "./components/Confirmation";
 import Focus from "./components/Focus";
 import Overview from "./components/Overview";
 import ThemeProvider from "./components/ThemeProvider";
@@ -123,18 +124,22 @@ function App() {
           )}
           {tab === TabType.Settings && (
             <div>
-              <button
-                style={{ width: "87%", margin: "32px 24px" }}
-                onClick={() => clearSaves()}
+              <Confirmation
+                type="settings-button"
+                title="Clear Save Data"
+                body="All stats from previous days will be deleted. Today's data and your timers will be preserved."
+                callback={() => clearSaves()}
               >
                 Clear Saves
-              </button>
-              <button
-                style={{ width: "87%", margin: "32px 24px" }}
-                onClick={() => clearAllData()}
+              </Confirmation>
+              <Confirmation
+                type="settings-button"
+                title="Clear All Data"
+                body="All stats and tasks will be deleted. Your app be reset to factory default."
+                callback={() => clearAllData()}
               >
                 Clear All Data
-              </button>
+              </Confirmation>
             </div>
           )}
           {state.state.focus === -1 && (
