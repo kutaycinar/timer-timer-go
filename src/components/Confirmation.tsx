@@ -4,11 +4,13 @@ import "./Focus.css";
 function Confirmation({
   title,
   body,
+  type,
   callback,
   children,
 }: {
   title: string;
   body: string;
+  type?: string;
   callback: any;
   children?: any;
 }) {
@@ -20,7 +22,10 @@ function Confirmation({
 
   return (
     <>
-      <button className="action-button" onClick={() => setModal(!modal)}>
+      <button
+        className={type || "action-button"}
+        onClick={() => setModal(!modal)}
+      >
         {children}
       </button>
       <dialog open={modal}>
