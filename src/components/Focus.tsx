@@ -4,7 +4,9 @@ import {
   CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
+const ConfettiExplosion = await import("react-confetti-explosion").then(
+  (module) => module.default
+);
 import {
   FaCheck,
   FaChevronLeft,
@@ -27,6 +29,7 @@ import {
 import Modal from "./Add";
 import Confirmation from "./Confirmation";
 import "./Focus.css";
+import { ConfettiProps } from "react-confetti-explosion";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
