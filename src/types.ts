@@ -11,8 +11,14 @@ export type State = {
     active: boolean;
     focus: number;
     timers: TimerType[];
-    saves: {};
+    saves: Save[];
   };
+};
+
+export type Save = {
+  date: string;
+  timers: TimerType[];
+  completion: number;
 };
 
 export const initial: State = {
@@ -21,6 +27,6 @@ export const initial: State = {
     active: false,
     focus: -1,
     timers: [],
-    saves: {},
+    saves: [],
   },
 };

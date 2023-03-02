@@ -46,7 +46,7 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserWrapper>
-        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
+        <pre>{JSON.stringify(state, undefined, 2)}</pre>
         {tab === TabType.Main && (
           <div>
             {state.state.focus !== -1 ? (

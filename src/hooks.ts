@@ -3,7 +3,7 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
 import { useEffect, useState } from "react";
 import { OverviewProps } from "./components/Overview";
-import { initial, State, TimerType } from "./types";
+import { initial, Save, State, TimerType } from "./types";
 import { isSameDay } from "./utils";
 
 export function useTimer() {
@@ -274,24 +274,28 @@ export function useTimer() {
   }
 
   function saveAllTimers() {
-    const newSave: any = state.state.saves;
-    newSave[new Date(state.state.date).toLocaleString()] = state.state.timers;
-    setState((prevState) => {
+    const overall = getOverall();
+    const newSave: Save = {
+      timers: state.state.timers,
+      completion: (overall.delta / overall.total) * 100,
+      date: new Date(state.state.date).toLocaleDateString(),
+    };
+    setState((prevState: State) => {
       return {
         state: {
           ...prevState.state,
-          saves: newSave,
+          saves: [...(prevState.state.saves || []), newSave],
         },
       };
     });
   }
 
   function clearSaves() {
-    setState((prevState) => {
+    setState((prevState: State) => {
       return {
         state: {
           ...prevState.state,
-          saves: {},
+          saves: [],
         },
       };
     });
