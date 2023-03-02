@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
-import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
-import {
-  FaChevronLeft,
-  FaCog,
-  FaPause,
-  FaPlay,
-  FaUndoAlt,
-  FaPlus,
-  FaTrash,
-  FaForward,
-  FaCheck,
-} from "react-icons/fa";
-import { TimerType } from "../types";
-import "./Focus.css";
 import {
   buildStyles,
-  CircularProgressbar,
   CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
+import {
+  FaCheck,
+  FaChevronLeft,
+  FaCog,
+  FaForward,
+  FaPause,
+  FaPlay,
+  FaTrash,
+  FaUndoAlt,
+} from "react-icons/fa";
+import { TimerType } from "../types";
 import {
   getHours,
   getMinutes,
@@ -28,6 +25,8 @@ import {
   RadialSeparators,
 } from "../utils";
 import Modal from "./Add";
+import Confirmation from "./Confirmation";
+import "./Focus.css";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -63,9 +62,9 @@ function Focus({
   editTimer,
   deleteTimer,
 }: FocusProps) {
-  const [key, setKey] = useState(0);
   const [prevDelta, setPrevDelta] = useState(delta);
   const [taskOver, setTaskOver] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     if (delta === 0 && prevDelta !== 0) {
@@ -153,24 +152,23 @@ function Focus({
         </div>
       </div>
       <div className="footer-buttons">
-        <button
-          className="action-button"
-          onClick={() => {
+        <Confirmation
+          title="Reset Timer"
+          body="Task data will be reset to zero. This action cannot be undone"
+          callback={() => {
             signalReset();
             setTaskOver(false);
-            setKey(key + 1);
           }}
         >
           <FaUndoAlt />
-        </button>
-        <button
-          className="action-button"
-          onClick={() => {
-            deleteTimer(name);
-          }}
+        </Confirmation>
+        <Confirmation
+          title="Delete Timer"
+          body="Task will be deleted. All previous task data will be preserved."
+          callback={() => deleteTimer(name)}
         >
           <FaTrash />
-        </button>
+        </Confirmation>
         <Modal setHook={editTimer} initialValues={init}>
           <button className="action-button">
             <FaCog />
