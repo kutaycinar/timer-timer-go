@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 function Purchases() {
   const [perms, setPerms] = useState<GlassfyOffering[]>([]);
+  const [test, setTest] = useState(0);
   useEffect(() => {
     async function init() {
       try {
@@ -17,11 +18,18 @@ function Purchases() {
       } catch (e) {
         console.log(e);
       }
-      const offerings = await Glassfy.offerings();
-      setPerms(offerings.all);
+      setTest(1);
     }
     init();
   }, []);
+
+  useEffect(() => {
+    async function updateOfferings() {
+      const offerings = await Glassfy.offerings();
+      setPerms(offerings.all);
+    }
+    updateOfferings();
+  }, [test]);
 
   function getOffers() {
     const options = perms.map((perm: GlassfyOffering) => {
@@ -31,7 +39,7 @@ function Purchases() {
       <>
         {perms.length}
         {...options}
-        <button onClick={() => console.log(perms)}> Log </button>
+        <button onClick={() => setTest(test + 1)}> Refresh </button>
       </>
     );
   }
