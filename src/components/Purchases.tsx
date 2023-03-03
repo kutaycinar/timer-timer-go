@@ -1,8 +1,12 @@
-import { Glassfy, GlassfyPermissions } from "capacitor-plugin-glassfy";
+import {
+  Glassfy,
+  GlassfyOffering,
+  GlassfyOfferings,
+} from "capacitor-plugin-glassfy";
 import { useEffect, useState } from "react";
 
 function Purchases() {
-  const [perms, setPerms] = useState<GlassfyPermissions>();
+  const [perms, setPerms] = useState<GlassfyOffering[]>([]);
   useEffect(() => {
     async function init() {
       try {
@@ -13,12 +17,26 @@ function Purchases() {
       } catch (e) {
         console.log(e);
       }
-      const perms = await Glassfy.permissions();
-      setPerms(perms);
+      const offerings = await Glassfy.offerings();
+      setPerms(offerings.all);
     }
     init();
   }, []);
-  return <pre>{JSON.stringify(perms, undefined, 2)}</pre>;
+
+  function getOffers() {
+    const options = perms.map((perm: GlassfyOffering) => {
+      <div>{perm.offeringId}</div>;
+    });
+    return (
+      <>
+        {perms.length}
+        {...options}
+        <button onClick={() => console.log(perms)}> Log </button>
+      </>
+    );
+  }
+
+  return <div>Test: {getOffers()}</div>;
 }
 
 export default Purchases;
