@@ -57,6 +57,8 @@ function App() {
 
   return (
     <ThemeProvider>
+      <br />
+      <br />
       <Purchases />
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
