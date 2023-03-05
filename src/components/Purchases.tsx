@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 function Purchases() {
   const [perms, setPerms] = useState<GlassfyOffering[]>([]);
-  const [test, setTest] = useState(0);
   useEffect(() => {
     async function init() {
       try {
@@ -12,43 +11,28 @@ function Purchases() {
           watcherMode: false,
         });
       } catch (e) {
-        console.log(e);
+        console.log("INIT ERROR:", e);
       }
-      setTest(1);
+
+      try {
+        const offerings = await Glassfy.offerings();
+        setPerms(offerings.all);
+      } catch (e) {
+        console.log("OFFERINGS ERROR:", e);
+      }
     }
     init();
   }, []);
 
-  useEffect(() => {
-    async function updateOfferings() {
-      const offerings = await Glassfy.offerings();
-      setPerms(offerings.all);
-      //@ts-ignore
-      // try {
-      //   let sku = await Glassfy.skuWithId({ identifier: "unlock_pro_mode" });
-      //   // sku.extravars
-      //   // sku.product.description;
-      //   // sku.product.price
-      //   //@ts-ignore
-      //   setPerms(sku);
-      // } catch (e) {
-      //   console.log(e);
-      //   // setPerms(e);
-      // }
-    }
-    updateOfferings();
-  }, [test]);
-
   function getOffers() {
     const options = perms.map((perm: GlassfyOffering) => {
-      return <div>{perm.offeringId}</div>;
+      return <div>{perm.skus[0]?.skuId}</div>;
     });
     return (
       <>
         {perms.length}
         <pre>{JSON.stringify(perms, undefined, 2)}</pre>
         {...options}
-        <button onClick={() => setTest(test + 1)}> Refresh </button>
       </>
     );
   }

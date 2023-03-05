@@ -5,11 +5,10 @@ import {
 import { Save } from "./types";
 import "./Analytics.css";
 import "react-calendar-heatmap/dist/styles.css";
-const Heatmap = await import("./components/Analytics/Heatmap").then(
-  (module) => module.default
-);
+import "./components/Analytics/Heatmap";
 import Summary from "./components/Analytics/Summary";
 import Card from "./components/Analytics/Card";
+import Heatmap from "./components/Analytics/Heatmap";
 
 function Analytics({ saves }: { saves: Save[] }) {
   return (
