@@ -1,8 +1,9 @@
-import { Glassfy, GlassfyOffering } from "capacitor-plugin-glassfy";
+import { Glassfy, GlassfyOffering, GlassfySku } from "capacitor-plugin-glassfy";
 import { useEffect, useState } from "react";
 
 function Purchases() {
   const [perms, setPerms] = useState<GlassfyOffering[]>([]);
+  const [pro, setPro] = useState(false);
   useEffect(() => {
     async function init() {
       try {
@@ -24,15 +25,35 @@ function Purchases() {
     init();
   }, []);
 
+  async function purchaseSKU(sku: GlassfySku) {
+    try {
+      const transaction = await Glassfy.purchaseSku({ sku });
+      const permission = transaction.permissions.all.find(
+        (p) => p.permissionId === "aPermission"
+      );
+      if (permission && permission.isValid) {
+        setPro(true);
+      }
+    } catch (e) {
+      console.log("Purchase Error");
+    }
+  }
+
   function getOffers() {
     const options = perms.map((perm: GlassfyOffering) => {
-      return <div>{perm.skus[0]?.skuId}</div>;
+      return (
+        <button onClick={() => purchaseSKU(perm.skus[0])}>
+          {perm.skus[0].product.title + ": " + perm.skus[0].product.price}
+        </button>
+      );
     });
     return (
       <>
-        {perms.length}
+        {options}
         <pre>{JSON.stringify(perms, undefined, 2)}</pre>
-        {...options}
+        {pro && (
+          <div style={{ background: "blue", width: "100%" }}>You are pro</div>
+        )}
       </>
     );
   }
