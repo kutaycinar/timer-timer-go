@@ -24,7 +24,7 @@ import {
   prettyTime,
   RadialSeparators,
 } from "../utils";
-import Modal from "./Add";
+import Add from "./Add";
 import Confirmation from "./Confirmation";
 import "./Focus.css";
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
@@ -170,11 +170,11 @@ function Focus({
         >
           <FaTrash />
         </Confirmation>
-        <Modal setHook={editTimer} initialValues={init}>
+        <Add setHook={editTimer} initialValues={init}>
           <button className="action-button">
             <FaCog />
           </button>
-        </Modal>
+        </Add>
       </div>
     </div>
   );

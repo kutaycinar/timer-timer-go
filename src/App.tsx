@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { Glassfy, GlassfySku } from "capacitor-plugin-glassfy";
+import { useEffect, useState } from "react";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
 import Analytics from "./Analytics";
 import "./App.css";
-import Modal from "./components/Add";
+import Add from "./components/Add";
 import Confirmation from "./components/Confirmation";
 import Focus from "./components/Focus";
 import Overview from "./components/Overview";
+import PurchaseButton from "./components/PurchaseButton";
 import Purchases from "./components/Purchases";
 import ThemeProvider from "./components/ThemeProvider";
 import Timer from "./components/Timer";
 import BrowserWrapper from "./components/Wrapper";
 import { useTimer } from "./hooks";
+import { initGlassfy, SkuInfo } from "./iap";
 
 function App() {
   const {
@@ -55,11 +58,37 @@ function App() {
       break;
   }
 
+  const [proSku, setProSku] = useState<SkuInfo>({
+    isPro: false,
+    proSku: undefined,
+  });
+
+  useEffect(() => {
+    async function init() {
+      const skuInfo = await initGlassfy();
+      setProSku(skuInfo);
+    }
+    init();
+  }, []);
+
+  async function purchaseSKU() {
+    try {
+      const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
+      const permission = transaction.permissions.all.find(
+        (p) => p.permissionId === "pro_mode"
+      );
+      if (permission && permission.isValid) {
+        setProSku({ ...proSku, isPro: true });
+      }
+    } catch (e) {
+      console.log("Purchase Error");
+    }
+  }
+
+  // init
+
   return (
     <ThemeProvider>
-      <br />
-      <br />
-      <Purchases />
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
           style={{
@@ -95,11 +124,11 @@ function App() {
                 <div className="page">
                   {state.state.timers.length === 0 && (
                     <div className="timer">
-                      <Modal setHook={addTimer} reset={true}>
+                      <Add setHook={addTimer} reset={true} proInfo={proSku}>
                         <CircularProgressbarWithChildren value={0}>
                           <FaPlus size={32} />
                         </CircularProgressbarWithChildren>
-                      </Modal>
+                      </Add>
                     </div>
                   )}
                   {state.state.timers.map((t, idx) => (
@@ -112,11 +141,28 @@ function App() {
                       color={t.color}
                     />
                   ))}
-                  <Modal setHook={addTimer} reset={true}>
-                    <button className="add">
+                  {state.state.timers.length < 1 ? (
+                    <Add setHook={addTimer} reset={true}>
+                      <button className="add">
+                        <FaPlus />
+                      </button>
+                    </Add>
+                  ) : (
+                    <Confirmation
+                      title={"Buy Pro"}
+                      body={
+                        "You have reached the three timer limit for the trial period. Buy pro mode to add more activities. $" +
+                        proSku.proSku?.product.price
+                      }
+                      callback={purchaseSKU}
+                      type={"add"}
+                      invert
+                      confirmText="Purchase"
+                      disabled={!proSku.proSku}
+                    >
                       <FaPlus />
-                    </button>
-                  </Modal>
+                    </Confirmation>
+                  )}
                 </div>
               )}
             </div>
@@ -144,6 +190,20 @@ function App() {
               >
                 Clear All Data
               </Confirmation>
+              <Confirmation
+                title={"Buy Pro"}
+                body={
+                  "Upgrade to Pro Mode and unlock unlimited tasks, giving you the freedom to track all of your habits without any restrictions."
+                }
+                callback={purchaseSKU}
+                type={"settings-button"}
+                invert
+                confirmText="Purchase"
+                disabled={!proSku.proSku}
+              >
+                Upgrade Pro Mode
+              </Confirmation>
+              {/* TODO: add restrore puchases */}
             </div>
           )}
           {state.state.focus === -1 && (

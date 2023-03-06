@@ -1,4 +1,5 @@
 import { useReducer, useState } from "react";
+import { SkuInfo } from "../iap";
 import { State, TimerType } from "../types";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
@@ -6,7 +7,7 @@ const range = (start: number = 0, stop: number = 31, step = 5) =>
     .fill(start)
     .map((x, y) => x + y * step);
 
-function Modal({
+function Add({
   setHook,
   children,
   initialValues = {
@@ -19,11 +20,15 @@ function Modal({
     color: "#1bb3e6",
   },
   reset = false,
+  proInfo,
+  updatePro,
 }: {
   setHook: any;
   children: any;
   initialValues?: any;
   reset?: boolean;
+  proInfo?: SkuInfo;
+  updatePro?: () => any;
 }) {
   const [modal, setModal] = useState(false);
 
@@ -184,4 +189,4 @@ function Modal({
   );
 }
 
-export default Modal;
+export default Add;
