@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import CalendarHeatmap from "react-calendar-heatmap";
 import dayjs from "dayjs";
 import { Bar } from "react-chartjs-2";
 import {
@@ -18,6 +19,7 @@ import {
 } from "./analyticsUtils";
 import { Save } from "./types";
 import "./Analytics.css";
+import "react-calendar-heatmap/dist/styles.css";
 
 ChartJS.register(
   CategoryScale,
@@ -33,12 +35,12 @@ ChartJS.register(
 
 function Analytics({ saves }: { saves: Save[] }) {
   const lastWeek = saves.filter((save: Save) => {
-    console.log(
-      dayjs().format("DD/MM/YYYY") + " " + dayjs(save.date).format("DD/MM/YYYY")
-    );
-    console.log(Math.abs(dayjs().diff(dayjs(save.date), "days")) < 7);
     return Math.abs(dayjs().diff(dayjs(save.date), "days")) < 7;
   });
+  const lastThreeMonths = saves.filter((save: Save) => {
+    return Math.abs(dayjs().diff(dayjs(save.date), "months")) <= 3;
+  });
+
   const data = {
     labels: lastWeek.map((s: Save) => {
       return dayjs(s.date).format("DD ddd");
@@ -86,6 +88,26 @@ function Analytics({ saves }: { saves: Save[] }) {
               },
             },
           },
+        }}
+      />
+      <CalendarHeatmap
+        showWeekdayLabels
+        gutterSize={2.5}
+        startDate={dayjs().subtract(3, "months").toDate()}
+        endDate={dayjs().toDate()}
+        values={lastThreeMonths.map((save: Save) => {
+          return {
+            date: dayjs(save.date).format("YYYY-MM-DD"),
+            count: save.completion,
+          };
+        })}
+        classForValue={(value) => {
+          if (!value) {
+            return "color-empty";
+          }
+          console.log(Math.round(value.count / 25));
+
+          return `color-scale-${Math.round(value.count / 25)}`;
         }}
       />
     </div>
