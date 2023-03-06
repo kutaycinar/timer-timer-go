@@ -79,10 +79,14 @@ function App() {
           <div>
             <Analytics saves={state.state.saves} />
             {/* <pre>{JSON.stringify(state.state.saves, undefined, 2)}</pre> */}
+          </div>
+        )}
+        {tab === TabType.Settings && (
+          <div>
+            Settings
             <button onClick={() => clearSaves()}>Clear Saves</button>
           </div>
         )}
-        {tab === TabType.Settings && <div>Settings</div>}
         {state.state.focus === -1 && (
           <nav className="navbar">
             <ul>
