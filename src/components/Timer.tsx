@@ -38,7 +38,7 @@ function Timer({
             strokeLinecap: "butt",
             trailColor: color + "20",
             // trailColor: "#2e2e2e",
-            backgroundColor: delta ? "transparent" : color + "A0",
+            backgroundColor: delta ? "#11191f" : color + "A0",
           })}
         >
           {delta ? (
@@ -53,7 +53,7 @@ function Timer({
               count={total!}
               style={{
                 background: "#11191f",
-                width: "5px",
+                width: "12px",
                 height: `${15}%`,
                 margin: "-1px",
               }}

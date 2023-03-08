@@ -102,8 +102,9 @@ function Focus({
           styles={buildStyles({
             pathColor: color,
             strokeLinecap: "butt",
-            trailColor: "#2e2e2e",
-            backgroundColor: delta ? "transparent" : color + "A0",
+            // trailColor: "#2e2e2e",
+            trailColor: color + "20",
+            backgroundColor: delta ? "#11191f" : color + "A0",
           })}
         >
           {delta ? (
@@ -117,11 +118,11 @@ function Focus({
             <RadialSeparators
               count={total!}
               style={{
-                background: "var(--background-color)",
-                border: "1px solid var(--background-color)",
+                background: "#11191f",
+                border: "1px solid #11191f",
                 width: "19px",
-                height: `25px`,
-                marginTop: "-5px",
+                height: `20px`,
+                margin: "-1px",
               }}
             />
           )}
