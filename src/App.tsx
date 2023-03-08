@@ -53,7 +53,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <BrowserWrapper>
+      <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
           style={{
             height: `${delta}%`,
@@ -154,7 +154,7 @@ function App() {
             </nav>
           )}
         </div>
-      </BrowserWrapper>
+      </div>
     </ThemeProvider>
   );
 }
