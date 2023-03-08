@@ -1,5 +1,5 @@
-import { useState } from "react";
-import "./Focus.css";
+import { useState } from "react"
+import "./Focus.css"
 
 function Confirmation({
   title,
@@ -11,19 +11,19 @@ function Confirmation({
   confirmText,
   disabled = false,
 }: {
-  title: string;
-  body: string;
-  type?: string;
-  callback: any;
-  children?: any;
-  invert?: boolean;
-  confirmText?: string;
-  disabled?: boolean;
+  title: string
+  body: string
+  type?: string
+  callback: any
+  children?: any
+  invert?: boolean
+  confirmText?: string
+  disabled?: boolean
 }) {
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false)
 
   function handleFormCancel() {
-    setModal(!modal);
+    setModal(!modal)
   }
 
   return (
@@ -32,27 +32,28 @@ function Confirmation({
         className={type || "action-button"}
         onClick={() => setModal(!modal)}
         disabled={disabled}
+        style={{ zIndex: 1 }}
       >
         {children}
       </button>
       <dialog open={modal}>
-        <article className="modal">
+        <article className='modal'>
           <h1>{title}</h1>
           <body>{body}</body>
           <footer style={{ display: "flex" }}>
             <button
-              role="button"
+              role='button'
               onClick={handleFormCancel}
               className={invert ? "secondary" : ""}
             >
               Cancel
             </button>
             <button
-              role="button"
+              role='button'
               className={invert ? "" : "secondary"}
               onClick={() => {
-                callback();
-                setModal(false);
+                callback()
+                setModal(false)
               }}
             >
               {confirmText || "Confirm"}
@@ -61,7 +62,7 @@ function Confirmation({
         </article>
       </dialog>
     </>
-  );
+  )
 }
 
-export default Confirmation;
+export default Confirmation

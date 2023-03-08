@@ -64,8 +64,9 @@
 }
 
 .settings-button {
-  width: 87%;
-  margin: 32px 24px;
+  opacity: 0.99;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .separator {

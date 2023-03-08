@@ -123,6 +123,9 @@ function App() {
         {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
         {tab === TabType.Main && (
           <div>
+            {state.state.focus == -1 && (
+              <div className='heading'> {heading} </div>
+            )}
             {state.state.focus !== -1 ? (
               <div>
                 <Focus
@@ -139,9 +142,6 @@ function App() {
               </div>
             ) : (
               <div className='page inner'>
-                {state.state.focus == -1 && (
-                  <div className='heading'> {heading} </div>
-                )}
                 {state.state.timers.length === 0 && (
                   <div className='timer'>
                     <Add setHook={addTimer} reset={true} proInfo={proSku}>
@@ -189,40 +189,44 @@ function App() {
         )}
         {tab === TabType.Analytics && (
           <div>
+            <div className='heading'> {heading} </div>
             <Analytics saves={state.state.saves} />
           </div>
         )}
         {tab === TabType.Settings && (
           <div>
-            <Confirmation
-              type='settings-button'
-              title='Clear Save Data'
-              body="All stats from previous days will be deleted. Today's data and your timers will be preserved."
-              callback={() => clearSaves()}
-            >
-              Clear Saves
-            </Confirmation>
-            <Confirmation
-              type='settings-button'
-              title='Clear All Data'
-              body='All stats and tasks will be deleted. Your app be reset to factory default.'
-              callback={() => clearAllData()}
-            >
-              Clear All Data
-            </Confirmation>
-            <Confirmation
-              title={"Buy Pro"}
-              body={
-                "Upgrade to Pro Mode and unlock unlimited tasks, giving you the freedom to track all of your habits without any restrictions."
-              }
-              callback={purchaseSKU}
-              type={"settings-button"}
-              invert
-              confirmText='Purchase'
-              disabled={!proSku.proSku || proSku.isPro}
-            >
-              Upgrade Pro Mode
-            </Confirmation>
+            <div className='heading'> {heading} </div>
+            <div style={{padding: 20}}>
+              <Confirmation
+                type='settings-button'
+                title='Clear Save Data'
+                body="All stats from previous days will be deleted. Today's data and your timers will be preserved."
+                callback={() => clearSaves()}
+              >
+                Clear Saves
+              </Confirmation>
+              <Confirmation
+                type='settings-button'
+                title='Clear All Data'
+                body='All stats and tasks will be deleted. Your app be reset to factory default.'
+                callback={() => clearAllData()}
+              >
+                Clear All Data
+              </Confirmation>
+              <Confirmation
+                title={"Buy Pro"}
+                body={
+                  "Upgrade to Pro Mode and unlock unlimited tasks, giving you the freedom to track all of your habits without any restrictions."
+                }
+                callback={purchaseSKU}
+                type={"settings-button"}
+                invert
+                confirmText='Purchase'
+                disabled={!proSku.proSku || proSku.isPro}
+              >
+                Upgrade Pro Mode
+              </Confirmation>
+            </div>
             {/* TODO: add restrore puchases */}
           </div>
         )}
