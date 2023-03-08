@@ -91,13 +91,29 @@ function App() {
     }
   }
 
+  return (
+    <div className='page'>
+      {state.state.timers.map((t, idx) => (
+        <Timer
+          key={t.name}
+          {...t}
+          idx={idx}
+          deleteTimer={deleteTimer}
+          focusTimer={focusTimer}
+          color={t.color}
+        />
+      ))}
+    </div>
+  )
+
   // init
   return (
     <ThemeProvider>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
+          className='outer'
           style={{
-            height: `${delta}%`,
+            // height: `${delta}%`,
             width: "100%",
             background: "#11191f",
             transition: "all 1s",
@@ -126,7 +142,7 @@ function App() {
                   />
                 </div>
               ) : (
-                <div className='page'>
+                <div className='page inner'>
                   {state.state.timers.length === 0 && (
                     <div className='timer'>
                       <Add setHook={addTimer} reset={true} proInfo={proSku}>

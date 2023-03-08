@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const FREE_MAX_TIMERS = 3
+export const FREE_MAX_TIMERS = 300
 
 export type TimerType = {
   name: string;
