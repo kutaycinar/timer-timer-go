@@ -47,7 +47,9 @@ function Modal({
   function handleFormSubmit() {
     setModal(!modal);
     const params: TimerType = {
-      name,
+      name:
+        name.trim().charAt(0).toUpperCase() +
+        name.trim().slice(1).toLowerCase(),
       delta: !counter
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : goal,

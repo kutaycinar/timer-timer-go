@@ -38,6 +38,19 @@ function App() {
   delta *= 100;
   delta = 100 - delta;
 
+  var heading = "";
+  switch (tab) {
+    case TabType.Main:
+      heading = "Today";
+      break;
+    case TabType.Analytics:
+      heading = "Stats";
+      break;
+    case TabType.Settings:
+      heading = "Settings";
+      break;
+  }
+
   return (
     <ThemeProvider>
       <BrowserWrapper>
@@ -49,6 +62,11 @@ function App() {
             transition: "all 1s",
           }}
         >
+          {state.state.focus == -1 && (
+            <div>
+              <h2 className="heading"> {heading} </h2>
+            </div>
+          )}
           {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
           {tab === TabType.Main && (
             <div>
@@ -68,9 +86,6 @@ function App() {
                 </div>
               ) : (
                 <div className="page">
-                  <div className="overview">
-                    <h2 style={{ marginBottom: 15 }}> Today </h2>
-                  </div>
                   {state.state.timers.map((t, idx) => (
                     <Timer
                       key={t.name}
@@ -98,7 +113,6 @@ function App() {
           )}
           {tab === TabType.Settings && (
             <div>
-              Settings
               <button onClick={() => clearSaves()}>Clear Saves</button>
             </div>
           )}
