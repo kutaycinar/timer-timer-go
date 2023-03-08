@@ -12,7 +12,7 @@ a {
   overflow-x: hidden;
 }
 
-/* @media (min-width: 668px) {
+@media (min-width: 668px) {
   .page {
     grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
     gap: 5%;
@@ -21,7 +21,7 @@ a {
   .timer {
     margin-bottom: 20%;
   }
-} */
+}
 
 .timer {
   /* margin-bottom: 20%; */

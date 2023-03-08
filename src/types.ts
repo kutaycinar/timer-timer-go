@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const FREE_MAX_TIMERS = 300
+export const FREE_MAX_TIMERS = 3;
 
 export type TimerType = {
   name: string;
@@ -17,7 +17,7 @@ export type State = {
     focus: number;
     timers: TimerType[];
     saves: Save[];
-    promode: boolean
+    promode: boolean;
   };
 };
 
@@ -47,6 +47,6 @@ export const initial: State = {
     focus: -1,
     timers: [],
     saves: emptyList,
-    promode: false
+    promode: false,
   },
 };
