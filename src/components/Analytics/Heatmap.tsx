@@ -1,6 +1,7 @@
 import { Save } from "../../types";
 import CalendarHeatmap from "react-calendar-heatmap";
 import dayjs from "dayjs";
+import "./Heatmap.css";
 
 function Heatmap({ data }: { data: Save[] }) {
   const lastThreeMonths = data.filter((save: Save) => {
