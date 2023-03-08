@@ -1,5 +1,4 @@
 import { useReducer, useState } from "react";
-import { SkuInfo } from "../iap";
 import { State, TimerType } from "../types";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
@@ -20,15 +19,13 @@ function Add({
     color: "#1bb3e6",
   },
   reset = false,
-  proInfo,
-  updatePro,
+  timers,
 }: {
   setHook: any;
   children: any;
   initialValues?: any;
   reset?: boolean;
-  proInfo?: SkuInfo;
-  updatePro?: () => any;
+  timers: TimerType[];
 }) {
   const [modal, setModal] = useState(false);
 
@@ -177,7 +174,8 @@ function Add({
               //   to do add disable state
               disabled={
                 name.trim() === "" ||
-                (counter ? false : hour + minutes + seconds <= 0)
+                (counter ? false : hour + minutes + seconds <= 0) ||
+                timers.some((timer) => timer.name === name)
               }
             >
               Confirm
