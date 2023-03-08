@@ -37,7 +37,7 @@ a {
 }
 
 .timer:nth-last-child(3) {
-  /* margin-left: 0  */
+  margin-bottom: 80px; 
 }
 
 .timer-title {
