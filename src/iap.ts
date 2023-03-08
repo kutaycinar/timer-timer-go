@@ -11,7 +11,7 @@ export async function initGlassfy(): Promise<SkuInfo> {
   };
   try {
     await Glassfy.initialize({
-      apiKey: "6f17c860640445d6b7112bf3215e80b9",
+      apiKey: import.meta.env.VITE_GLASSFY_API_KEY ?? "",
       watcherMode: false,
     });
     const permissions = await Glassfy.permissions();
