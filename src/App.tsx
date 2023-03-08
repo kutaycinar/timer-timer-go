@@ -141,7 +141,7 @@ function App() {
                       color={t.color}
                     />
                   ))}
-                  {state.state.timers.length < 1 ? (
+                  {proSku.isPro || state.state.timers.length < 1 ? (
                     <Add setHook={addTimer} reset={true}>
                       <button className="add">
                         <FaPlus />
@@ -199,7 +199,7 @@ function App() {
                 type={"settings-button"}
                 invert
                 confirmText="Purchase"
-                disabled={!proSku.proSku}
+                disabled={!proSku.proSku || proSku.isPro}
               >
                 Upgrade Pro Mode
               </Confirmation>
