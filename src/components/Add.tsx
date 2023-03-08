@@ -1,5 +1,6 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { State, TimerType } from "../types";
+import { getHours, getMinutes, getSeconds } from "../utils";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
   Array(Math.ceil((stop - start) / step))
@@ -15,6 +16,7 @@ function Add({
     minutes: 0,
     hour: 0,
     goal: 1,
+    delta: 0,
     counter: false,
     color: "#1bb3e6",
   },
@@ -25,7 +27,7 @@ function Add({
   children: any;
   initialValues?: any;
   reset?: boolean;
-  timers: TimerType[];
+  timers?: TimerType[];
 }) {
   const [modal, setModal] = useState(false);
 
@@ -39,10 +41,35 @@ function Add({
 
   const [counter, setCounter] = useState(initialValues.counter);
 
-  const { name, seconds, minutes, hour, goal, color } = formValues;
+  const { name, delta, seconds, minutes, hour, goal, color } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
+    if (name == "goal")
+      setFormValues({
+        delta: Math.max(0, Number(delta) + (Number(value) - Number(goal))),
+      });
+
+    if (name == "seconds")
+      setFormValues({
+        delta: Math.max(0, Number(delta) + (Number(value) - seconds)),
+      });
+
+    if (name == "minutes")
+      setFormValues({
+        delta: Math.max(
+          0,
+          Number(delta) + (Number(value) - Number(minutes)) * 60
+        ),
+      });
+
+    if (name == "hour")
+      setFormValues({
+        delta: Math.max(
+          0,
+          Number(delta) + (Number(value) - Number(hour)) * 3600
+        ),
+      });
     setFormValues({ [name]: value });
   }
 
@@ -52,9 +79,7 @@ function Add({
       name:
         name.trim().charAt(0).toUpperCase() +
         name.trim().slice(1).toLowerCase(),
-      delta: !counter
-        ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
-        : goal,
+      delta,
       total: !counter
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
         : goal,
@@ -71,7 +96,14 @@ function Add({
 
   return (
     <>
-      <a onClick={() => setModal(true)}>{children}</a>
+      <a
+        onClick={() => {
+          setModal(true);
+          setFormValues(initialValues);
+        }}
+      >
+        {children}
+      </a>
       <dialog open={modal}>
         <article className="modal">
           <label>
@@ -175,7 +207,7 @@ function Add({
               disabled={
                 name.trim() === "" ||
                 (counter ? false : hour + minutes + seconds <= 0) ||
-                timers.some((timer) => timer.name === name)
+                timers?.some((timer) => timer.name === name)
               }
             >
               Confirm

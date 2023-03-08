@@ -81,6 +81,7 @@ function Focus({
     seconds: getSeconds(total!),
     minutes: getMinutes(total!),
     hour: getHours(total!),
+    delta: delta,
     goal: counter ? total : 1,
     counter,
     color,
