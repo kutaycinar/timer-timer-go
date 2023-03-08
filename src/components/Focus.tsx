@@ -89,7 +89,7 @@ function Focus({
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
-        <FaChevronLeft />
+        <FaChevronLeft size={32} />
       </button>
       <h3 className="title">{name}</h3>
       <div className="timer-container">
@@ -104,7 +104,7 @@ function Focus({
             strokeLinecap: "butt",
             // trailColor: "#2e2e2e",
             trailColor: color + "20",
-            backgroundColor: delta ? "#11191f" : color + "A0",
+            backgroundColor: delta ? "#11191f" : color || "#1bb3e6" + "A0",
           })}
         >
           {delta ? (

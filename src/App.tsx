@@ -68,7 +68,9 @@ function App() {
                 </div>
               ) : (
                 <div className="page">
-                  {/* <Overview {...getOverall()} /> */}
+                  <div className="overview">
+                    <h2 style={{ marginBottom: 15 }}> Today </h2>
+                  </div>
                   {state.state.timers.map((t, idx) => (
                     <Timer
                       key={t.name}

@@ -38,7 +38,7 @@ function Timer({
             strokeLinecap: "butt",
             trailColor: color + "20",
             // trailColor: "#2e2e2e",
-            backgroundColor: delta ? "#11191f" : color + "A0",
+            backgroundColor: delta ? "#11191f" : color || "#1bb3e6" + "A0",
           })}
         >
           {delta ? (
@@ -46,7 +46,7 @@ function Timer({
               {counter ? `${delta} left` : `${prettyTime(delta)}`}
             </h3>
           ) : (
-            <FaCheck fontSize={32} color="var(--text-primary)" />
+            <FaCheck fontSize={55 } color="var(--text-primary)" />
           )}
           {counter && delta !== 0 && total != 1 && (
             <RadialSeparators
