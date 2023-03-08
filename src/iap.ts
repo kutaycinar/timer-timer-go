@@ -1,12 +1,12 @@
 import { Glassfy, GlassfySku } from "capacitor-plugin-glassfy";
 
 export type SkuInfo = {
-  isPro: boolean;
+  isPro: boolean | undefined;
   proSku: GlassfySku | undefined;
 };
 export async function initGlassfy(): Promise<SkuInfo> {
   const result: SkuInfo = {
-    isPro: false,
+    isPro: undefined,
     proSku: undefined,
   };
   try {

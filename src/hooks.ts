@@ -371,6 +371,7 @@ export function useTimer() {
 
   return {
     state,
+    setState,
     addTimer,
     deleteTimer,
     focusTimer,

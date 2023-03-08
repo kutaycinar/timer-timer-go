@@ -1,24 +1,22 @@
-import { Glassfy, GlassfySku } from "capacitor-plugin-glassfy";
-import { useEffect, useState } from "react";
-import { CircularProgressbarWithChildren } from "react-circular-progressbar";
-import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
-import Analytics from "./Analytics";
-import "./App.css";
-import Add from "./components/Add";
-import Confirmation from "./components/Confirmation";
-import Focus from "./components/Focus";
-import Overview from "./components/Overview";
-import PurchaseButton from "./components/PurchaseButton";
-import Purchases from "./components/Purchases";
-import ThemeProvider from "./components/ThemeProvider";
-import Timer from "./components/Timer";
-import BrowserWrapper from "./components/Wrapper";
-import { useTimer } from "./hooks";
-import { initGlassfy, SkuInfo } from "./iap";
+import { Glassfy } from "capacitor-plugin-glassfy"
+import { useEffect, useState } from "react"
+import { CircularProgressbarWithChildren } from "react-circular-progressbar"
+import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa"
+import Analytics from "./Analytics"
+import "./App.css"
+import Add from "./components/Add"
+import Confirmation from "./components/Confirmation"
+import Focus from "./components/Focus"
+import ThemeProvider from "./components/ThemeProvider"
+import Timer from "./components/Timer"
+import { useTimer } from "./hooks"
+import { initGlassfy, SkuInfo } from "./iap"
+import { FREE_MAX_TIMERS } from "./types"
 
 function App() {
   const {
     state,
+    setState,
     addTimer,
     deleteTimer,
     focusTimer,
@@ -31,7 +29,7 @@ function App() {
     editTimer,
     clearSaves,
     clearAllData,
-  } = useTimer();
+  } = useTimer()
 
   enum TabType {
     Main,
@@ -39,54 +37,61 @@ function App() {
     Settings,
   }
 
-  const [tab, setTab] = useState(TabType.Main);
+  const [tab, setTab] = useState(TabType.Main)
 
-  var { delta } = getOverall();
-  delta *= 100;
-  delta = 100 - delta;
+  var { delta } = getOverall()
+  delta *= 100
+  delta = 100 - delta
 
-  var heading = "";
+  var heading = ""
   switch (tab) {
     case TabType.Main:
-      heading = "Today";
-      break;
+      heading = "Today"
+      break
     case TabType.Analytics:
-      heading = "Stats";
-      break;
+      heading = "Stats"
+      break
     case TabType.Settings:
-      heading = "Settings";
-      break;
+      heading = "Settings"
+      break
   }
 
   const [proSku, setProSku] = useState<SkuInfo>({
-    isPro: false,
+    isPro: undefined,
     proSku: undefined,
-  });
+  })
 
   useEffect(() => {
     async function init() {
-      const skuInfo = await initGlassfy();
-      setProSku(skuInfo);
+      const skuInfo = await initGlassfy()
+      setProSku(skuInfo)
+      setState((prevState) => {
+        return {
+          state: {
+            ...prevState.state,
+            promode: skuInfo.isPro ?? prevState.state.promode,
+          },
+        }
+      })
     }
-    init();
-  }, []);
+    init()
+  }, [])
 
   async function purchaseSKU() {
     try {
-      const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
+      const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! })
       const permission = transaction.permissions.all.find(
         (p) => p.permissionId === "pro_mode"
-      );
+      )
       if (permission && permission.isValid) {
-        setProSku({ ...proSku, isPro: true });
+        setProSku({ ...proSku, isPro: true })
       }
     } catch (e) {
-      console.log("Purchase Error");
+      console.log("Purchase Error")
     }
   }
 
   // init
-
   return (
     <ThemeProvider>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
@@ -100,7 +105,7 @@ function App() {
         >
           {state.state.focus == -1 && (
             <div>
-              <h2 className="heading"> {heading} </h2>
+              <h2 className='heading'> {heading} </h2>
             </div>
           )}
           {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
@@ -121,9 +126,9 @@ function App() {
                   />
                 </div>
               ) : (
-                <div className="page">
+                <div className='page'>
                   {state.state.timers.length === 0 && (
-                    <div className="timer">
+                    <div className='timer'>
                       <Add setHook={addTimer} reset={true} proInfo={proSku}>
                         <CircularProgressbarWithChildren value={0}>
                           <FaPlus size={32} />
@@ -141,9 +146,10 @@ function App() {
                       color={t.color}
                     />
                   ))}
-                  {proSku.isPro || state.state.timers.length < 1 ? (
+                  {proSku.isPro ||
+                  state.state.timers.length < FREE_MAX_TIMERS ? (
                     <Add setHook={addTimer} reset={true}>
-                      <button className="add">
+                      <button className='add'>
                         <FaPlus />
                       </button>
                     </Add>
@@ -157,7 +163,7 @@ function App() {
                       callback={purchaseSKU}
                       type={"add"}
                       invert
-                      confirmText="Purchase"
+                      confirmText='Purchase'
                       disabled={!proSku.proSku}
                     >
                       <FaPlus />
@@ -175,17 +181,17 @@ function App() {
           {tab === TabType.Settings && (
             <div>
               <Confirmation
-                type="settings-button"
-                title="Clear Save Data"
+                type='settings-button'
+                title='Clear Save Data'
                 body="All stats from previous days will be deleted. Today's data and your timers will be preserved."
                 callback={() => clearSaves()}
               >
                 Clear Saves
               </Confirmation>
               <Confirmation
-                type="settings-button"
-                title="Clear All Data"
-                body="All stats and tasks will be deleted. Your app be reset to factory default."
+                type='settings-button'
+                title='Clear All Data'
+                body='All stats and tasks will be deleted. Your app be reset to factory default.'
                 callback={() => clearAllData()}
               >
                 Clear All Data
@@ -198,7 +204,7 @@ function App() {
                 callback={purchaseSKU}
                 type={"settings-button"}
                 invert
-                confirmText="Purchase"
+                confirmText='Purchase'
                 disabled={!proSku.proSku || proSku.isPro}
               >
                 Upgrade Pro Mode
@@ -207,11 +213,11 @@ function App() {
             </div>
           )}
           {state.state.focus === -1 && (
-            <nav className="navbar">
+            <nav className='navbar'>
               <ul>
                 <li>
                   <a
-                    href="#"
+                    href='#'
                     className={`${tab === TabType.Main && "selected"}`}
                     onClick={() => setTab(TabType.Main)}
                   >
@@ -222,7 +228,7 @@ function App() {
               <ul>
                 <li>
                   <a
-                    href="#"
+                    href='#'
                     className={`${tab === TabType.Analytics && "selected"}`}
                     onClick={() => setTab(TabType.Analytics)}
                   >
@@ -233,7 +239,7 @@ function App() {
               <ul>
                 <li>
                   <a
-                    href="#"
+                    href='#'
                     className={`${tab === TabType.Settings && "selected"}`}
                     onClick={() => setTab(TabType.Settings)}
                   >
@@ -246,7 +252,7 @@ function App() {
         </div>
       </div>
     </ThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App
