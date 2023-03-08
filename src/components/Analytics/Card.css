@@ -9,11 +9,13 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  z-index: 1;
+  height: fit-content;
 }
 
 .card-title {
-  margin: auto;
   padding-bottom: 5px;
+  margin: 0px;
 }
 
 .span2 {

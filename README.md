@@ -1,3 +1,3 @@
-# timer-timer-go
+# daily focus
 
 React

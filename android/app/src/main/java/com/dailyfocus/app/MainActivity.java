@@ -1,4 +1,4 @@
-package com.timertimergo.app;
+package com.dailyfocus.app;
 
 import com.getcapacitor.BridgeActivity;
 

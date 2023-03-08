@@ -71,13 +71,6 @@ export function useTimer() {
       const prevDate = dayjs(state.state.date);
 
       if (!dayjs().isSame(prevDate, "day")) {
-        console.log(
-          "Curr: " +
-            dayjs().format("DD/MM/YYYY") +
-            " Prev: " +
-            prevDate.format("DD/MM/YYYY")
-        );
-
         saveAllTimers(prevDate);
         resetAllTimers();
         return;
@@ -288,8 +281,6 @@ export function useTimer() {
   }
 
   function saveAllTimers(date: Dayjs) {
-    console.log("Saving");
-
     const newSaves: Save[] = [];
     const overall = getOverall();
     // Push timer for last day with data
@@ -380,6 +371,7 @@ export function useTimer() {
 
   return {
     state,
+    setState,
     addTimer,
     deleteTimer,
     focusTimer,
