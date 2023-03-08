@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export type TimerType = {
   name: string;
   delta: number;
@@ -16,14 +18,14 @@ export type State = {
 };
 
 export type Save = {
-  date: string;
+  date: number;
   timers: TimerType[];
   completion: number;
 };
 
 export const initial: State = {
   state: {
-    date: new Date().getTime(),
+    date: dayjs().valueOf(),
     active: false,
     focus: -1,
     timers: [],

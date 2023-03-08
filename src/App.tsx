@@ -77,7 +77,8 @@ function App() {
         )}
         {tab === TabType.Analytics && (
           <div>
-            <Analytics />
+            <Analytics saves={state.state.saves} />
+            {/* <pre>{JSON.stringify(state.state.saves, undefined, 2)}</pre> */}
             <button onClick={() => clearSaves()}>Clear Saves</button>
           </div>
         )}

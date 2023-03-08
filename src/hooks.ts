@@ -39,8 +39,6 @@ export function useTimer() {
     //TODO: Handle case where it's the same day
     // increment check if not daily reset not happened
     else if (state.state.active) {
-      console.log("Case 2");
-
       const date1 = dayjs(state.state.date);
       const date2 = dayjs();
       const seconds = date2.diff(date1, "seconds");
@@ -71,9 +69,18 @@ export function useTimer() {
 
       // daily reset check
       const prevDate = dayjs(state.state.date);
+
       if (!dayjs().isSame(prevDate, "day")) {
+        console.log(
+          "Curr: " +
+            dayjs().format("DD/MM/YYYY") +
+            " Prev: " +
+            prevDate.format("DD/MM/YYYY")
+        );
+
         saveAllTimers(prevDate);
         resetAllTimers();
+        return;
       }
 
       // check for timer active
@@ -87,7 +94,7 @@ export function useTimer() {
             return {
               state: {
                 ...prevState.state,
-                date: new Date().getTime(),
+                date: dayjs().valueOf(),
                 timers: newTimers,
               },
             };
@@ -99,7 +106,7 @@ export function useTimer() {
             return {
               state: {
                 ...prevState.state,
-                date: new Date().getTime(),
+                date: dayjs().valueOf(),
                 active: false,
               },
             };
@@ -112,7 +119,7 @@ export function useTimer() {
           return {
             state: {
               ...prevState.state,
-              date: new Date().getTime(),
+              date: dayjs().valueOf(),
             },
           };
         });
@@ -135,7 +142,6 @@ export function useTimer() {
 
   // edit
   function editTimer(props: TimerType) {
-    console.log(props);
     const newTimers = [...state.state.timers];
     newTimers[state.state.focus] = props;
     setState((prevState) => {
@@ -176,8 +182,9 @@ export function useTimer() {
 
   async function sendNotification() {
     const now = dayjs();
-    const future = dayjs(
-      now.millisecond() + state.state.timers[state.state.focus].delta * 1000
+    const future = now.add(
+      state.state.timers[state.state.focus].delta,
+      "seconds"
     );
 
     if (now.diff(future, "days") > 1) return;
@@ -189,9 +196,7 @@ export function useTimer() {
           body: String(state.state.timers[state.state.focus].total),
           id: 1,
           schedule: {
-            at: new Date(
-              Date.now() + state.state.timers[state.state.focus].delta * 1000
-            ),
+            at: future.toDate(),
           },
           sound: undefined,
         },
@@ -279,13 +284,15 @@ export function useTimer() {
   }
 
   function saveAllTimers(date: Dayjs) {
+    console.log("Saving");
+
     const newSaves: Save[] = [];
     const overall = getOverall();
     // Push timer for last day with data
     newSaves.push({
       timers: state.state.timers,
       completion: Math.round((overall.delta / overall.total) * 100),
-      date: date.format("DD/MM/YYYY"),
+      date: date.valueOf(),
     });
     // Backfill missed days
     const missedDays = dayjs().diff(date, "days");
@@ -294,7 +301,7 @@ export function useTimer() {
       newSaves.push({
         timers: state.state.timers,
         completion: 0,
-        date: date.format("DD/MM/YYYY"),
+        date: date.valueOf(),
       });
     }
     // Add saves to state
@@ -303,14 +310,13 @@ export function useTimer() {
         state: {
           ...prevState.state,
           saves: [...(prevState.state.saves || []), ...newSaves],
+          date: dayjs().valueOf(),
         },
       };
     });
   }
 
   function clearSaves() {
-    console.log("clearing saves");
-
     setState((prevState: State) => {
       return {
         state: {

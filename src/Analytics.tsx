@@ -10,7 +10,9 @@ import {
   BarController,
   BarElement,
 } from "chart.js";
+import dayjs from "dayjs";
 import { Bar } from "react-chartjs-2";
+import { Save } from "./types";
 
 ChartJS.register(
   CategoryScale,
@@ -24,31 +26,34 @@ ChartJS.register(
   Legend
 );
 
-function Analytics() {
+function Analytics({ saves }: { saves: Save[] }) {
+  const lastWeek = saves.filter((save: Save) => {
+    // console.log(dayjs(save.date).diff(dayjs(), "days"));
+    return dayjs(save.date).diff(dayjs(), "days") < 7;
+  });
   const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: lastWeek.map((s: Save) => {
+      console.log(dayjs(s.date).format("dddd"));
+      return dayjs(s.date).format("dddd");
+    }),
     datasets: [
       {
-        label: "My First Dataset",
-        data: [65, 59, 80, 81, 56, 55, 40],
+        label: "Week Summary",
+        data: lastWeek.map((s: Save) => s.completion),
         borderWidth: 1,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 205, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(201, 203, 207, 0.2)",
-        ],
+        backgroundColor: "rgba(255, 99, 132, 0.4)",
       },
     ],
   };
 
   return (
     <div>
-      <h1>Analytics</h1>
-      <Bar data={data} />
+      <>
+        <h1>Analytics</h1>
+        <Bar data={data} />
+        {/* {lastWeek.forEach((s: Save) => console.log(s))} */}
+        {/* {console.log(data.labels)} */}
+      </>
     </div>
   );
 }
