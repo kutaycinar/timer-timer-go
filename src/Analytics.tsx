@@ -17,7 +17,6 @@ function Analytics({ saves }: { saves: Save[] }) {
         padding: "15px",
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        height: "73vh",
         overflow: "hidden",
       }}
     >

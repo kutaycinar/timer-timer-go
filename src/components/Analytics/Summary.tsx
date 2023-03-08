@@ -13,7 +13,7 @@ function Summary({ data }: { data: Save[] }) {
         display: "flex",
         gap: "4px",
         marginBottom: "10px",
-        maxHeight: "40px",
+        height: "auto",
       }}
     >
       {lastWeek.map((save: Save, idx: number) => (
