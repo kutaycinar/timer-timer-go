@@ -103,6 +103,11 @@ function App() {
           color={t.color}
         />
       ))}
+      <Add setHook={addTimer} reset={true}>
+        <button className='add'>
+          <FaPlus />
+        </button>
+      </Add>
     </div>
   )
 
