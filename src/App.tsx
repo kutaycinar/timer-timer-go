@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import { Glassfy } from "capacitor-plugin-glassfy";
 import { useEffect, useState } from "react";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
@@ -165,7 +166,9 @@ function App() {
                     color={t.color}
                   />
                 ))}
-                {proSku.isPro || state.state.timers.length < FREE_MAX_TIMERS ? (
+                {proSku.isPro ||
+                state.state.timers.length < FREE_MAX_TIMERS ||
+                !Capacitor.isNativePlatform() ? (
                   <Add
                     setHook={addTimer}
                     reset={true}
