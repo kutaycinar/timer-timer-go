@@ -207,7 +207,10 @@ function Add({
               disabled={
                 name.trim() === "" ||
                 (counter ? false : hour + minutes + seconds <= 0) ||
-                timers?.some((timer) => timer.name === name)
+                (timers &&
+                  timers.some(
+                    (timer) => timer.name.toLowerCase() === name.toLowerCase()
+                  ))
               }
             >
               Confirm
