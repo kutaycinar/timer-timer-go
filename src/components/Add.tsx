@@ -25,7 +25,7 @@ function Add({
   children: any;
   initialValues?: any;
   reset?: boolean;
-  timers: TimerType[];
+  timers?: TimerType[];
 }) {
   const [modal, setModal] = useState(false);
 
@@ -175,7 +175,10 @@ function Add({
               disabled={
                 name.trim() === "" ||
                 (counter ? false : hour + minutes + seconds <= 0) ||
-                timers.some((timer) => timer.name === name)
+                (timers &&
+                  timers.some(
+                    (timer) => timer.name.toLowerCase() === name.toLowerCase()
+                  ))
               }
             >
               Confirm
