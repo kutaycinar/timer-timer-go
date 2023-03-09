@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import { Glassfy } from "capacitor-plugin-glassfy";
 import { useEffect, useState } from "react";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
@@ -11,7 +12,7 @@ import ThemeProvider from "./components/ThemeProvider";
 import Timer from "./components/Timer";
 import { useTimer } from "./hooks";
 import { initGlassfy, SkuInfo } from "./iap";
-import { FREE_MAX_TIMERS } from "./types";
+import { FREE_MAX_TIMERS, themeOption } from "./types";
 
 function App() {
   const {
@@ -38,6 +39,7 @@ function App() {
   }
 
   const [tab, setTab] = useState(TabType.Main);
+  const [theme, setTheme] = useState<themeOption>("dark");
 
   var { delta } = getOverall();
   delta *= 100;
@@ -77,6 +79,18 @@ function App() {
     init();
   }, []);
 
+  // Load the theme from storage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme as themeOption);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   async function purchaseSKU() {
     try {
       const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
@@ -91,30 +105,15 @@ function App() {
     }
   }
 
-  // return (
-  //   <div className='page'>
-  //     {state.state.timers.map((t, idx) => (
-  //       <Timer
-  //         key={t.name}
-  //         {...t}
-  //         idx={idx}
-  //         deleteTimer={deleteTimer}
-  //         focusTimer={focusTimer}
-  //         color={t.color}
-  //       />
-  //     ))}
-  //   </div>
-  // )
-
   // init
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
           style={{
             height: `${delta}%`,
             width: "100%",
-            background: "#11191f",
+            background: "var(--progress-fill)",
             transition: "all 1s",
             position: "fixed",
             zIndex: 0,
@@ -165,7 +164,9 @@ function App() {
                     color={t.color}
                   />
                 ))}
-                {proSku.isPro || state.state.timers.length < FREE_MAX_TIMERS ? (
+                {proSku.isPro ||
+                state.state.timers.length < FREE_MAX_TIMERS ||
+                !Capacitor.isNativePlatform() ? (
                   <Add
                     setHook={addTimer}
                     reset={true}
@@ -179,7 +180,7 @@ function App() {
                   <Confirmation
                     title={"Buy Pro"}
                     body={
-                      "You have reached the three timer limit for the trial period. Buy pro mode to add more activities. $" +
+                      "You have reached the three task limit for the trial period. Buy pro mode to add more activities. $" +
                       proSku.proSku?.product.price
                     }
                     callback={purchaseSKU}
@@ -234,8 +235,13 @@ function App() {
               >
                 Upgrade Pro Mode
               </Confirmation>
+              <button
+                className="settings-button"
+                onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
+              >
+                Toggle Theme
+              </button>
             </div>
-            {/* TODO: add restrore puchases */}
           </div>
         )}
         {state.state.focus === -1 && (
@@ -247,7 +253,7 @@ function App() {
                   className={`${tab === TabType.Main && "selected"}`}
                   onClick={() => setTab(TabType.Main)}
                 >
-                  <FaClock size={"24px"} />
+                  <FaClock className="nav-icon" size={"24px"} />
                 </a>
               </li>
             </ul>
@@ -258,7 +264,7 @@ function App() {
                   className={`${tab === TabType.Analytics && "selected"}`}
                   onClick={() => setTab(TabType.Analytics)}
                 >
-                  <FaChartLine size={"24px"} />
+                  <FaChartLine className="nav-icon" size={"24px"} />
                 </a>
               </li>
             </ul>
@@ -269,7 +275,7 @@ function App() {
                   className={`${tab === TabType.Settings && "selected"}`}
                   onClick={() => setTab(TabType.Settings)}
                 >
-                  <FaCog size={"24px"} />
+                  <FaCog className="nav-icon" size={"24px"} />
                 </a>
               </li>
             </ul>

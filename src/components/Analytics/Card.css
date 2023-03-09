@@ -2,7 +2,7 @@
   display: flex;
   border-radius: 10px;
   /* background-color: #7441d2bd; */
-  background-color: #000000b0;
+  background-color: var(--overlay-color);
   padding: 16px 10px;
   margin: 6px;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
