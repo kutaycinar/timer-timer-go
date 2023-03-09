@@ -79,6 +79,18 @@ function App() {
     init();
   }, []);
 
+  // Load the theme from storage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme as themeOption);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   async function purchaseSKU() {
     try {
       const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
@@ -92,21 +104,6 @@ function App() {
       console.log("Purchase Error");
     }
   }
-
-  // return (
-  //   <div className='page'>
-  //     {state.state.timers.map((t, idx) => (
-  //       <Timer
-  //         key={t.name}
-  //         {...t}
-  //         idx={idx}
-  //         deleteTimer={deleteTimer}
-  //         focusTimer={focusTimer}
-  //         color={t.color}
-  //       />
-  //     ))}
-  //   </div>
-  // )
 
   // init
   return (
@@ -183,7 +180,7 @@ function App() {
                   <Confirmation
                     title={"Buy Pro"}
                     body={
-                      "You have reached the three timer limit for the trial period. Buy pro mode to add more activities. $" +
+                      "You have reached the three task limit for the trial period. Buy pro mode to add more activities. $" +
                       proSku.proSku?.product.price
                     }
                     callback={purchaseSKU}
