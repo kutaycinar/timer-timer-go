@@ -1,3 +1,8 @@
 :root {
   background: black !important;
 }
+
+[data-theme="dark"],
+:root:not([data-theme="light"]) {
+  --background-color: #102534 !important;
+}
