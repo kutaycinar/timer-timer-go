@@ -47,7 +47,7 @@ function Add({
     const { name, value } = event.target;
     if (name == "goal")
       setFormValues({
-        delta: Math.max(0, Number(delta) + (Number(value) - Number(goal))),
+        delta: Math.max(0, Number(delta) + (Number(value) - Number(goal)) + 1),
       });
 
     if (name == "seconds")
@@ -77,15 +77,16 @@ function Add({
     setModal(!modal);
     const params: TimerType = {
       name:
-        name.trim().charAt(0).toUpperCase() +
-        name.trim().slice(1).toLowerCase(),
+      name.trim().charAt(0).toUpperCase() +
+      name.trim().slice(1).toLowerCase(),
       delta,
       total: !counter
-        ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
-        : goal,
+      ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
+      : goal,
       counter,
       color,
     };
+    console.log(params)
     setHook(params);
     if (reset) setFormValues(initialValues);
   }
