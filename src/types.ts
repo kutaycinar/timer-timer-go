@@ -27,6 +27,8 @@ export type Save = {
   completion: number;
 };
 
+export type themeOption = "dark" | "light";
+
 const emptyList: Save[] = [];
 for (let index = 1; index < 9; index++) {
   const empty: Save = {

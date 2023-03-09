@@ -12,7 +12,7 @@ import ThemeProvider from "./components/ThemeProvider";
 import Timer from "./components/Timer";
 import { useTimer } from "./hooks";
 import { initGlassfy, SkuInfo } from "./iap";
-import { FREE_MAX_TIMERS } from "./types";
+import { FREE_MAX_TIMERS, themeOption } from "./types";
 
 function App() {
   const {
@@ -39,6 +39,7 @@ function App() {
   }
 
   const [tab, setTab] = useState(TabType.Main);
+  const [theme, setTheme] = useState<themeOption>("dark");
 
   var { delta } = getOverall();
   delta *= 100;
@@ -109,7 +110,7 @@ function App() {
 
   // init
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
         <div
           style={{
@@ -237,8 +238,13 @@ function App() {
               >
                 Upgrade Pro Mode
               </Confirmation>
+              <button
+                className="settings-button"
+                onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
+              >
+                Toggle Theme
+              </button>
             </div>
-            {/* TODO: add restrore puchases */}
           </div>
         )}
         {state.state.focus === -1 && (
