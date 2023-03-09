@@ -105,7 +105,9 @@ function Focus({
             strokeLinecap: "butt",
             // trailColor: "#2e2e2e",
             trailColor: color + "20",
-            backgroundColor: delta ? "#11191f" : color || "#1bb3e6" + "A0",
+            backgroundColor: delta
+              ? "var(--progress-fill)"
+              : color || "#1bb3e6" + "A0",
           })}
         >
           {delta ? (
@@ -119,8 +121,8 @@ function Focus({
             <RadialSeparators
               count={total!}
               style={{
-                background: "#11191f",
-                border: "1px solid #11191f",
+                background: "var(--progress-fill)",
+                border: "1px solid var(--progress-fill)",
                 width: "19px",
                 height: `20px`,
                 margin: "-1px",

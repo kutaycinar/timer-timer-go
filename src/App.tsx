@@ -114,7 +114,7 @@ function App() {
           style={{
             height: `${delta}%`,
             width: "100%",
-            background: "#11191f",
+            background: "var(--progress-fill)",
             transition: "all 1s",
             position: "fixed",
             zIndex: 0,
@@ -247,7 +247,7 @@ function App() {
                   className={`${tab === TabType.Main && "selected"}`}
                   onClick={() => setTab(TabType.Main)}
                 >
-                  <FaClock size={"24px"} />
+                  <FaClock className="nav-icon" size={"24px"} />
                 </a>
               </li>
             </ul>
@@ -258,7 +258,7 @@ function App() {
                   className={`${tab === TabType.Analytics && "selected"}`}
                   onClick={() => setTab(TabType.Analytics)}
                 >
-                  <FaChartLine size={"24px"} />
+                  <FaChartLine className="nav-icon" size={"24px"} />
                 </a>
               </li>
             </ul>
@@ -269,7 +269,7 @@ function App() {
                   className={`${tab === TabType.Settings && "selected"}`}
                   onClick={() => setTab(TabType.Settings)}
                 >
-                  <FaCog size={"24px"} />
+                  <FaCog className="nav-icon" size={"24px"} />
                 </a>
               </li>
             </ul>

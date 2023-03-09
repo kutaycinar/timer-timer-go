@@ -1,20 +1,32 @@
 :root {
-  --background: white;
+  --background-color: white;
   --text-primary: black;
   --text-secondary: rgb(92, 103, 136);
   --accent: purple;
+  --nav-bar: black;
+  --progress-fill: #11191f;
+  --primary-inverse: white;
+  --overlay-color: #000000b0;
 }
 
 [data-theme="dark"] {
-  --background: black;
+  --background-color: #102534 !important;
   --text-primary: white;
   --text-secondary: grey;
   --accent: rgb(8, 154, 142);
+  --nav-bar: black;
+  --progress-fill: #11191f;
+  --primary-inverse: white;
+  --overlay-color: #000000b0;
 }
 
 [data-theme="light"] {
-  --background: white;
+  --background-color: #9cd8e7 !important;
   --text-primary: black;
   --text-secondary: rgb(65, 65, 65);
-  --accent: rgb(8, 154, 142);
+  --accent: #11191f;
+  --nav-bar: #cae5ec;
+  --progress-fill: #cae5ec;
+  --primary-inverse: #11191f !important;
+  --overlay-color: white;
 }
