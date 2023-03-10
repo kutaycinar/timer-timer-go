@@ -1,4 +1,5 @@
 import { Capacitor } from "@capacitor/core";
+import { App } from "@capacitor/app";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
 import dayjs from "dayjs";
@@ -10,21 +11,29 @@ import { Dayjs } from "dayjs";
 export function useTimer() {
   const [state, setState] = useState<State>(initial);
   const [isLoaded, setLoaded] = useState(false);
+  const [active, setActive] = useState(true);
 
   // ask for notification permission
   if (Capacitor.isNativePlatform()) {
     LocalNotifications.requestPermissions();
   }
 
+  App.addListener("appStateChange", ({ isActive }) => {
+    if (active != isActive) {
+      setActive(isActive);
+    }
+  });
+
   // initial load
   useEffect(() => {
+    if (!active) return;
     Preferences.get({ key: "state" }).then((res) => {
       if (res.value) {
         setState(JSON.parse(res.value));
         setLoaded(true);
       }
     });
-  }, []);
+  }, [active]);
 
   // runs once after loading state
   useEffect(() => {
@@ -39,25 +48,31 @@ export function useTimer() {
     //TODO: Handle case where it's the same day
     // increment check if not daily reset not happened
     else if (state.state.active) {
-      const date1 = dayjs(state.state.date);
-      const date2 = dayjs();
-      const seconds = date2.diff(date1, "seconds");
-      const newTimers = [...state.state.timers];
-      newTimers[state.state.focus].delta = Math.max(
-        0,
-        newTimers[state.state.focus].delta - seconds
-      );
-      setState((prevState) => {
-        return {
-          state: {
-            ...prevState.state,
-            timers: newTimers,
-          },
-        };
-      });
+      fastForwardTimer();
     }
     setLoaded(false);
   }, [isLoaded, state]);
+
+  function fastForwardTimer() {
+    const prevDate = dayjs(state.state.date).startOf("second");
+    const date2 = dayjs().startOf("second");
+    const seconds = date2.diff(prevDate, "seconds");
+
+    const newTimers = [...state.state.timers];
+    newTimers[state.state.focus].delta = Math.max(
+      0,
+      newTimers[state.state.focus].delta - seconds
+    );
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          timers: newTimers,
+          date: dayjs().startOf("second").valueOf(),
+        },
+      };
+    });
+  }
 
   // interval
   useEffect(() => {
@@ -82,16 +97,7 @@ export function useTimer() {
         const delta = newTimers[state.state.focus].delta;
         // timer can be decremented, do that
         if (delta > 0) {
-          newTimers[state.state.focus].delta -= 1;
-          setState((prevState) => {
-            return {
-              state: {
-                ...prevState.state,
-                date: dayjs().valueOf(),
-                timers: newTimers,
-              },
-            };
-          });
+          fastForwardTimer();
         }
         // timer already at 0, set active to false
         else {

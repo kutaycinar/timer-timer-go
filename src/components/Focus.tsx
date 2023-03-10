@@ -69,6 +69,7 @@ function Focus({
 
   useEffect(() => {
     if (delta === 0 && prevDelta !== 0) {
+      // Delay so that the confetti shows up after the animation.
       setTimeout(() => {
         setTaskOver(true);
       }, 150);
