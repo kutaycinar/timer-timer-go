@@ -192,7 +192,7 @@ export function useTimer() {
       notifications: [
         {
           title: state.state.timers[state.state.focus].name + " Finished!",
-          body: String(state.state.timers[state.state.focus].total),
+          body: "Congratulations, you have completed your task.",
           smallIcon: "icon",
           id: 1,
           schedule: {
