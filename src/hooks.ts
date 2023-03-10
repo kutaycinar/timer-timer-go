@@ -193,6 +193,7 @@ export function useTimer() {
         {
           title: state.state.timers[state.state.focus].name + " Finished!",
           body: String(state.state.timers[state.state.focus].total),
+          smallIcon: "icon",
           id: 1,
           schedule: {
             at: future.toDate(),
