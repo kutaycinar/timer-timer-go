@@ -77,16 +77,16 @@ function Add({
     setModal(!modal);
     const params: TimerType = {
       name:
-      name.trim().charAt(0).toUpperCase() +
-      name.trim().slice(1).toLowerCase(),
+        name.trim().charAt(0).toUpperCase() +
+        name.trim().slice(1).toLowerCase(),
       delta,
       total: !counter
-      ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
-      : goal,
+        ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
+        : goal,
       counter,
       color,
     };
-    console.log(params)
+    console.log(params);
     setHook(params);
     if (reset) setFormValues(initialValues);
   }
@@ -147,7 +147,7 @@ function Add({
                 <label>
                   Hour
                   <select name="hour" value={hour} onChange={handleFormChange}>
-                    {range(0, 23).map((n) => (
+                    {range(0, 10, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
@@ -159,7 +159,7 @@ function Add({
                     value={minutes}
                     onChange={handleFormChange}
                   >
-                    {range().map((n) => (
+                    {range(0, 60, 5).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
@@ -171,7 +171,7 @@ function Add({
                     value={seconds}
                     onChange={handleFormChange}
                   >
-                    {range().map((n) => (
+                    {range(0, 60, 5).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
@@ -204,7 +204,6 @@ function Add({
               role="button"
               data-target="modal-example"
               onClick={handleFormSubmit}
-              //   to do add disable state
               disabled={
                 name.trim() === "" ||
                 (counter ? false : hour + minutes + seconds <= 0) ||
