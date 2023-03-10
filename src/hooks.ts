@@ -1,6 +1,6 @@
 import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
-import { LocalNotifications } from "@capacitor/local-notifications";
+import { Channel, LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -16,6 +16,18 @@ export function useTimer() {
   // ask for notification permission
   if (Capacitor.isNativePlatform()) {
     LocalNotifications.requestPermissions();
+
+    const channel: Channel = {
+      id: "main",
+      name: "Task Finished",
+      description: "Triggers when a timer completes in the app.",
+      sound: "harp.mp3",
+      importance: 4,
+      visibility: 1,
+      lights: true,
+      vibration: true,
+    };
+    LocalNotifications.createChannel(channel);
   }
 
   App.addListener("appStateChange", ({ isActive }) => {
@@ -197,8 +209,10 @@ export function useTimer() {
           id: 1,
           schedule: {
             at: future.toDate(),
+            allowWhileIdle: true,
           },
-          sound: undefined,
+          sound: "harp3.mp3",
+          channelId: "main",
         },
       ],
     });
