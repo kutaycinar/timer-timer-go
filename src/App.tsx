@@ -112,7 +112,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
-        {/* <pre>{JSON.stringify(state.state.saves.length, undefined, 2)}</pre> */}
+        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
         <div
           style={{
             height: `${delta}%`,

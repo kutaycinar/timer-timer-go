@@ -20,7 +20,7 @@ function Add({
     delta: 0,
     counter: false,
     color: "#1bb3e6",
-    days: [1, 2, 3, 4, 5],
+    days: [0, 1, 2, 3, 4, 5, 6],
   },
   reset = false,
   timers,
