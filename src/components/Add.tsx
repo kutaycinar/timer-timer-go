@@ -1,6 +1,5 @@
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import { State, TimerType } from "../types";
-import { getHours, getMinutes, getSeconds } from "../utils";
 import DaySelector from "./DaySelector";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
@@ -20,7 +19,7 @@ function Add({
     delta: 0,
     counter: false,
     color: "#1bb3e6",
-    days: [1, 2, 3, 4, 5],
+    days: [0, 1, 2, 3, 4, 5, 6],
   },
   reset = false,
   timers,

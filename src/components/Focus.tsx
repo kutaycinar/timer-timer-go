@@ -28,6 +28,8 @@ import Add from "./Add";
 import Confirmation from "./Confirmation";
 import "./Focus.css";
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
+import { Capacitor } from "@capacitor/core";
+import { App } from "@capacitor/app";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -74,6 +76,10 @@ function Focus({
       // Delay so that the confetti shows up after the animation.
       setTimeout(() => {
         setTaskOver(true);
+        // Don't play sound if the app isn't active.
+        if (Capacitor.isNativePlatform() && !App.getState) {
+          return;
+        }
         effect.play();
       }, 150);
     }
