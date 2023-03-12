@@ -143,7 +143,7 @@ function App() {
                 />
               </div>
             ) : (
-              <div className='page inner'>
+              <div className='page'>
                 {state.state.timers.length === 0 && (
                   <div className='timer'>
                     <Add
@@ -157,19 +157,21 @@ function App() {
                     </Add>
                   </div>
                 )}
-                {state.state.timers.map((t, idx) => {
-                  if (!t.days.includes(today)) return
-                  return (
-                    <Timer
-                      key={t.name}
-                      {...t}
-                      idx={idx}
-                      deleteTimer={deleteTimer}
-                      focusTimer={focusTimer}
-                      color={t.color}
-                    />
-                  )
-                })}
+                <div className='child'>
+                  {state.state.timers.map((t, idx) => {
+                    if (!t.days.includes(today)) return
+                    return (
+                      <Timer
+                        key={t.name}
+                        {...t}
+                        idx={idx}
+                        deleteTimer={deleteTimer}
+                        focusTimer={focusTimer}
+                        color={t.color}
+                      />
+                    )
+                  })}
+                </div>
                 {proSku.isPro ||
                 state.state.timers.length < FREE_MAX_TIMERS ||
                 !Capacitor.isNativePlatform() ? (
