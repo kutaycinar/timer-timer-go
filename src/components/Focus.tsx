@@ -168,6 +168,7 @@ function Focus({
             signalReset();
             setTaskOver(false);
           }}
+          disabled={delta === total}
         >
           <FaUndoAlt />
         </Confirmation>
