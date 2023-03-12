@@ -1,0 +1,15 @@
+.selection-buttons {
+  display: flex;
+  max-width: 100%;
+  gap: 2%;
+  overflow-x: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.week-button {
+  padding: auto;
+  line-height: 1em;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+}

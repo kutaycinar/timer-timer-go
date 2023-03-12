@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { State, TimerType } from "../types";
 import { getHours, getMinutes, getSeconds } from "../utils";
+import DaySelector from "./DaySelector";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
   Array(Math.ceil((stop - start) / step))
@@ -19,6 +20,7 @@ function Add({
     delta: 0,
     counter: false,
     color: "#1bb3e6",
+    days: [1, 2, 3, 4, 5],
   },
   reset = false,
   timers,
@@ -40,8 +42,9 @@ function Add({
   const [formValues, setFormValues] = useReducer(reducer, initialValues);
 
   const [counter, setCounter] = useState(initialValues.counter);
+  const [selectedDays, setSelectedDays] = useState(initialValues.days);
 
-  const { name, delta, seconds, minutes, hour, goal, color } = formValues;
+  const { name, delta, seconds, minutes, hour, goal, color, days } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
@@ -85,6 +88,7 @@ function Add({
         : goal,
       counter,
       color,
+      days: selectedDays,
     };
     console.log(params);
     setHook(params);
@@ -124,7 +128,7 @@ function Add({
               onChange={handleFormChange}
               name="color"
               value={color}
-            ></input>
+            />
           </label>
           <div className="inline">
             Type:
@@ -141,6 +145,8 @@ function Add({
               Counter
             </button>
           </div>
+          <DaySelector value={selectedDays} setDays={setSelectedDays} />
+
           <div style={{ height: 98 }}>
             {!counter ? (
               <div className="inline">

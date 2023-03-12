@@ -374,6 +374,7 @@ export function useTimer() {
       counter: false,
       reverse: false,
       color: "",
+      days: [],
     });
 
     const { delta, total } = state.state.timers.reduce(reducer, {
@@ -383,6 +384,7 @@ export function useTimer() {
       counter: false,
       reverse: false,
       color: "",
+      days: [],
     });
 
     return {

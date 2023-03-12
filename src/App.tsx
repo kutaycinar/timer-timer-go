@@ -109,6 +109,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
+        <pre>{JSON.stringify(state, undefined, 2)}</pre>
         <div
           style={{
             height: `${delta}%`,
@@ -119,7 +120,6 @@ function App() {
             zIndex: 0,
           }}
         />
-        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
         {tab === TabType.Main && (
           <div>
             {state.state.focus == -1 && (

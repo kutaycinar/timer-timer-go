@@ -8,6 +8,7 @@ export type TimerType = {
   total: number;
   counter: boolean;
   color: string;
+  days: number[];
 };
 
 export type State = {
