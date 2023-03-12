@@ -4,5 +4,11 @@
 
 html,
 body {
+  overflow: scroll;
   overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+  display: none;
 }
