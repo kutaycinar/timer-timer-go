@@ -28,6 +28,8 @@ import Add from "./Add";
 import Confirmation from "./Confirmation";
 import "./Focus.css";
 import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
+import { Capacitor } from "@capacitor/core";
+import { App } from "@capacitor/app";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -39,7 +41,7 @@ const confettiProps: ConfettiProps = {
 
 const effect = new Audio("/sounds/complete.mp3");
 
-type FocusProps = Partial<TimerType> & {
+type FocusProps = TimerType & {
   signalStart: any;
   signalPause: any;
   signalStop: any;
@@ -56,6 +58,7 @@ function Focus({
   total,
   counter,
   color,
+  days,
   signalPause,
   signalStop,
   signalStart,
@@ -73,6 +76,10 @@ function Focus({
       // Delay so that the confetti shows up after the animation.
       setTimeout(() => {
         setTaskOver(true);
+        // Don't play sound if the app isn't active.
+        if (Capacitor.isNativePlatform() && !App.getState) {
+          return;
+        }
         effect.play();
       }, 150);
     }
@@ -88,6 +95,7 @@ function Focus({
     goal: counter ? total : 1,
     counter,
     color,
+    days,
   };
 
   return (
@@ -166,6 +174,7 @@ function Focus({
             signalReset();
             setTaskOver(false);
           }}
+          disabled={delta === total}
         >
           <FaUndoAlt />
         </Confirmation>

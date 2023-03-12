@@ -12,14 +12,7 @@ import Heatmap from "./components/Analytics/Heatmap";
 
 function Analytics({ saves }: { saves: Save[] }) {
   return (
-    <div
-      style={{
-        padding: "15px",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        overflow: "hidden",
-      }}
-    >
+    <div className="analytics">
       <Card>
         <div className="stat-container">
           <h2 className="stat">{calculateAverageCompletion(saves) + "%"}</h2>
