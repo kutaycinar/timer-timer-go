@@ -31,9 +31,17 @@ a {
     margin-bottom: 24px;
   }
 } */
+.week-title {
+  font-size: 120%;
+  font-weight: 700;
+}
+
 @media (min-width: 150px) {
   .timer {
     flex: 0 0 calc(100% - 10px);
+  }
+  .week-title {
+    font-size: 12px;
   }
 }
 
@@ -41,11 +49,17 @@ a {
   .timer {
     flex: 0 0 calc(48% - 10px);
   }
+  .week-title {
+    font-size: 95%;
+  }
 }
 
 @media (min-width: 600px) {
   .timer {
     flex: 0 0 calc(30% - 10px);
+  }
+  .week-title {
+    font-size: 160%;
   }
 }
 
