@@ -165,7 +165,7 @@ function Add({
                     value={minutes}
                     onChange={handleFormChange}
                   >
-                    {range(0, 60, 5).map((n) => (
+                    {range(0, 60, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
@@ -177,7 +177,7 @@ function Add({
                     value={seconds}
                     onChange={handleFormChange}
                   >
-                    {range(0, 60, 5).map((n) => (
+                    {range(0, 60, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
