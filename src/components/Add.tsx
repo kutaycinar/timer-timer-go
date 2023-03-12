@@ -1,7 +1,7 @@
-import { useEffect, useReducer, useState } from "react";
-import { State, TimerType } from "../types";
-import { getHours, getMinutes, getSeconds } from "../utils";
-import DaySelector from "./DaySelector";
+import { useEffect, useReducer, useState } from "react"
+import { State, TimerType } from "../types"
+import { getHours, getMinutes, getSeconds } from "../utils"
+import DaySelector from "./DaySelector"
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
   Array(Math.ceil((stop - start) / step))
@@ -51,6 +51,10 @@ function Add({
     setFormValues({ [name]: value })
   }
 
+  const nameExists =
+    timers &&
+    timers.some((timer) => timer.name.toLowerCase() === name.toLowerCase())
+
   function handleFormSubmit() {
     setModal(!modal)
     const params: TimerType = {
@@ -91,11 +95,18 @@ function Add({
             <input
               type='text'
               name='name'
-              placeholder="Activity name like Running, Reading..."
+              placeholder='Activity name like Running, Reading...'
               value={name}
               onChange={handleFormChange}
               autoComplete='nope'
             />
+            {nameExists && (
+              <strong
+                style={{ color: "salmon", position: "relative", bottom: 10 }}
+              >
+                This activity name already exists
+              </strong>
+            )}
           </label>
           <label>
             Color
@@ -122,6 +133,13 @@ function Add({
             </button>
           </div>
           <DaySelector value={selectedDays} setDays={setSelectedDays} />
+          {selectedDays.length < 1 && (
+            <strong
+              style={{ color: "salmon", position: "relative", bottom: 8 }}
+            >
+              Select at least one day
+            </strong>
+          )}
           <div style={{ height: 98 }}>
             {!counter ? (
               <div className='inline'>
@@ -188,10 +206,7 @@ function Add({
               disabled={
                 name.trim() === "" ||
                 (counter ? false : hour + minutes + seconds <= 0) ||
-                (timers &&
-                  timers.some(
-                    (timer) => timer.name.toLowerCase() === name.toLowerCase()
-                  )) ||
+                nameExists ||
                 selectedDays.length < 1
               }
             >
