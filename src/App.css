@@ -6,6 +6,8 @@ a {
 .page {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
+
   /* justify-content: space-evenly; */
   padding: 5%;
   gap: 4%;
@@ -14,8 +16,12 @@ a {
   padding-bottom: 64px;
   background-color: var(--background-color);
 }
+.page:after {
+  content: "";
+  flex: auto;
+}
 
-@media (min-width: 725px) {
+/* @media (min-width: 725px) {
   .page {
     gap: 24px;
   }
@@ -24,14 +30,50 @@ a {
     width: 200px !important;
     margin-bottom: 24px;
   }
+} */
+.week-title {
+  font-size: 120%;
+  font-weight: 700;
+}
+
+@media (min-width: 150px) {
+  .timer {
+    flex: 0 0 calc(100% - 10px);
+  }
+  .week-title {
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 375px) {
+  .timer {
+    flex: 0 0 calc(48% - 10px);
+  }
+  .week-title {
+    font-size: 95%;
+  }
+}
+
+@media (min-width: 600px) {
+  .timer {
+    flex: 0 0 calc(30% - 10px);
+  }
+  .week-title {
+    font-size: 160%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .timer {
+    flex: 0 0 calc(16.666% + 40px);
+  }
 }
 
 .timer {
-  width: 40%;
-  margin: auto;
-  margin-bottom: 24px;
   z-index: 1;
   color: whitesmoke;
+  margin: 5px;
+  margin-bottom: 50px;
 }
 
 .timer-title {
@@ -39,6 +81,7 @@ a {
   margin-bottom: 8px;
   font-size: 18px;
   text-align: center;
+  /* text-transform: capitalize; */
 }
 
 .add {

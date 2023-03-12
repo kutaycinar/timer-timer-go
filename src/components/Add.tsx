@@ -1,11 +1,12 @@
-import { useReducer, useState } from "react";
-import { State, TimerType } from "../types";
-import DaySelector from "./DaySelector";
+import { useEffect, useReducer, useState } from "react"
+import { State, TimerType } from "../types"
+import { getHours, getMinutes, getSeconds } from "../utils"
+import DaySelector from "./DaySelector"
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
   Array(Math.ceil((stop - start) / step))
     .fill(start)
-    .map((x, y) => x + y * step);
+    .map((x, y) => x + y * step)
 
 function Add({
   setHook,
@@ -24,63 +25,46 @@ function Add({
   reset = false,
   timers,
 }: {
-  setHook: any;
-  children: any;
-  initialValues?: any;
-  reset?: boolean;
-  timers?: TimerType[];
+  setHook: any
+  children: any
+  initialValues?: any
+  reset?: boolean
+  timers?: TimerType[]
 }) {
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false)
 
   function reducer(state: State, action: any) {
     switch (action.type) {
       default:
-        return { ...state, ...action };
+        return { ...state, ...action }
     }
   }
-  const [formValues, setFormValues] = useReducer(reducer, initialValues);
+  const [formValues, setFormValues] = useReducer(reducer, initialValues)
 
-  const [counter, setCounter] = useState(initialValues.counter);
-  const [selectedDays, setSelectedDays] = useState(initialValues.days);
+  const [counter, setCounter] = useState(initialValues.counter)
+  const [selectedDays, setSelectedDays] = useState(initialValues.days)
 
-  const { name, delta, seconds, minutes, hour, goal, color } = formValues;
+  const { name, delta, seconds, minutes, hour, goal, color } = formValues
 
   function handleFormChange(event: any) {
-    const { name, value } = event.target;
-    if (name == "goal")
-      setFormValues({
-        delta: Math.max(0, Number(delta) + (Number(value) - Number(goal)) + 1),
-      });
-
-    if (name == "seconds")
-      setFormValues({
-        delta: Math.max(0, Number(delta) + (Number(value) - seconds)),
-      });
-
-    if (name == "minutes")
-      setFormValues({
-        delta: Math.max(
-          0,
-          Number(delta) + (Number(value) - Number(minutes)) * 60
-        ),
-      });
-
-    if (name == "hour")
-      setFormValues({
-        delta: Math.max(
-          0,
-          Number(delta) + (Number(value) - Number(hour)) * 3600
-        ),
-      });
-    setFormValues({ [name]: value });
+    const { name, value } = event.target
+    setFormValues({ [name]: value.slice(0, 16) })
   }
 
+  const nameExists =
+    timers &&
+    timers.some((timer) => timer.name.toLowerCase() === name.toLowerCase())
+
   function handleFormSubmit() {
-    setModal(!modal);
+    setModal(!modal)
     const params: TimerType = {
-      name:
-        name.trim().charAt(0).toUpperCase() +
-        name.trim().slice(1).toLowerCase(),
+      name: name
+        .split(" ")
+        .map(
+          (s: string) =>
+            s.trim().charAt(0).toUpperCase() + s.trim().slice(1).toLowerCase()
+        )
+        .join(" "),
       delta,
       total: !counter
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
@@ -88,48 +72,55 @@ function Add({
       counter,
       color,
       days: selectedDays,
-    };
-    console.log(params);
-    setHook(params);
-    if (reset) setFormValues(initialValues);
+    }
+    setHook(params)
+    if (reset) setFormValues(initialValues)
   }
   function handleFormCancel() {
-    setModal(!modal);
-    setFormValues(initialValues);
+    setModal(!modal)
+    setFormValues(initialValues)
   }
 
   return (
     <>
       <a
         onClick={() => {
-          setModal(true);
-          setFormValues(initialValues);
+          setModal(true)
+          setFormValues(initialValues)
         }}
       >
         {children}
       </a>
       <dialog open={modal}>
-        <article className="modal">
+        <article className='modal'>
           <label>
             Activity
             <input
-              type="text"
-              name="name"
+              type='text'
+              name='name'
+              placeholder='Activity name like Running, Reading...'
               value={name}
               onChange={handleFormChange}
-              autoComplete="off"
+              autoComplete='nope'
             />
+            {nameExists && (
+              <strong
+                style={{ color: "salmon", position: "relative", bottom: 10 }}
+              >
+                This activity name already exists
+              </strong>
+            )}
           </label>
           <label>
             Color
             <input
-              type="color"
+              type='color'
               onChange={handleFormChange}
-              name="color"
+              name='color'
               value={color}
             />
           </label>
-          <div className="inline">
+          <div className='inline'>
             Type:
             <button
               className={counter ? "secondary" : ""}
@@ -145,13 +136,19 @@ function Add({
             </button>
           </div>
           <DaySelector value={selectedDays} setDays={setSelectedDays} />
-
+          {selectedDays.length < 1 && (
+            <strong
+              style={{ color: "salmon", position: "relative", bottom: 8 }}
+            >
+              Select at least one day
+            </strong>
+          )}
           <div style={{ height: 98 }}>
             {!counter ? (
-              <div className="inline">
+              <div className='inline'>
                 <label>
                   Hour
-                  <select name="hour" value={hour} onChange={handleFormChange}>
+                  <select name='hour' value={hour} onChange={handleFormChange}>
                     {range(0, 10, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
@@ -160,11 +157,11 @@ function Add({
                 <label>
                   Minutes
                   <select
-                    name="minutes"
+                    name='minutes'
                     value={minutes}
                     onChange={handleFormChange}
                   >
-                    {range(0, 60, 5).map((n) => (
+                    {range(0, 60, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
@@ -172,11 +169,11 @@ function Add({
                 <label>
                   Seconds
                   <select
-                    name="seconds"
+                    name='seconds'
                     value={seconds}
                     onChange={handleFormChange}
                   >
-                    {range(0, 60, 5).map((n) => (
+                    {range(0, 60, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
                   </select>
@@ -186,7 +183,7 @@ function Add({
               <div>
                 <label>
                   Goal
-                  <select name="goal" value={goal} onChange={handleFormChange}>
+                  <select name='goal' value={goal} onChange={handleFormChange}>
                     {range(1, 13, 1).map((n) => (
                       <option key={n}>{n}</option>
                     ))}
@@ -199,23 +196,21 @@ function Add({
           </div>
           <footer style={{ display: "flex" }}>
             <button
-              role="button"
-              className="secondary"
+              role='button'
+              className='secondary'
               onClick={handleFormCancel}
             >
               Cancel
             </button>
             <button
-              role="button"
-              data-target="modal-example"
+              role='button'
+              data-target='modal-example'
               onClick={handleFormSubmit}
               disabled={
                 name.trim() === "" ||
                 (counter ? false : hour + minutes + seconds <= 0) ||
-                (timers &&
-                  timers.some(
-                    (timer) => timer.name.toLowerCase() === name.toLowerCase()
-                  ))
+                nameExists ||
+                selectedDays.length < 1
               }
             >
               Confirm
@@ -224,7 +219,7 @@ function Add({
         </article>
       </dialog>
     </>
-  );
+  )
 }
 
-export default Add;
+export default Add

@@ -7,8 +7,13 @@
   scrollbar-width: none; /* Firefox */
 }
 
+/* hide scrollbar for chrome, safari and opera */
+.selection-buttons::-webkit-scrollbar {
+  display: none;
+}
+
 .week-button {
-  padding: auto;
+  padding: 1px;
   line-height: 1em;
   border-radius: 50%;
   aspect-ratio: 1 / 1;
