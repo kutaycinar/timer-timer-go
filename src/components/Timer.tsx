@@ -1,16 +1,16 @@
 import {
   buildStyles,
   CircularProgressbarWithChildren,
-} from "react-circular-progressbar";
-import { FaCheck, FaPlus } from "react-icons/fa";
-import { TimerType } from "../types";
-import { prettyTime, RadialSeparators } from "../utils";
+} from "react-circular-progressbar"
+import { FaCheck, FaPlus } from "react-icons/fa"
+import { TimerType } from "../types"
+import { prettyTime, RadialSeparators } from "../utils"
 
 type TimerProps = TimerType & {
-  idx: number;
-  deleteTimer: any;
-  focusTimer: any;
-};
+  idx: number
+  deleteTimer: any
+  focusTimer: any
+}
 
 function Timer({
   name,
@@ -23,13 +23,13 @@ function Timer({
   color,
 }: TimerProps) {
   return (
-    <div className="timer">
+    <div className='timer'>
       <a onClick={() => focusTimer(idx)}>
-        <div className="timer-title">
+        <div className='timer-title'>
           <strong>{name}</strong>
         </div>
         <CircularProgressbarWithChildren
-          value={((total - delta) / total) * 100}
+          value={(delta / total) * 100}
           background
           // backgroundPadding={delta == 0 ? 100 : 0}
           strokeWidth={10}
@@ -38,19 +38,20 @@ function Timer({
             strokeLinecap: "butt",
             trailColor: color + "20",
             // trailColor: "#2e2e2e",
-            backgroundColor: delta
-              ? "var(--progress-fill)"
-              : color || "#1bb3e6" + "A0",
+            backgroundColor:
+              delta < total
+                ? "var(--progress-fill)"
+                : color || "#1bb3e6" + "A0",
           })}
         >
-          {delta ? (
+          {delta < total ? (
             <h3 style={{ margin: "auto" }}>
-              {counter ? `${delta} left` : `${prettyTime(delta)}`}
+              {counter ? `${total - delta} left` : `${prettyTime(total - delta)}`}
             </h3>
           ) : (
-            <FaCheck fontSize={55} color="var(--text-primary)" />
+            <FaCheck fontSize={55} color='var(--text-primary)' />
           )}
-          {counter && delta !== 0 && total != 1 && (
+          {counter && total != 1 && delta != total && (
             <RadialSeparators
               count={total!}
               style={{
@@ -64,7 +65,7 @@ function Timer({
         </CircularProgressbarWithChildren>
       </a>
     </div>
-  );
+  )
 }
 
-export default Timer;
+export default Timer

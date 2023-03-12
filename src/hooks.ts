@@ -1,21 +1,21 @@
-import { Capacitor } from "@capacitor/core";
-import { App } from "@capacitor/app";
-import { Channel, LocalNotifications } from "@capacitor/local-notifications";
-import { Preferences } from "@capacitor/preferences";
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { OverviewProps } from "./components/Overview";
-import { initial, Save, State, TimerType } from "./types";
-import { Dayjs } from "dayjs";
+import { Capacitor } from "@capacitor/core"
+import { App } from "@capacitor/app"
+import { Channel, LocalNotifications } from "@capacitor/local-notifications"
+import { Preferences } from "@capacitor/preferences"
+import dayjs from "dayjs"
+import { useEffect, useState } from "react"
+import { OverviewProps } from "./components/Overview"
+import { initial, Save, State, TimerType } from "./types"
+import { Dayjs } from "dayjs"
 
 export function useTimer() {
-  const [state, setState] = useState<State>(initial);
-  const [isLoaded, setLoaded] = useState(false);
-  const [active, setActive] = useState(true);
+  const [state, setState] = useState<State>(initial)
+  const [isLoaded, setLoaded] = useState(false)
+  const [active, setActive] = useState(true)
 
   // ask for notification permission
   if (Capacitor.isNativePlatform()) {
-    LocalNotifications.requestPermissions();
+    LocalNotifications.requestPermissions()
 
     const channel: Channel = {
       id: "main",
@@ -26,56 +26,56 @@ export function useTimer() {
       visibility: 1,
       lights: true,
       vibration: true,
-    };
-    LocalNotifications.createChannel(channel);
+    }
+    LocalNotifications.createChannel(channel)
   }
 
   App.addListener("appStateChange", ({ isActive }) => {
     if (active != isActive) {
-      setActive(isActive);
+      setActive(isActive)
     }
-  });
+  })
 
   // initial load
   useEffect(() => {
-    if (!active) return;
+    if (!active) return
     Preferences.get({ key: "state" }).then((res) => {
       if (res.value) {
-        setState(JSON.parse(res.value));
-        setLoaded(true);
+        setState(JSON.parse(res.value))
+        setLoaded(true)
       }
-    });
-  }, [active]);
+    })
+  }, [active])
 
   // runs once after loading state
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded) return
 
     // daily reset check
-    const lastDate = dayjs(state.state.date);
-    const now = dayjs();
+    const lastDate = dayjs(state.state.date)
+    const now = dayjs()
     if (!now.isSame(lastDate, "day")) {
-      saveAllTimers(lastDate);
-      resetAllTimers();
+      saveAllTimers(lastDate)
+      resetAllTimers()
     }
     //TODO: Handle case where it's the same day
     // increment check if not daily reset not happened
     else if (state.state.active) {
-      fastForwardTimer();
+      fastForwardTimer()
     }
-    setLoaded(false);
-  }, [isLoaded, state]);
+    setLoaded(false)
+  }, [isLoaded, state])
 
   function fastForwardTimer() {
-    const prevDate = dayjs(state.state.date).startOf("second");
-    const date2 = dayjs().startOf("second");
-    const seconds = date2.diff(prevDate, "seconds");
+    const prevDate = dayjs(state.state.date).startOf("second")
+    const date2 = dayjs().startOf("second")
+    const seconds = date2.diff(prevDate, "seconds")
 
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].delta = Math.max(
-      0,
-      newTimers[state.state.focus].delta - seconds
-    );
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus].delta = Math.min(
+      newTimers[state.state.focus].total,
+      newTimers[state.state.focus].delta + seconds
+    )
     setState((prevState) => {
       return {
         state: {
@@ -83,8 +83,8 @@ export function useTimer() {
           timers: newTimers,
           date: dayjs().startOf("second").valueOf(),
         },
-      };
-    });
+      }
+    })
   }
 
   // interval
@@ -93,24 +93,25 @@ export function useTimer() {
       await Preferences.set({
         key: "state",
         value: JSON.stringify(state),
-      });
+      })
 
       // daily reset check
-      const prevDate = dayjs(state.state.date);
+      const prevDate = dayjs(state.state.date)
 
       if (!dayjs().isSame(prevDate, "day")) {
-        saveAllTimers(prevDate);
-        resetAllTimers();
-        return;
+        saveAllTimers(prevDate)
+        resetAllTimers()
+        return
       }
 
       // check for timer active
       if (state.state.active) {
-        const newTimers = [...state.state.timers];
-        const delta = newTimers[state.state.focus].delta;
+        const newTimers = [...state.state.timers]
+        const delta = newTimers[state.state.focus].delta
+        const total = newTimers[state.state.focus].total
         // timer can be decremented, do that
-        if (delta > 0) {
-          fastForwardTimer();
+        if (delta < total) {
+          fastForwardTimer()
         }
         // timer already at 0, set active to false
         else {
@@ -121,8 +122,8 @@ export function useTimer() {
                 date: dayjs().valueOf(),
                 active: false,
               },
-            };
-          });
+            }
+          })
         }
       }
       // no decrement -- update date in state
@@ -133,12 +134,12 @@ export function useTimer() {
               ...prevState.state,
               date: dayjs().valueOf(),
             },
-          };
-        });
+          }
+        })
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [state]);
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [state])
 
   // addition
   function addTimer(props: TimerType) {
@@ -148,22 +149,22 @@ export function useTimer() {
           ...prevState.state,
           timers: [...prevState.state.timers, props],
         },
-      };
-    });
+      }
+    })
   }
 
   // edit
   function editTimer(props: TimerType) {
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus] = props;
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus] = props
     setState((prevState) => {
       return {
         state: {
           ...prevState.state,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // removal
@@ -176,8 +177,8 @@ export function useTimer() {
           focus: -1,
           timers: prevState.state.timers.filter((t) => t.name !== name),
         },
-      };
-    });
+      }
+    })
   }
 
   // focus
@@ -188,18 +189,20 @@ export function useTimer() {
           ...prevState.state,
           focus: idx,
         },
-      };
-    });
+      }
+    })
   }
 
   async function sendNotification() {
-    const now = dayjs();
+    const now = dayjs()
+    const delta = state.state.timers[state.state.focus].delta
+    const total = state.state.timers[state.state.focus].total
     const future = now.add(
-      state.state.timers[state.state.focus].delta,
+      total - delta,
       "seconds"
-    );
+    )
 
-    if (now.diff(future, "days") > 1) return;
+    if (now.diff(future, "days") > 1) return
 
     await LocalNotifications.schedule({
       notifications: [
@@ -216,65 +219,65 @@ export function useTimer() {
           channelId: "main",
         },
       ],
-    });
+    })
   }
 
   async function cancelNotification() {
     await LocalNotifications.cancel({
       notifications: [{ id: 1 }],
-    });
+    })
   }
 
   function countNext() {
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].delta -= 1;
-    newTimers[state.state.focus].delta = Math.max(
-      0,
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus].delta += 1
+    newTimers[state.state.focus].delta = Math.min(
+      newTimers[state.state.focus].total,
       newTimers[state.state.focus].delta
-    );
+    )
     setState((prevState) => {
       return {
         state: {
           ...prevState.state,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // start
   function signalStart() {
-    sendNotification();
+    sendNotification()
     setState((prevState) => {
       return {
         state: {
           ...prevState.state,
           active: true,
         },
-      };
-    });
+      }
+    })
   }
 
   // pause
   function signalPause() {
-    cancelNotification();
+    cancelNotification()
     setState((prevState) => {
       return {
         state: {
           ...prevState.state,
           active: false,
         },
-      };
-    });
+      }
+    })
   }
 
   function clearAllData() {
-    setState(initial);
+    setState(initial)
   }
 
   // stop
   function signalStop() {
-    cancelNotification();
+    cancelNotification()
     setState((prevState) => {
       return {
         state: {
@@ -282,35 +285,35 @@ export function useTimer() {
           active: false,
           focus: -1,
         },
-      };
-    });
+      }
+    })
   }
 
   // reset
   function signalReset() {
-    signalPause();
-    cancelNotification();
-    const newTimers = [...state.state.timers];
-    newTimers[state.state.focus].delta = newTimers[state.state.focus].total;
+    signalPause()
+    cancelNotification()
+    const newTimers = [...state.state.timers]
+    newTimers[state.state.focus].delta = 0
     setState((prevState) => {
       return {
         state: {
           ...prevState.state,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   function saveAllTimers(date: Dayjs) {
-    console.log("Saving for time: " + date.format("DD:MM:YYYY"));
-    const overall = getOverall(date);
+    console.log("Saving for time: " + date.format("DD:MM:YYYY"))
+    const overall = getOverall(date)
     // Push timer for last day with data
     const newSave = {
       timers: state.state.timers,
       completion: Math.round((overall.delta / overall.total) * 100),
       date: date.valueOf(),
-    };
+    }
     // Add saves to state
     setState((prevState: State) => {
       return {
@@ -319,8 +322,8 @@ export function useTimer() {
           saves: [...(prevState.state.saves || []), newSave],
           date: dayjs().valueOf(),
         },
-      };
-    });
+      }
+    })
   }
 
   function clearSaves() {
@@ -330,27 +333,27 @@ export function useTimer() {
           ...prevState.state,
           saves: [],
         },
-      };
-    });
+      }
+    })
   }
 
   // reset all
   function resetAllTimers() {
-    cancelNotification();
+    cancelNotification()
     const newTimers = state.state.timers.map((t) => {
       return {
         ...t,
-        delta: t.total,
-      };
-    });
+        delta: 0,
+      }
+    })
     setState((prevState) => {
       return {
         state: {
           ...prevState.state,
           timers: newTimers,
         },
-      };
-    });
+      }
+    })
   }
 
   // accumulated timer data
@@ -365,10 +368,10 @@ export function useTimer() {
       reverse: false,
       color: "",
       days: [],
-    });
+    })
     const todayTimers = state.state.timers.filter((t: TimerType) =>
       t.days.includes(date.day())
-    );
+    )
     const { delta, total } = todayTimers.reduce(reducer, {
       name: "",
       delta: 0,
@@ -377,12 +380,12 @@ export function useTimer() {
       reverse: false,
       color: "",
       days: [],
-    });
+    })
 
     return {
       delta: (total - delta) / todayTimers.length || 0,
       total: total / todayTimers.length || 0,
-    };
+    }
   }
 
   return {
@@ -402,5 +405,5 @@ export function useTimer() {
     saveAllTimers,
     clearSaves,
     clearAllData,
-  };
+  }
 }

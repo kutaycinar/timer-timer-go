@@ -48,31 +48,6 @@ function Add({
 
   function handleFormChange(event: any) {
     const { name, value } = event.target
-    if (name == "goal")
-      setFormValues({
-        delta: Math.max(0, Number(delta) + (Number(value) - Number(goal)) + 1),
-      })
-
-    if (name == "seconds")
-      setFormValues({
-        delta: Math.max(0, Number(delta) + (Number(value) - seconds)),
-      })
-
-    if (name == "minutes")
-      setFormValues({
-        delta: Math.max(
-          0,
-          Number(delta) + (Number(value) - Number(minutes)) * 60
-        ),
-      })
-
-    if (name == "hour")
-      setFormValues({
-        delta: Math.max(
-          0,
-          Number(delta) + (Number(value) - Number(hour)) * 3600
-        ),
-      })
     setFormValues({ [name]: value })
   }
 
