@@ -1,7 +1,7 @@
-import { useEffect, useReducer, useState } from "react"
-import { State, TimerType } from "../types"
-import { getHours, getMinutes, getSeconds } from "../utils"
-import DaySelector from "./DaySelector"
+import { useEffect, useReducer, useState } from "react";
+import { State, TimerType } from "../types";
+import { getHours, getMinutes, getSeconds } from "../utils";
+import DaySelector from "./DaySelector";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
   Array(Math.ceil((stop - start) / step))
