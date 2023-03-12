@@ -116,9 +116,10 @@ function Add({
             <input
               type='text'
               name='name'
+              placeholder="Activity name like Running, Reading..."
               value={name}
               onChange={handleFormChange}
-              autoComplete='off'
+              autoComplete='nope'
             />
           </label>
           <label>
