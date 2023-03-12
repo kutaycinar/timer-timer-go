@@ -3,9 +3,21 @@ import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { Save } from "../../types";
 
 function Summary({ data }: { data: Save[] }) {
-  const lastWeek = data.filter((save: Save) => {
-    return Math.abs(dayjs().diff(dayjs(save.date), "days")) < 7;
-  });
+  const today = dayjs();
+  let lastWeek: Save[] = [];
+  for (let i = 7; i >= 1; i--) {
+    const date = today.subtract(i, "days");
+    const save = data.find((s: Save) => dayjs(s.date).isSame(date, "day"));
+    if (save) {
+      lastWeek.push(save);
+    } else {
+      lastWeek.push({
+        completion: 0,
+        date: date.valueOf(),
+        timers: [], //TODO: Backfill timers from previous day with progress
+      });
+    }
+  }
 
   return (
     <div

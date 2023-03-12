@@ -303,30 +303,20 @@ export function useTimer() {
   }
 
   function saveAllTimers(date: Dayjs) {
-    const newSaves: Save[] = [];
-    const overall = getOverall();
+    console.log("Saving for time: " + date.format("DD:MM:YYYY"));
+    const overall = getOverall(date);
     // Push timer for last day with data
-    newSaves.push({
+    const newSave = {
       timers: state.state.timers,
       completion: Math.round((overall.delta / overall.total) * 100),
       date: date.valueOf(),
-    });
-    // Backfill missed days
-    const missedDays = dayjs().diff(date, "days");
-    for (let i = 0; i < missedDays; i++) {
-      date = date.add(1, "day");
-      newSaves.push({
-        timers: state.state.timers,
-        completion: 0,
-        date: date.valueOf(),
-      });
-    }
+    };
     // Add saves to state
     setState((prevState: State) => {
       return {
         state: {
           ...prevState.state,
-          saves: [...(prevState.state.saves || []), ...newSaves],
+          saves: [...(prevState.state.saves || []), newSave],
           date: dayjs().valueOf(),
         },
       };
@@ -364,7 +354,7 @@ export function useTimer() {
   }
 
   // accumulated timer data
-  function getOverall(): OverviewProps {
+  function getOverall(date: Dayjs): OverviewProps {
     const reducer = (accumulator: TimerType, currentValue: TimerType) => ({
       name: "",
       delta:
@@ -376,8 +366,10 @@ export function useTimer() {
       color: "",
       days: [],
     });
-
-    const { delta, total } = state.state.timers.reduce(reducer, {
+    const todayTimers = state.state.timers.filter((t: TimerType) =>
+      t.days.includes(date.day())
+    );
+    const { delta, total } = todayTimers.reduce(reducer, {
       name: "",
       delta: 0,
       total: 0,
@@ -388,8 +380,8 @@ export function useTimer() {
     });
 
     return {
-      delta: (total - delta) / state.state.timers.length || 0,
-      total: total / state.state.timers.length || 0,
+      delta: (total - delta) / todayTimers.length || 0,
+      total: total / todayTimers.length || 0,
     };
   }
 
