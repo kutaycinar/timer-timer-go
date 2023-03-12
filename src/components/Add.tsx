@@ -48,7 +48,7 @@ function Add({
 
   function handleFormChange(event: any) {
     const { name, value } = event.target
-    setFormValues({ [name]: value })
+    setFormValues({ [name]: value.slice(0, 16) })
   }
 
   const nameExists =
@@ -58,9 +58,13 @@ function Add({
   function handleFormSubmit() {
     setModal(!modal)
     const params: TimerType = {
-      name:
-        name.trim().charAt(0).toUpperCase() +
-        name.trim().slice(1).toLowerCase(),
+      name: name
+        .split(" ")
+        .map(
+          (s: string) =>
+            s.trim().charAt(0).toUpperCase() + s.trim().slice(1).toLowerCase()
+        )
+        .join(" "),
       delta,
       total: !counter
         ? Number(hour) * 3600 + Number(minutes) * 60 + Number(seconds)
@@ -69,7 +73,6 @@ function Add({
       color,
       days: selectedDays,
     }
-    console.log(params)
     setHook(params)
     if (reset) setFormValues(initialValues)
   }

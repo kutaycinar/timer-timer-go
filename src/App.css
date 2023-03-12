@@ -17,7 +17,7 @@ a {
   background-color: var(--background-color);
 }
 .page:after {
-  content: '';
+  content: "";
   flex: auto;
 }
 
@@ -36,7 +36,6 @@ a {
     flex: 0 0 calc(100% - 10px);
   }
 }
-
 
 @media (min-width: 375px) {
   .timer {
@@ -63,12 +62,12 @@ a {
   margin-bottom: 50px;
 }
 
-
 .timer-title {
   color: var(--text-primary);
   margin-bottom: 8px;
   font-size: 18px;
   text-align: center;
+  /* text-transform: capitalize; */
 }
 
 .add {
