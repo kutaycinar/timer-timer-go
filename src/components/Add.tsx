@@ -44,7 +44,7 @@ function Add({
   const [counter, setCounter] = useState(initialValues.counter);
   const [selectedDays, setSelectedDays] = useState(initialValues.days);
 
-  const { name, delta, seconds, minutes, hour, goal, color, days } = formValues;
+  const { name, delta, seconds, minutes, hour, goal, color } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;

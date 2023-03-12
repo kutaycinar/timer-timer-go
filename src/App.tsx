@@ -1,5 +1,6 @@
 import { Capacitor } from "@capacitor/core";
 import { Glassfy } from "capacitor-plugin-glassfy";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
@@ -105,11 +106,13 @@ function App() {
     }
   }
 
+  const today = dayjs().day();
+
   // init
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
-        <pre>{JSON.stringify(state, undefined, 2)}</pre>
+        {/* <pre>{JSON.stringify(state, undefined, 2)}</pre> */}
         <div
           style={{
             height: `${delta}%`,
@@ -154,16 +157,19 @@ function App() {
                     </Add>
                   </div>
                 )}
-                {state.state.timers.map((t, idx) => (
-                  <Timer
-                    key={t.name}
-                    {...t}
-                    idx={idx}
-                    deleteTimer={deleteTimer}
-                    focusTimer={focusTimer}
-                    color={t.color}
-                  />
-                ))}
+                {state.state.timers.map((t, idx) => {
+                  if (!t.days.includes(today)) return;
+                  return (
+                    <Timer
+                      key={t.name}
+                      {...t}
+                      idx={idx}
+                      deleteTimer={deleteTimer}
+                      focusTimer={focusTimer}
+                      color={t.color}
+                    />
+                  );
+                })}
                 {proSku.isPro ||
                 state.state.timers.length < FREE_MAX_TIMERS ||
                 !Capacitor.isNativePlatform() ? (

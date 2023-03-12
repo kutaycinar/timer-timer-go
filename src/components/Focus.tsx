@@ -39,7 +39,7 @@ const confettiProps: ConfettiProps = {
 
 const effect = new Audio("/sounds/complete.mp3");
 
-type FocusProps = Partial<TimerType> & {
+type FocusProps = TimerType & {
   signalStart: any;
   signalPause: any;
   signalStop: any;
@@ -56,6 +56,7 @@ function Focus({
   total,
   counter,
   color,
+  days,
   signalPause,
   signalStop,
   signalStart,
@@ -88,6 +89,7 @@ function Focus({
     goal: counter ? total : 1,
     counter,
     color,
+    days,
   };
 
   return (
