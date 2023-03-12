@@ -37,6 +37,8 @@ const confettiProps: ConfettiProps = {
   colors: ["#041E43", "#1471BF", "#5BB4DC", "#FC027B", "#66D805"],
 };
 
+const effect = new Audio("/sounds/complete.mp3");
+
 type FocusProps = Partial<TimerType> & {
   signalStart: any;
   signalPause: any;
@@ -65,12 +67,13 @@ function Focus({
 }: FocusProps) {
   const [prevDelta, setPrevDelta] = useState(delta);
   const [taskOver, setTaskOver] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     if (delta === 0 && prevDelta !== 0) {
+      // Delay so that the confetti shows up after the animation.
       setTimeout(() => {
         setTaskOver(true);
+        effect.play();
       }, 150);
     }
     setPrevDelta(delta);
