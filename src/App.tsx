@@ -108,6 +108,26 @@ function App() {
 
   const today = dayjs().day()
 
+  return (
+    <div className='page'>
+      <div className='child'>
+        {state.state.timers.map((t, idx) => {
+          if (!t.days.includes(today)) return
+          return (
+            <Timer
+              key={t.name}
+              {...t}
+              idx={idx}
+              deleteTimer={deleteTimer}
+              focusTimer={focusTimer}
+              color={t.color}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+
   // init
   return (
     <ThemeProvider theme={theme}>
