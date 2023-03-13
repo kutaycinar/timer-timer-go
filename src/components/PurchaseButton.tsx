@@ -29,7 +29,7 @@ function PurchaseButton({
     //     setPro(true);
     //   }
     // } catch (e) {
-    //   console.log("Purchase Error");
+    //   console.error("Purchase Error");
     // }
   }
 

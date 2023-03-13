@@ -96,7 +96,7 @@ function App() {
         setProSku({ ...proSku, isPro: true });
       }
     } catch (e) {
-      console.log("Purchase Error");
+      console.error("Purchase Error");
     }
   }
 

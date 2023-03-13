@@ -20,14 +20,14 @@ function Purchases() {
           setPro(true);
         }
       } catch (e) {
-        console.log("INIT ERROR:", e);
+        console.error("INIT ERROR:", e);
       }
 
       try {
         const offerings = await Glassfy.offerings();
         setOfferings(offerings.all);
       } catch (e) {
-        console.log("OFFERINGS ERROR:", e);
+        console.error("OFFERINGS ERROR:", e);
       }
     }
     init();
@@ -43,7 +43,7 @@ function Purchases() {
         setPro(true);
       }
     } catch (e) {
-      console.log("Purchase Error");
+      console.error("Purchase Error");
     }
   }
 

@@ -30,14 +30,14 @@ export async function initGlassfy(): Promise<SkuInfo | undefined> {
       result.isPro = true;
     }
   } catch (e) {
-    console.log("INIT ERROR:", e);
+    console.error("INIT ERROR:", e);
   }
 
   try {
     const offerings = await Glassfy.offerings();
     result.proSku = offerings.all[0]?.skus[0] ?? undefined;
   } catch (e) {
-    console.log("OFFERINGS ERROR:", e);
+    console.error("OFFERINGS ERROR:", e);
   }
   return result;
 }

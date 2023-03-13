@@ -70,10 +70,8 @@ export function useTimer() {
 
   function fastForwardTimer() {
     const prevDate = dayjs(state.state.date).startOf("second");
-    console.log("Prev: " + prevDate.format("mm:ss"));
     const now = dayjs().startOf("second");
-    console.log("Now: " + now.format("mm:ss"));
-    const seconds = now.diff(prevDate, "seconds");
+    let seconds = now.diff(prevDate, "seconds");
 
     const newTimers = [...state.state.timers];
     newTimers[state.state.focus].delta = Math.min(
@@ -96,8 +94,6 @@ export function useTimer() {
       key: "state",
       value: JSON.stringify(state),
     });
-
-    console.log("Interval Running");
 
     // daily reset check
     const prevDate = dayjs(state.state.date);
@@ -146,7 +142,6 @@ export function useTimer() {
 
   useEffect(() => {
     intervalIdRef.current = setInterval(intervalFunction, 1000);
-    console.log("Interval Set");
     return () => clearInterval(intervalIdRef.current!);
   }, [intervalFunction]);
 
@@ -272,6 +267,7 @@ export function useTimer() {
         state: {
           ...prevState.state,
           active: true,
+          date: dayjs().valueOf(),
         },
       };
     });
@@ -285,6 +281,7 @@ export function useTimer() {
         state: {
           ...prevState.state,
           active: false,
+          date: dayjs().valueOf(),
         },
       };
     });
@@ -325,8 +322,6 @@ export function useTimer() {
   }
 
   function saveAllTimers(date: Dayjs) {
-    console.log("Saving for time: " + date.format("DD:MM:YYYY"));
-    console.log("Setting time to: " + dayjs().format("DD:MM:YYYY"));
     const overall = getOverall(date);
     // Push timer for last day with data
     const newSave = {
