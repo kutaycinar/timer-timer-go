@@ -116,9 +116,10 @@ function Focus({
             strokeLinecap: "butt",
             // trailColor: "#2e2e2e",
             trailColor: color + "20",
-            backgroundColor: !taskOver
-              ? "var(--progress-fill)"
-              : color || "#1bb3e6" + "A0",
+            backgroundColor:
+              delta < total
+                ? "var(--progress-fill)"
+                : color || "#1bb3e6" + "A0",
           })}
         >
           {delta < total ? (
