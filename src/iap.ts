@@ -1,14 +1,21 @@
+import { Capacitor } from "@capacitor/core";
 import { Glassfy, GlassfySku } from "capacitor-plugin-glassfy";
 
-export type SkuInfo = {
-  isPro: boolean | undefined;
-  proSku: GlassfySku | undefined;
-};
-export async function initGlassfy(): Promise<SkuInfo> {
+export type SkuInfo =
+  | {
+      isPro: boolean | undefined;
+      proSku: GlassfySku | undefined;
+    }
+  | undefined;
+export async function initGlassfy(): Promise<SkuInfo | undefined> {
   const result: SkuInfo = {
     isPro: undefined,
     proSku: undefined,
   };
+  if (!Capacitor.isNativePlatform()) {
+    console.warn("Glassfy not supported on this platform");
+    return;
+  }
   try {
     await Glassfy.initialize({
       apiKey: import.meta.env.VITE_GLASSFY_API_KEY ?? "",
@@ -23,14 +30,14 @@ export async function initGlassfy(): Promise<SkuInfo> {
       result.isPro = true;
     }
   } catch (e) {
-    console.log("INIT ERROR:", e);
+    console.error("INIT ERROR:", e);
   }
 
   try {
     const offerings = await Glassfy.offerings();
     result.proSku = offerings.all[0]?.skus[0] ?? undefined;
   } catch (e) {
-    console.log("OFFERINGS ERROR:", e);
+    console.error("OFFERINGS ERROR:", e);
   }
   return result;
 }

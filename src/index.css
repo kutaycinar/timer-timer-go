@@ -1,8 +1,9 @@
-:root {
-  /* background: black !important; */
-}
-
 html,
 body {
+  /* Hide Scroll bar for web    */
   overflow-x: hidden;
+  scrollbar-width: none;
+  overflow: scroll;
+  width: calc(100% + 5px);
+  padding-right: 5px;
 }

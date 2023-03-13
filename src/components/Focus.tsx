@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react"
+import { App } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
+import { useEffect, useState } from "react";
 import {
   buildStyles,
   CircularProgressbarWithChildren,
-} from "react-circular-progressbar"
-import "react-circular-progressbar/dist/styles.css"
-import "react-confetti-explosion"
+} from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import "react-confetti-explosion";
+import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
 import {
-  FaCheck,
   FaChevronLeft,
   FaCog,
   FaForward,
@@ -14,8 +16,8 @@ import {
   FaPlay,
   FaTrash,
   FaUndoAlt,
-} from "react-icons/fa"
-import { TimerType } from "../types"
+} from "react-icons/fa";
+import { TimerType } from "../types";
 import {
   getHours,
   getMinutes,
@@ -23,13 +25,11 @@ import {
   GradientSVG,
   prettyTime,
   RadialSeparators,
-} from "../utils"
-import Add from "./Add"
-import Confirmation from "./Confirmation"
-import "./Focus.css"
-import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion"
-import { App } from "@capacitor/app"
-import { Capacitor } from "@capacitor/core"
+} from "../utils";
+import Add from "./Add";
+import Checkmark from "./Checkmark";
+import Confirmation from "./Confirmation";
+import "./Focus.css";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -37,20 +37,20 @@ const confettiProps: ConfettiProps = {
   particleCount: 100,
   width: 1000,
   colors: ["#041E43", "#1471BF", "#5BB4DC", "#FC027B", "#66D805"],
-}
+};
 
-const effect = new Audio("/sounds/complete.mp3")
+const effect = new Audio("/sounds/complete.mp3");
 
 type FocusProps = TimerType & {
-  signalStart: any
-  signalPause: any
-  signalStop: any
-  signalReset: any
-  isRunning: boolean
-  countNext: any
-  editTimer: any
-  deleteTimer: any
-}
+  signalStart: any;
+  signalPause: any;
+  signalStop: any;
+  signalReset: any;
+  isRunning: boolean;
+  countNext: any;
+  editTimer: any;
+  deleteTimer: any;
+};
 
 function Focus({
   name,
@@ -68,25 +68,23 @@ function Focus({
   editTimer,
   deleteTimer,
 }: FocusProps) {
-  const [prevDelta, setPrevDelta] = useState(delta)
-  const [taskOver, setTaskOver] = useState(false)
+  const [prevDelta, setPrevDelta] = useState(delta);
+  const [taskOver, setTaskOver] = useState(false);
 
   useEffect(() => {
-    console.log(`delta: ${delta} prev: ${prevDelta} total: ${total}`)
     if (delta >= total && prevDelta != delta) {
-      console.log("CONFETTI")
       // Delay so that the confetti shows up after the animation.
       setTimeout(() => {
-        setTaskOver(true)
+        setTaskOver(true);
         // Don't play sound if the app isn't active.
         if (Capacitor.isNativePlatform() && !App.getState) {
-          return
+          return;
         }
-        effect.play()
-      }, 150)
+        effect.play();
+      }, 150);
     }
-    setPrevDelta(delta)
-  }, [delta, total])
+    setPrevDelta(delta);
+  }, [delta, total]);
 
   const init = {
     name,
@@ -98,15 +96,15 @@ function Focus({
     counter,
     color,
     days,
-  }
+  };
 
   return (
-    <div className='container'>
-      <button onClick={() => signalStop()} className='back-button'>
+    <div className="container">
+      <button onClick={() => signalStop()} className="back-button">
         <FaChevronLeft size={32} />
       </button>
-      <h3 className='title'>{name}</h3>
-      <div className='timer-container'>
+      <h3 className="title">{name}</h3>
+      <div className="timer-container">
         <GradientSVG />
         <CircularProgressbarWithChildren
           strokeWidth={6}
@@ -131,7 +129,7 @@ function Focus({
                 : `${prettyTime(total - delta)}`}
             </h1>
           ) : (
-            <FaCheck fontSize={100} color='var(--text-primary)' />
+            <Checkmark animated={true} />
           )}
           {counter && total != 1 && delta != total && (
             <RadialSeparators
@@ -153,9 +151,9 @@ function Focus({
         )}
         <br />
         <br />
-        <div className='button-container'>
+        <div className="button-container">
           <button
-            className='play-button'
+            className="play-button"
             onClick={() =>
               counter ? countNext() : isRunning ? signalPause() : signalStart()
             }
@@ -171,33 +169,33 @@ function Focus({
           </button>
         </div>
       </div>
-      <div className='footer-buttons'>
+      <div className="footer-buttons">
         <Confirmation
-          title='Reset Timer'
-          body='Task data will be reset to zero. This action cannot be undone'
+          title="Reset Timer"
+          body="Task data will be reset to zero. This action cannot be undone"
           callback={() => {
-            signalReset()
-            setTaskOver(false)
+            signalReset();
+            setTaskOver(false);
           }}
           disabled={delta == 0}
         >
           <FaUndoAlt />
         </Confirmation>
         <Confirmation
-          title='Delete Timer'
-          body='Task will be deleted. All previous task data will be preserved.'
+          title="Delete Timer"
+          body="Task will be deleted. All previous task data will be preserved."
           callback={() => deleteTimer(name)}
         >
           <FaTrash />
         </Confirmation>
         <Add setHook={editTimer} initialValues={init}>
-          <button className='action-button'>
+          <button className="action-button">
             <FaCog />
           </button>
         </Add>
       </div>
     </div>
-  )
+  );
 }
 
-export default Focus
+export default Focus;
