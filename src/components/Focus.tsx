@@ -73,9 +73,7 @@ function Focus({
   const [taskOver, setTaskOver] = useState(false);
 
   useEffect(() => {
-    console.log(`delta: ${delta} prev: ${prevDelta} total: ${total}`);
     if (delta >= total && prevDelta != delta) {
-      console.log("CONFETTI");
       // Delay so that the confetti shows up after the animation.
       setTimeout(() => {
         setTaskOver(true);

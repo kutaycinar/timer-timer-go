@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { OverviewProps } from "./components/Overview";
 import { initial, Save, State, TimerType } from "./types";
 import { Dayjs } from "dayjs";
+import { SkuInfo } from "./iap";
 
 export function useTimer() {
   const [state, setState] = useState<State>(initial);
@@ -97,14 +98,11 @@ export function useTimer() {
     });
 
     console.log("Interval Running");
-    console.log("State: " + state.state.date);
 
     // daily reset check
     const prevDate = dayjs(state.state.date);
 
     if (!dayjs().isSame(prevDate, "day")) {
-      console.log("returning not same day");
-
       saveAllTimers(prevDate);
       resetAllTimers();
       return;
@@ -112,8 +110,6 @@ export function useTimer() {
 
     // check for timer active
     if (state.state.active) {
-      console.log("Active timer");
-
       const newTimers = [...state.state.timers];
       const delta = newTimers[state.state.focus].delta;
       const total = newTimers[state.state.focus].total;
@@ -137,7 +133,6 @@ export function useTimer() {
     }
     // no decrement -- update date in state
     else {
-      console.log("Nothing active");
       setState((prevState) => {
         return {
           state: {
@@ -176,6 +171,19 @@ export function useTimer() {
         state: {
           ...prevState.state,
           timers: newTimers,
+        },
+      };
+    });
+  }
+
+  // Set pro mode
+  function setProMode(skuInfo: SkuInfo) {
+    if (skuInfo === undefined) return;
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          promode: skuInfo.isPro ?? prevState.state.promode,
         },
       };
     });
@@ -418,5 +426,6 @@ export function useTimer() {
     saveAllTimers,
     clearSaves,
     clearAllData,
+    setProMode,
   };
 }

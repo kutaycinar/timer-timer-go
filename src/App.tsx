@@ -18,7 +18,6 @@ import { FREE_MAX_TIMERS, themeOption } from "./types";
 function App() {
   const {
     state,
-    setState,
     addTimer,
     deleteTimer,
     focusTimer,
@@ -31,6 +30,7 @@ function App() {
     editTimer,
     clearSaves,
     clearAllData,
+    setProMode,
   } = useTimer();
 
   enum TabType {
@@ -68,14 +68,7 @@ function App() {
     async function init() {
       const skuInfo = await initGlassfy();
       setProSku(skuInfo);
-      setState((prevState) => {
-        return {
-          state: {
-            ...prevState.state,
-            promode: skuInfo.isPro ?? prevState.state.promode,
-          },
-        };
-      });
+      setProMode(skuInfo);
     }
     init();
   }, []);
@@ -93,6 +86,7 @@ function App() {
   }, [theme]);
 
   async function purchaseSKU() {
+    if (!proSku) return;
     try {
       const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
       const permission = transaction.permissions.all.find(
@@ -112,7 +106,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ height: "100vh", background: "var(--background-color)" }}>
-        <pre style={{ height: 200 }}>{JSON.stringify(state, undefined, 2)}</pre>
+        {/* <pre style={{ height: 200 }}>{JSON.stringify(state, undefined, 2)}</pre> */}
         <div
           style={{
             height: `${delta}%`,
@@ -172,7 +166,7 @@ function App() {
                     );
                   })}
                 </div>
-                {proSku.isPro ||
+                {proSku?.isPro ||
                 state.state.timers.length < FREE_MAX_TIMERS ||
                 !Capacitor.isNativePlatform() ? (
                   <Add
@@ -189,13 +183,13 @@ function App() {
                     title={"Buy Pro"}
                     body={
                       "You have reached the three task limit for the trial period. Buy pro mode to add more activities. $" +
-                      proSku.proSku?.product.price
+                      proSku?.proSku?.product.price
                     }
                     callback={purchaseSKU}
                     type={"add"}
                     invert
                     confirmText="Purchase"
-                    disabled={!proSku.proSku}
+                    disabled={!proSku?.proSku}
                   >
                     <FaPlus />
                   </Confirmation>
@@ -239,7 +233,7 @@ function App() {
                 type={"settings-button"}
                 invert
                 confirmText="Purchase"
-                disabled={!proSku.proSku || proSku.isPro}
+                disabled={!proSku?.proSku || proSku?.isPro}
               >
                 Upgrade Pro Mode
               </Confirmation>
