@@ -1,16 +1,18 @@
 import {
   buildStyles,
   CircularProgressbarWithChildren,
-} from "react-circular-progressbar"
-import { FaCheck, FaPlus } from "react-icons/fa"
-import { TimerType } from "../types"
-import { prettyTime, RadialSeparators } from "../utils"
+} from "react-circular-progressbar";
+import { HiOutlineCheck } from "react-icons/hi";
+import { TimerType } from "../types";
+import { prettyTime, RadialSeparators } from "../utils";
+import Checkmark from "./Checkmark";
+import "./Checkmark.css";
 
 type TimerProps = TimerType & {
-  idx: number
-  deleteTimer: any
-  focusTimer: any
-}
+  idx: number;
+  deleteTimer: any;
+  focusTimer: any;
+};
 
 function Timer({
   name,
@@ -23,9 +25,9 @@ function Timer({
   color,
 }: TimerProps) {
   return (
-    <div className='timer'>
+    <div className="timer">
       <a onClick={() => focusTimer(idx)}>
-        <div className='timer-title'>
+        <div className="timer-title">
           <strong>{name}</strong>
         </div>
         <CircularProgressbarWithChildren
@@ -46,10 +48,12 @@ function Timer({
         >
           {delta < total ? (
             <h3 style={{ margin: "auto" }}>
-              {counter ? `${total - delta} left` : `${prettyTime(total - delta)}`}
+              {counter
+                ? `${total - delta} left`
+                : `${prettyTime(total - delta)}`}
             </h3>
           ) : (
-            <FaCheck fontSize={55} color='var(--text-primary)' />
+            <Checkmark animated={false} />
           )}
           {counter && total != 1 && delta != total && (
             <RadialSeparators
@@ -65,7 +69,7 @@ function Timer({
         </CircularProgressbarWithChildren>
       </a>
     </div>
-  )
+  );
 }
 
-export default Timer
+export default Timer;
