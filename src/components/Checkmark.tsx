@@ -1,6 +1,6 @@
 import "./Checkmark.css";
 
-export default function Checkmark() {
+export default function Checkmark({ animated }: { animated: boolean }) {
   return (
     <svg
       className="checkmark"

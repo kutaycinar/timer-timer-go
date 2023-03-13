@@ -1,3 +1,5 @@
+import { App } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
 import { useEffect, useState } from "react";
 import {
   buildStyles,
@@ -5,8 +7,8 @@ import {
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "react-confetti-explosion";
+import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
 import {
-  FaCheck,
   FaChevronLeft,
   FaCog,
   FaForward,
@@ -25,12 +27,9 @@ import {
   RadialSeparators,
 } from "../utils";
 import Add from "./Add";
+import Checkmark from "./Checkmark";
 import Confirmation from "./Confirmation";
 import "./Focus.css";
-import ConfettiExplosion, { ConfettiProps } from "react-confetti-explosion";
-import { App } from "@capacitor/app";
-import { Capacitor } from "@capacitor/core";
-import Checkmark from "./Checkmark";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -129,7 +128,7 @@ function Focus({
                 : `${prettyTime(total - delta)}`}
             </h1>
           ) : (
-            <Checkmark />
+            <Checkmark animated={true} />
           )}
           {counter && total != 1 && delta != total && (
             <RadialSeparators
