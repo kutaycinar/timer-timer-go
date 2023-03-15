@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
-import { FaChartLine, FaClock, FaCog } from "react-icons/fa";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ThemeProvider from "./components/ThemeProvider";
@@ -66,7 +65,7 @@ function App() {
             height: `${delta}%`,
             width: "100%",
             background: "var(--progress-fill)",
-            transition: "all 1s",
+            transition: "all 0.5s",
             position: "fixed",
             zIndex: 0,
           }}
