@@ -2,21 +2,16 @@ import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
 import { FaChartLine, FaClock, FaCog } from "react-icons/fa";
 import "./App.css";
+import NavBar from "./components/NavBar";
 import ThemeProvider from "./components/ThemeProvider";
 import { initGlassfy, SkuInfo } from "./iap";
 import Analytics from "./Pages/Analytics";
 import Main from "./Pages/Main";
 import Settings from "./Pages/Settings";
 import { StateContext } from "./StateProvider";
-import { themeOption } from "./types";
+import { TabType, themeOption } from "./types";
 
 function App() {
-  enum TabType {
-    Main,
-    Analytics,
-    Settings,
-  }
-
   const { state, getOverall, setProMode } = useContext(StateContext);
 
   const [tab, setTab] = useState(TabType.Main);
@@ -86,43 +81,7 @@ function App() {
         {tab === TabType.Settings && (
           <Settings theme={theme} setTheme={setTheme} proSku={proSku} />
         )}
-        {state.state.focus === -1 && (
-          <nav className="navbar">
-            <ul>
-              <li>
-                <a
-                  href="#"
-                  className={`${tab === TabType.Main && "selected"}`}
-                  onClick={() => setTab(TabType.Main)}
-                >
-                  <FaClock className="nav-icon" size={"24px"} />
-                </a>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <a
-                  href="#"
-                  className={`${tab === TabType.Analytics && "selected"}`}
-                  onClick={() => setTab(TabType.Analytics)}
-                >
-                  <FaChartLine className="nav-icon" size={"24px"} />
-                </a>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <a
-                  href="#"
-                  className={`${tab === TabType.Settings && "selected"}`}
-                  onClick={() => setTab(TabType.Settings)}
-                >
-                  <FaCog className="nav-icon" size={"24px"} />
-                </a>
-              </li>
-            </ul>
-          </nav>
-        )}
+        {state.state.focus === -1 && <NavBar tab={tab} setTab={setTab} />}
       </div>
     </ThemeProvider>
   );

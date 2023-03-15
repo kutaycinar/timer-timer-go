@@ -62,3 +62,9 @@ export type Hooks = {
   clearAllData: () => void;
   setProMode: (sku: SkuInfo) => void;
 };
+
+export enum TabType {
+  Main,
+  Analytics,
+  Settings,
+}
