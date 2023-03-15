@@ -1,16 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import Confirmation from "../components/Confirmation";
+import { purchaseSKU, SkuInfo } from "../iap";
 import { StateContext } from "../StateProvider";
 import { themeOption } from "../types";
 
 function Settings({
   theme,
   setTheme,
+  proSku,
 }: {
   theme: themeOption;
   setTheme: (theme: themeOption) => void;
+  proSku: SkuInfo;
 }) {
-  const { clearSaves, clearAllData } = useContext(StateContext);
+  const { state, clearSaves, clearAllData } = useContext(StateContext);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -36,19 +39,19 @@ function Settings({
         >
           Clear All Data
         </Confirmation>
-        {/* <Confirmation
-                title={"Buy Pro"}
-                body={
-                  "Upgrade to Pro Mode and unlock unlimited tasks, giving you the freedom to track all of your habits without any restrictions."
-                }
-                callback={purchaseSKU}
-                type={"settings-button"}
-                invert
-                confirmText="Purchase"
-                disabled={!proSku?.proSku || proSku?.isPro}
-              >
-                Upgrade Pro Mode
-              </Confirmation> */}
+        <Confirmation
+          title={"Buy Pro"}
+          body={
+            "Upgrade to Pro Mode and unlock unlimited tasks, giving you the freedom to track all of your habits without any restrictions."
+          }
+          callback={() => purchaseSKU(proSku)}
+          type={"settings-button"}
+          invert
+          confirmText="Purchase"
+          disabled={!proSku?.proSku || state.state.promode}
+        >
+          Upgrade Pro Mode
+        </Confirmation>
         <button
           className="settings-button"
           onClick={() => setTheme(theme == "dark" ? "light" : "dark")}

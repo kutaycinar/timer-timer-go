@@ -1,49 +1,18 @@
 import { Capacitor } from "@capacitor/core";
-import { Glassfy } from "capacitor-plugin-glassfy";
 import dayjs from "dayjs";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { FaPlus } from "react-icons/fa";
 import Add from "../components/Add";
 import Confirmation from "../components/Confirmation";
 import Focus from "../components/Focus";
 import Timer from "../components/Timer";
-import { initGlassfy, SkuInfo } from "../iap";
+import { purchaseSKU, SkuInfo } from "../iap";
 import { StateContext } from "../StateProvider";
 import { FREE_MAX_TIMERS, TimerType } from "../types";
 
-function Main() {
-  const { state, setProMode, addTimer, deleteTimer, focusTimer } =
-    useContext(StateContext);
-
-  const [proSku, setProSku] = useState<SkuInfo>({
-    isPro: undefined,
-    proSku: undefined,
-  });
-
-  useEffect(() => {
-    async function init() {
-      const skuInfo = await initGlassfy();
-      setProSku(skuInfo);
-      setProMode(skuInfo);
-    }
-    init();
-  }, []);
-
-  async function purchaseSKU() {
-    if (!proSku) return;
-    try {
-      const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
-      const permission = transaction.permissions.all.find(
-        (p) => p.permissionId === "pro_mode"
-      );
-      if (permission && permission.isValid) {
-        setProSku({ ...proSku, isPro: true });
-      }
-    } catch (e) {
-      console.error("Purchase Error");
-    }
-  }
+function Main({ proSku }: { proSku: SkuInfo }) {
+  const { state, addTimer, deleteTimer, focusTimer } = useContext(StateContext);
 
   const today = dayjs().day();
 
@@ -80,7 +49,7 @@ function Main() {
               );
             })}
           </div>
-          {proSku?.isPro ||
+          {state.state.promode ||
           state.state.timers.length < FREE_MAX_TIMERS ||
           !Capacitor.isNativePlatform() ? (
             <Add setHook={addTimer} reset={true} timers={state.state.timers}>
@@ -95,7 +64,7 @@ function Main() {
                 "You have reached the three task limit for the trial period. Buy pro mode to add more activities. $" +
                 proSku?.proSku?.product.price
               }
-              callback={purchaseSKU}
+              callback={() => purchaseSKU(proSku)}
               type={"add"}
               invert
               confirmText="Purchase"

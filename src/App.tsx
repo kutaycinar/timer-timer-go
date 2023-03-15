@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { FaChartLine, FaClock, FaCog } from "react-icons/fa";
 import "./App.css";
 import ThemeProvider from "./components/ThemeProvider";
+import { initGlassfy, SkuInfo } from "./iap";
 import Analytics from "./Pages/Analytics";
 import Main from "./Pages/Main";
 import Settings from "./Pages/Settings";
@@ -16,8 +17,7 @@ function App() {
     Settings,
   }
 
-  const { state, getOverall, clearSaves, clearAllData } =
-    useContext(StateContext);
+  const { state, getOverall, setProMode } = useContext(StateContext);
 
   const [tab, setTab] = useState(TabType.Main);
   const [theme, setTheme] = useState<themeOption>("dark");
@@ -25,6 +25,20 @@ function App() {
   var { delta } = getOverall(dayjs());
   delta *= 100;
   if (state.state.timers.length == 0) delta = 100;
+
+  const [proSku, setProSku] = useState<SkuInfo>({
+    isPro: undefined,
+    proSku: undefined,
+  });
+
+  useEffect(() => {
+    async function init() {
+      const skuInfo = await initGlassfy();
+      setProSku(skuInfo);
+      setProMode(skuInfo);
+    }
+    init();
+  }, []);
 
   var heading = "";
   switch (tab) {
@@ -62,7 +76,7 @@ function App() {
             zIndex: 0,
           }}
         />
-        {tab === TabType.Main && <Main />}
+        {tab === TabType.Main && <Main proSku={proSku} />}
         {tab === TabType.Analytics && (
           <div>
             <div className="heading"> {heading} </div>
@@ -70,7 +84,7 @@ function App() {
           </div>
         )}
         {tab === TabType.Settings && (
-          <Settings theme={theme} setTheme={setTheme} />
+          <Settings theme={theme} setTheme={setTheme} proSku={proSku} />
         )}
         {state.state.focus === -1 && (
           <nav className="navbar">
