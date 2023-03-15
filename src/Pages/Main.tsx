@@ -8,9 +8,9 @@ import Add from "../components/Add";
 import Confirmation from "../components/Confirmation";
 import Focus from "../components/Focus";
 import Timer from "../components/Timer";
-import { SkuInfo, initGlassfy } from "../iap";
+import { initGlassfy, SkuInfo } from "../iap";
 import { StateContext } from "../StateProvider";
-import { FREE_MAX_TIMERS, State, TimerType } from "../types";
+import { FREE_MAX_TIMERS, TimerType } from "../types";
 
 function Main() {
   const { state, setProMode, addTimer, deleteTimer, focusTimer } =

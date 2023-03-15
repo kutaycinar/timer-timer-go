@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
 import { FaChartLine, FaClock, FaCog } from "react-icons/fa";
-import Analytics from "./Analytics";
 import "./App.css";
-import Confirmation from "./components/Confirmation";
 import ThemeProvider from "./components/ThemeProvider";
+import Analytics from "./Pages/Analytics";
 import Main from "./Pages/Main";
+import Settings from "./Pages/Settings";
 import { StateContext } from "./StateProvider";
 import { themeOption } from "./types";
 
@@ -47,10 +47,6 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
   // init
   return (
     <ThemeProvider theme={theme}>
@@ -74,46 +70,7 @@ function App() {
           </div>
         )}
         {tab === TabType.Settings && (
-          <div>
-            <div className="heading"> {heading} </div>
-            <div style={{ padding: 20 }}>
-              <Confirmation
-                type="settings-button"
-                title="Clear Save Data"
-                body="All stats from previous days will be deleted. Today's data and your timers will be preserved."
-                callback={() => clearSaves()}
-              >
-                Clear Saves
-              </Confirmation>
-              <Confirmation
-                type="settings-button"
-                title="Clear All Data"
-                body="All stats and tasks will be deleted. Your app be reset to factory default."
-                callback={() => clearAllData()}
-              >
-                Clear All Data
-              </Confirmation>
-              {/* <Confirmation
-                title={"Buy Pro"}
-                body={
-                  "Upgrade to Pro Mode and unlock unlimited tasks, giving you the freedom to track all of your habits without any restrictions."
-                }
-                callback={purchaseSKU}
-                type={"settings-button"}
-                invert
-                confirmText="Purchase"
-                disabled={!proSku?.proSku || proSku?.isPro}
-              >
-                Upgrade Pro Mode
-              </Confirmation> */}
-              <button
-                className="settings-button"
-                onClick={() => setTheme(theme == "dark" ? "light" : "dark")}
-              >
-                Toggle Theme
-              </button>
-            </div>
-          </div>
+          <Settings theme={theme} setTheme={setTheme} />
         )}
         {state.state.focus === -1 && (
           <nav className="navbar">
