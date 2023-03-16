@@ -26,7 +26,7 @@ function Main({ proSku }: { proSku: SkuInfo }) {
       ) : (
         <div className="page">
           {state.state.timers.length === 0 && (
-            <div className="timer behind">
+            <div className="timer">
               <Add setHook={addTimer} reset={true} timers={state.state.timers}>
                 <CircularProgressbarWithChildren value={0}>
                   <FaPlus size={32} />

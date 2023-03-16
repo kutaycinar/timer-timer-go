@@ -25,7 +25,7 @@ function Timer({
   color,
 }: TimerProps) {
   return (
-    <div className="timer">
+    <div className="timer foreground">
       <a onClick={() => focusTimer(idx)}>
         <div className="timer-title">
           <strong>{name}</strong>
