@@ -21,16 +21,6 @@ a {
   flex: auto;
 }
 
-/* @media (min-width: 725px) {
-  .page {
-    gap: 24px;
-  }
-
-  .timer {
-    width: 200px !important;
-    margin-bottom: 24px;
-  }
-} */
 .week-title {
   font-size: 120%;
   font-weight: 700;
@@ -70,11 +60,15 @@ a {
 }
 
 .timer {
-  z-index: 1;
+  /* z-index: 1; */
   color: whitesmoke;
   margin: 5px;
   margin-bottom: 50px;
 }
+
+/* .behind {
+  z-index: auto;
+} */
 
 .timer-title {
   color: var(--text-primary);
@@ -98,7 +92,7 @@ a {
   border-radius: 100%;
   font-size: 17px;
   line-height: 0;
-  z-index: 999;
+  z-index: auto;
   padding: 0;
 }
 
