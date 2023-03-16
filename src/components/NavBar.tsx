@@ -1,5 +1,6 @@
 import { FaClock, FaChartLine, FaCog } from "react-icons/fa";
 import { TabType } from "../types";
+import "../App.css";
 
 function NavBar({
   tab,

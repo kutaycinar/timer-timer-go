@@ -4,6 +4,4 @@ body {
   overflow-x: hidden;
   scrollbar-width: none;
   overflow: scroll;
-  width: calc(100% + 5px);
-  padding-right: 5px;
 }

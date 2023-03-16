@@ -66,7 +66,7 @@ function App() {
             width: "100%",
             background: "var(--progress-fill)",
             transition: "all 0.5s",
-            position: "fixed",
+            position: "absolute",
             zIndex: 0,
           }}
         />
