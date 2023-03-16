@@ -5,3 +5,11 @@ body {
   scrollbar-width: none;
   overflow: scroll;
 }
+
+* {
+  -webkit-touch-callout: none; /* Disable long press on link */
+  -webkit-user-select: none; /* Disable selection */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
