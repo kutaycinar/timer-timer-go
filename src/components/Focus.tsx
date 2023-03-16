@@ -88,6 +88,21 @@ function Focus({ name, delta, total, counter, color, days }: TimerType) {
     days,
   };
 
+  useEffect(() => {
+    const handleBackButton = () => {
+      // Handle the back swipe gesture here
+      signalStop();
+    };
+
+    // Listen for the backButton event
+    const backButtonListener = App.addListener("backButton", handleBackButton);
+
+    // Cleanup function to remove the listener when the component unmounts
+    return () => {
+      backButtonListener.remove();
+    };
+  }, []);
+
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
