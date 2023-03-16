@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { Color, TwitterPicker } from "react-color";
 import { State, TimerType } from "../types";
 import "./Add.css";
@@ -33,6 +33,20 @@ function Add({
   timers?: TimerType[];
 }) {
   const [modal, setModal] = useState(false);
+  const pickerRef = useRef<HTMLDivElement | null>(null);
+
+  // Close color picker when the user clicks outside it.
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (pickerRef.current && pickerRef.current.contains(event.target)) {
+        setDisplayPicker(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [pickerRef]);
 
   function reducer(state: State, action: any) {
     switch (action.type) {
@@ -133,7 +147,7 @@ function Add({
           <div>
             {displayPicker ? (
               <div className="popover">
-                <div className="cover" />
+                <div className="cover" ref={pickerRef} />
                 <TwitterPicker
                   color={color}
                   onChangeComplete={(e) => {

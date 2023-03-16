@@ -12,7 +12,7 @@ function Heatmap({ data }: { data: Save[] }) {
       showWeekdayLabels
       gutterSize={2.5}
       startDate={dayjs().subtract(3, "months").toDate()}
-      endDate={dayjs().toDate()}
+      endDate={dayjs().subtract(1, "day").toDate()}
       values={lastThreeMonths.map((save: Save) => {
         return {
           date: dayjs(save.date).format("YYYY-MM-DD"),
