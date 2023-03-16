@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ThemeProvider from "./components/ThemeProvider";
@@ -34,6 +35,17 @@ function App() {
     init();
   }, []);
 
+  // Set up gesture controls for page navigation.
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (state.state.focus !== -1) return;
+      setTab((t: TabType) => Math.min(2, t + 1));
+    },
+    onSwipedRight: () => {
+      setTab((t: TabType) => Math.max(0, t - 1));
+    },
+  });
+
   var heading = "";
   switch (tab) {
     case TabType.Main:
@@ -58,7 +70,10 @@ function App() {
   // init
   return (
     <ThemeProvider theme={theme}>
-      <div style={{ height: "100vh", background: "var(--background-color)" }}>
+      <div
+        style={{ height: "100vh", background: "var(--background-color)" }}
+        {...handlers}
+      >
         {/* <pre style={{ height: 200 }}>{JSON.stringify(state, undefined, 2)}</pre> */}
         <div
           style={{
