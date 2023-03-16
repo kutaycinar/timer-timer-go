@@ -13,6 +13,7 @@
 }
 
 .week-button {
+  box-shadow: none;
   padding: 1px;
   line-height: 1em;
   border-radius: 50%;
