@@ -1,5 +1,7 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { Color, TwitterPicker } from "react-color";
 import { State, TimerType } from "../types";
+import "./Add.css";
 import DaySelector from "./DaySelector";
 
 const range = (start: number = 0, stop: number = 31, step = 5) =>
@@ -31,6 +33,20 @@ function Add({
   timers?: TimerType[];
 }) {
   const [modal, setModal] = useState(false);
+  const pickerRef = useRef<HTMLDivElement | null>(null);
+
+  // Close color picker when the user clicks outside it.
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (pickerRef.current && pickerRef.current.contains(event.target)) {
+        setDisplayPicker(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [pickerRef]);
 
   function reducer(state: State, action: any) {
     switch (action.type) {
@@ -42,12 +58,17 @@ function Add({
 
   const [counter, setCounter] = useState(initialValues.counter);
   const [selectedDays, setSelectedDays] = useState(initialValues.days);
+  const [displayPicker, setDisplayPicker] = useState(false);
 
   const { name, delta, seconds, minutes, hour, goal, color } = formValues;
 
   function handleFormChange(event: any) {
     const { name, value } = event.target;
     setFormValues({ [name]: value.slice(0, 16) });
+  }
+
+  function handleColorChange(color: Color) {
+    setFormValues({ color });
   }
 
   const nameExists =
@@ -114,11 +135,40 @@ function Add({
             Color
             <input
               type="color"
-              onChange={handleFormChange}
               name="color"
               value={color}
+              onClick={(e) => {
+                e.preventDefault();
+                setDisplayPicker((display) => !display);
+              }}
+              readOnly
             />
           </label>
+          <div>
+            {displayPicker ? (
+              <div className="popover">
+                <div className="cover" ref={pickerRef} />
+                <TwitterPicker
+                  color={color}
+                  onChangeComplete={(e) => {
+                    handleColorChange(e.hex);
+                    setDisplayPicker(false);
+                  }}
+                  styles={{
+                    default: {
+                      triangle: {
+                        borderColor:
+                          "transparent transparent var(--progress-fill)",
+                      },
+                      card: { background: "var(--progress-fill)" },
+                      hash: { display: "none" },
+                      input: { display: "none" },
+                    },
+                  }}
+                />
+              </div>
+            ) : null}
+          </div>
           <div className="inline">
             Type:
             <button

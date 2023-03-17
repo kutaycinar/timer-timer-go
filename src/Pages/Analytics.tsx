@@ -1,14 +1,14 @@
+import "react-calendar-heatmap/dist/styles.css";
 import {
   calculateAverageCompletion,
   calculateTotalCompletions,
-} from "./analyticsUtils";
-import { Save } from "./types";
+} from "../analyticsUtils";
+import Card from "../components/Analytics/Card";
+import Heatmap from "../components/Analytics/Heatmap";
+import Summary from "../components/Analytics/Summary";
+import { Save } from "../types";
 import "./Analytics.css";
-import "react-calendar-heatmap/dist/styles.css";
-import "./components/Analytics/Heatmap";
-import Summary from "./components/Analytics/Summary";
-import Card from "./components/Analytics/Card";
-import Heatmap from "./components/Analytics/Heatmap";
+import "../components/Analytics/Heatmap";
 
 function Analytics({ saves }: { saves: Save[] }) {
   return (

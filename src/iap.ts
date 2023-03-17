@@ -1,5 +1,7 @@
 import { Capacitor } from "@capacitor/core";
 import { Glassfy, GlassfySku } from "capacitor-plugin-glassfy";
+import { useContext } from "react";
+import StateProvider, { StateContext } from "./StateProvider";
 
 export type SkuInfo =
   | {
@@ -40,4 +42,20 @@ export async function initGlassfy(): Promise<SkuInfo | undefined> {
     console.error("OFFERINGS ERROR:", e);
   }
   return result;
+}
+
+export async function purchaseSKU(proSku: SkuInfo) {
+  const { setProMode } = useContext(StateContext);
+  if (!proSku) return;
+  try {
+    const transaction = await Glassfy.purchaseSku({ sku: proSku.proSku! });
+    const permission = transaction.permissions.all.find(
+      (p) => p.permissionId === "pro_mode"
+    );
+    if (permission && permission.isValid) {
+      setProMode({ ...proSku, isPro: true });
+    }
+  } catch (e) {
+    console.error("Purchase Error");
+  }
 }

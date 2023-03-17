@@ -4,6 +4,12 @@ body {
   overflow-x: hidden;
   scrollbar-width: none;
   overflow: scroll;
-  width: calc(100% + 5px);
-  padding-right: 5px;
+}
+
+* {
+  -webkit-touch-callout: none; /* Disable long press on link */
+  -webkit-user-select: none; /* Disable selection */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

@@ -21,16 +21,6 @@ a {
   flex: auto;
 }
 
-/* @media (min-width: 725px) {
-  .page {
-    gap: 24px;
-  }
-
-  .timer {
-    width: 200px !important;
-    margin-bottom: 24px;
-  }
-} */
 .week-title {
   font-size: 120%;
   font-weight: 700;
@@ -70,10 +60,14 @@ a {
 }
 
 .timer {
-  z-index: 1;
+  /* z-index: 1; */
   color: whitesmoke;
   margin: 5px;
   margin-bottom: 50px;
+}
+
+.foreground {
+  z-index: 1;
 }
 
 .timer-title {
@@ -98,7 +92,7 @@ a {
   border-radius: 100%;
   font-size: 17px;
   line-height: 0;
-  z-index: 999;
+  z-index: auto;
   padding: 0;
 }
 
@@ -151,11 +145,10 @@ a {
 
 .navbar {
   display: flex;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   bottom: 0;
   justify-content: center !important;
-  width: 100%;
   background-color: var(--nav-bar);
   box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.2);
   gap: 8px;
@@ -173,7 +166,7 @@ a {
 
 .heading {
   margin-bottom: 0%;
-  margin-left: 5%;
+  padding-left: 5%;
   padding-top: 16px;
   font-weight: 600;
   font-size: 48px;

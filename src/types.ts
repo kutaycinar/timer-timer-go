@@ -1,4 +1,6 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { OverviewProps } from "./components/Overview";
+import { SkuInfo } from "./iap";
 
 export const FREE_MAX_TIMERS = 3;
 
@@ -40,3 +42,29 @@ export const initial: State = {
     promode: false,
   },
 };
+
+export type Hooks = {
+  state: State;
+  setState: (state: State) => void;
+  addTimer: (timer: TimerType) => void;
+  deleteTimer: (timer: string) => void;
+  focusTimer: (idx: number) => void;
+  signalStart: () => void;
+  signalPause: () => void;
+  signalStop: () => void;
+  signalReset: () => void;
+  resetAllTimers: () => void;
+  getOverall: (date: Dayjs) => OverviewProps;
+  countNext: () => void;
+  editTimer: (timer: TimerType) => void;
+  saveAllTimers: (date: Dayjs) => void;
+  clearSaves: () => void;
+  clearAllData: () => void;
+  setProMode: (sku: SkuInfo) => void;
+};
+
+export enum TabType {
+  Main,
+  Analytics,
+  Settings,
+}

@@ -1,6 +1,6 @@
 import { App } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   buildStyles,
   CircularProgressbarWithChildren,
@@ -17,6 +17,7 @@ import {
   FaTrash,
   FaUndoAlt,
 } from "react-icons/fa";
+import { StateContext } from "../StateProvider";
 import { TimerType } from "../types";
 import {
   getHours,
@@ -41,35 +42,24 @@ const confettiProps: ConfettiProps = {
 
 const effect = new Audio("/sounds/complete.mp3");
 
-type FocusProps = TimerType & {
-  signalStart: any;
-  signalPause: any;
-  signalStop: any;
-  signalReset: any;
-  isRunning: boolean;
-  countNext: any;
-  editTimer: any;
-  deleteTimer: any;
-};
-
-function Focus({
-  name,
-  delta,
-  total,
-  counter,
-  color,
-  days,
-  signalPause,
-  signalStop,
-  signalStart,
-  signalReset,
-  isRunning,
-  countNext,
-  editTimer,
-  deleteTimer,
-}: FocusProps) {
+function Focus({ name, delta, total, counter, color, days }: TimerType) {
   const [prevDelta, setPrevDelta] = useState(delta);
   const [taskOver, setTaskOver] = useState(false);
+  const {
+    state,
+    signalStart,
+    signalPause,
+    signalStop,
+    signalReset,
+    countNext,
+    editTimer,
+    deleteTimer,
+  } = useContext(StateContext);
+  const [isRunning, setIsRunning] = useState(state.state.active);
+
+  useEffect(() => {
+    setIsRunning(state.state.active);
+  }, [state.state.active]);
 
   useEffect(() => {
     if (delta >= total && prevDelta != delta) {
@@ -98,6 +88,21 @@ function Focus({
     days,
   };
 
+  useEffect(() => {
+    const handleBackButton = () => {
+      // Handle the back swipe gesture here
+      signalStop();
+    };
+
+    // Listen for the backButton event
+    const backButtonListener = App.addListener("backButton", handleBackButton);
+
+    // Cleanup function to remove the listener when the component unmounts
+    return () => {
+      backButtonListener.remove();
+    };
+  }, []);
+
   return (
     <div className="container">
       <button onClick={() => signalStop()} className="back-button">
@@ -109,12 +114,10 @@ function Focus({
         <CircularProgressbarWithChildren
           strokeWidth={6}
           background
-          // backgroundPadding={delta == 0 ? 100 : 0}
           value={(delta! / total!) * 100}
           styles={buildStyles({
             pathColor: color,
             strokeLinecap: "butt",
-            // trailColor: "#2e2e2e",
             trailColor: color + "20",
             backgroundColor:
               delta < total
