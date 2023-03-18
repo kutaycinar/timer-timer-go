@@ -56,6 +56,7 @@ export function useTimer() {
     const now = dayjs();
     if (!now.isSame(lastDate, "day")) {
       saveAllTimers(lastDate);
+      resetAllTimers();
     }
     //TODO: Handle case where it's the same day
     // increment check if not daily reset not happened
