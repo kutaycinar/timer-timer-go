@@ -17,7 +17,7 @@ function Main({ proSku }: { proSku: SkuInfo }) {
   const today = dayjs().day();
 
   return (
-    <div>
+    <div style={{ height: "100vh" }}>
       {state.state.focus == -1 && <div className="heading"> Today </div>}
       {state.state.focus !== -1 ? (
         <div>
