@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useContext, useEffect, useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ThemeProvider from "./components/ThemeProvider";
@@ -35,18 +36,16 @@ function App() {
     init();
   }, []);
 
-  var heading = "";
-  switch (tab) {
-    case TabType.Main:
-      heading = "Today";
-      break;
-    case TabType.Analytics:
-      heading = "Stats";
-      break;
-    case TabType.Settings:
-      heading = "Settings";
-      break;
-  }
+  // Set up gesture controls for page navigation.
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (state.state.focus !== -1) return;
+      setTab((t) => [Math.min(2, t[0] + 1), 1]);
+    },
+    onSwipedRight: () => {
+      setTab((t) => [Math.max(0, t[0] - 1), -1]);
+    },
+  });
 
   // Load the theme from storage
   useEffect(() => {
@@ -55,18 +54,6 @@ function App() {
       setTheme(savedTheme as themeOption);
     }
   }, []);
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
-  };
-
-  const paginate = (newDirection: number) => {
-    // Reject right swipes on the first page and left swipes on last page.
-    if (tab == TabType.Main && newDirection == -1) return;
-    if (tab == TabType.Settings && newDirection == 1) return;
-    setTab([tab + newDirection, newDirection]);
-  };
 
   const variants = {
     enter: (direction: number) => {
@@ -91,7 +78,10 @@ function App() {
   // init
   return (
     <ThemeProvider theme={theme}>
-      <div style={{ height: "100vh", background: "var(--background-color)" }}>
+      <div
+        style={{ height: "100vh", background: "var(--background-color)" }}
+        {...handlers}
+      >
         {/* <pre style={{ height: 200 }}>{JSON.stringify(state, undefined, 2)}</pre> */}
 
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -102,21 +92,10 @@ function App() {
             animate="center"
             exit="exit"
             variants={variants}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
             transition={{
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.2 },
               duration: 5,
-            }}
-            onDragEnd={(e, { offset, velocity }) => {
-              const swipe = swipePower(offset.x, velocity.x);
-              if (swipe < -swipeConfidenceThreshold) {
-                paginate(1);
-              } else if (swipe > swipeConfidenceThreshold) {
-                paginate(-1);
-              }
             }}
           >
             <div
@@ -132,7 +111,6 @@ function App() {
             {tab === TabType.Main && <Main proSku={proSku} />}
             {tab === TabType.Analytics && (
               <div>
-                <div className="heading"> {heading} </div>
                 <Analytics saves={state.state.saves} />
               </div>
             )}
