@@ -13,11 +13,17 @@ export type TimerType = {
   days: number[];
 };
 
+export type FocusRect = {
+  size: { height: number; width: number };
+  location: { x: number; y: number };
+};
+
 export type State = {
   state: {
     date: number;
     active: boolean;
     focus: number;
+    focusRect: FocusRect | null;
     timers: TimerType[];
     saves: Save[];
     promode: boolean;
@@ -37,6 +43,7 @@ export const initial: State = {
     date: dayjs().valueOf(),
     active: false,
     focus: -1,
+    focusRect: null,
     timers: [],
     saves: [],
     promode: false,
@@ -49,6 +56,7 @@ export type Hooks = {
   addTimer: (timer: TimerType) => void;
   deleteTimer: (timer: string) => void;
   focusTimer: (idx: number) => void;
+  setFocusRect: (rect: DOMRect | null) => void;
   signalStart: () => void;
   signalPause: () => void;
   signalStop: () => void;

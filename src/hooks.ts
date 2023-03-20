@@ -210,6 +210,27 @@ export function useTimer() {
     });
   }
 
+  function setFocusRect(rect: DOMRect | null) {
+    if (rect == null) return;
+    setState((prevState) => {
+      return {
+        state: {
+          ...prevState.state,
+          focusRect: {
+            size: {
+              width: rect.width,
+              height: rect.height,
+            },
+            location: {
+              x: rect.x,
+              y: rect.y,
+            },
+          },
+        },
+      };
+    });
+  }
+
   async function sendNotification() {
     const now = dayjs();
     const delta = state.state.timers[state.state.focus].delta;
@@ -410,6 +431,7 @@ export function useTimer() {
     addTimer,
     deleteTimer,
     focusTimer,
+    setFocusRect,
     signalStart,
     signalPause,
     signalStop,

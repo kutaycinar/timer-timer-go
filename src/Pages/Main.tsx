@@ -12,7 +12,7 @@ import { StateContext } from "../StateProvider";
 import { FREE_MAX_TIMERS, TimerType } from "../types";
 
 function Main({ proSku }: { proSku: SkuInfo }) {
-  const { state, addTimer, deleteTimer, focusTimer } = useContext(StateContext);
+  const { state, addTimer } = useContext(StateContext);
 
   const today = dayjs().day();
 
@@ -37,16 +37,7 @@ function Main({ proSku }: { proSku: SkuInfo }) {
           <div className="child">
             {state.state.timers.map((t: TimerType, idx: number) => {
               if (!t.days.includes(today)) return;
-              return (
-                <Timer
-                  key={t.name}
-                  {...t}
-                  idx={idx}
-                  deleteTimer={deleteTimer}
-                  focusTimer={focusTimer}
-                  color={t.color}
-                />
-              );
+              return <Timer key={t.name} {...t} idx={idx} color={t.color} />;
             })}
           </div>
           {state.state.promode ||

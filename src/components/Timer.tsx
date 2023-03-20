@@ -1,8 +1,10 @@
+import { RefObject, useContext, useRef } from "react";
 import {
   buildStyles,
   CircularProgressbarWithChildren,
 } from "react-circular-progressbar";
 import { HiOutlineCheck } from "react-icons/hi";
+import { StateContext } from "../StateProvider";
 import { TimerType } from "../types";
 import { prettyTime, RadialSeparators } from "../utils";
 import Checkmark from "./Checkmark";
@@ -10,23 +12,21 @@ import "./Checkmark.css";
 
 type TimerProps = TimerType & {
   idx: number;
-  deleteTimer: any;
-  focusTimer: any;
 };
 
-function Timer({
-  name,
-  delta,
-  total,
-  counter,
-  deleteTimer,
-  focusTimer,
-  idx,
-  color,
-}: TimerProps) {
+function Timer({ name, delta, total, counter, idx, color }: TimerProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { focusTimer, setFocusRect } = useContext(StateContext);
+
   return (
-    <div className="timer foreground">
-      <a onClick={() => focusTimer(idx)}>
+    <div className="timer foreground" ref={ref}>
+      <a
+        onClick={() => {
+          focusTimer(idx);
+          setFocusRect(ref.current?.getBoundingClientRect() ?? null);
+        }}
+      >
         <div className="timer-title">
           <strong>{name}</strong>
         </div>

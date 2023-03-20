@@ -31,6 +31,7 @@ import Add from "./Add";
 import Checkmark from "./Checkmark";
 import Confirmation from "./Confirmation";
 import "./Focus.css";
+import { motion } from "framer-motion";
 
 const confettiProps: ConfettiProps = {
   force: 0.6,
@@ -103,50 +104,72 @@ function Focus({ name, delta, total, counter, color, days }: TimerType) {
     };
   }, []);
 
+  const { size, location } = state.state.focusRect ?? {
+    size: { width: 0, height: 0 },
+    location: { x: 0, y: 0 },
+  };
+
   return (
-    <div className="container">
+    <motion.div
+      className="container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.75 }}
+    >
       <button onClick={() => signalStop()} className="back-button">
         <FaChevronLeft size={32} />
       </button>
       <h3 className="title">{name}</h3>
       <div className="timer-container">
         <GradientSVG />
-        <CircularProgressbarWithChildren
-          strokeWidth={6}
-          background
-          value={(delta! / total!) * 100}
-          styles={buildStyles({
-            pathColor: color,
-            strokeLinecap: "butt",
-            trailColor: color + "20",
-            backgroundColor:
-              delta < total
-                ? "var(--progress-fill)"
-                : color || "#1bb3e6" + "A0",
-          })}
+        <motion.div
+          initial={{
+            width: size.width,
+            height: size.height,
+            x: location.x,
+            y: location.y,
+            opacity: 1,
+          }}
+          animate={{ width: 300, height: 300, x: 0, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          {delta < total ? (
-            <h1 style={{ margin: "auto" }}>
-              {counter
-                ? `${total - delta} left`
-                : `${prettyTime(total - delta)}`}
-            </h1>
-          ) : (
-            <Checkmark animated={true} />
-          )}
-          {counter && total != 1 && delta != total && (
-            <RadialSeparators
-              count={total!}
-              style={{
-                background: "var(--progress-fill)",
-                border: "1px solid var(--progress-fill)",
-                width: "19px",
-                height: `20px`,
-                margin: "-1px",
-              }}
-            />
-          )}
-        </CircularProgressbarWithChildren>
+          <CircularProgressbarWithChildren
+            strokeWidth={6}
+            background
+            value={(delta! / total!) * 100}
+            styles={buildStyles({
+              pathColor: color,
+              strokeLinecap: "butt",
+              trailColor: color + "20",
+              backgroundColor:
+                delta < total
+                  ? "var(--progress-fill)"
+                  : color || "#1bb3e6" + "A0",
+            })}
+          >
+            {delta < total ? (
+              <h1 style={{ margin: "auto" }}>
+                {counter
+                  ? `${total - delta} left`
+                  : `${prettyTime(total - delta)}`}
+              </h1>
+            ) : (
+              <Checkmark animated={true} />
+            )}
+            {counter && total != 1 && delta != total && (
+              <RadialSeparators
+                count={total!}
+                style={{
+                  background: "var(--progress-fill)",
+                  border: "1px solid var(--progress-fill)",
+                  width: "19px",
+                  height: `20px`,
+                  margin: "-1px",
+                }}
+              />
+            )}
+          </CircularProgressbarWithChildren>
+        </motion.div>
         {taskOver && (
           <div style={{ position: "absolute", left: "50%", top: "50%" }}>
             <ConfettiExplosion {...confettiProps} />
@@ -197,7 +220,7 @@ function Focus({ name, delta, total, counter, color, days }: TimerType) {
           </button>
         </Add>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
