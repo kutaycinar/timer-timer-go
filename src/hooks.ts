@@ -1,10 +1,11 @@
 import { Capacitor } from "@capacitor/core";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Preferences } from "@capacitor/preferences";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { OverviewProps } from "./components/Overview";
 import { initial, Save, State, TimerType } from "./types";
-import { isSameDay } from "./utils";
+import { Dayjs } from "dayjs";
 
 export function useTimer() {
   const [state, setState] = useState<State>(initial);
@@ -30,16 +31,19 @@ export function useTimer() {
     if (!isLoaded) return;
 
     // daily reset check
-    if (!isSameDay(state.state.date, new Date().getTime())) {
-      saveAllTimers();
-      resetAllTimers();
+    const lastDate = dayjs(state.state.date);
+    const now = dayjs();
+    if (!now.isSame(lastDate, "day")) {
+      saveAllTimers(lastDate);
     }
-
+    //TODO: Handle case where it's the same day
     // increment check if not daily reset not happened
     else if (state.state.active) {
-      const date1 = state.state.date;
-      const date2 = new Date().getTime();
-      const seconds = Math.floor((date2 - date1) / 1000);
+      console.log("Case 2");
+
+      const date1 = dayjs(state.state.date);
+      const date2 = dayjs();
+      const seconds = date2.diff(date1, "seconds");
       const newTimers = [...state.state.timers];
       newTimers[state.state.focus].delta = Math.max(
         0,
@@ -66,8 +70,9 @@ export function useTimer() {
       });
 
       // daily reset check
-      if (!isSameDay(state.state.date, new Date().getTime())) {
-        saveAllTimers();
+      const prevDate = dayjs(state.state.date);
+      if (!dayjs().isSame(prevDate, "day")) {
+        saveAllTimers(prevDate);
         resetAllTimers();
       }
 
@@ -170,12 +175,12 @@ export function useTimer() {
   }
 
   async function sendNotification() {
-    const now = new Date().getTime();
-    const future = new Date(
-      now + state.state.timers[state.state.focus].delta * 1000
-    ).getTime();
+    const now = dayjs();
+    const future = dayjs(
+      now.millisecond() + state.state.timers[state.state.focus].delta * 1000
+    );
 
-    if (!isSameDay(now, future)) return;
+    if (now.diff(future, "days") > 1) return;
 
     await LocalNotifications.schedule({
       notifications: [
@@ -273,24 +278,39 @@ export function useTimer() {
     });
   }
 
-  function saveAllTimers() {
+  function saveAllTimers(date: Dayjs) {
+    const newSaves: Save[] = [];
     const overall = getOverall();
-    const newSave: Save = {
+    // Push timer for last day with data
+    newSaves.push({
       timers: state.state.timers,
-      completion: (overall.delta / overall.total) * 100,
-      date: new Date(state.state.date).toLocaleDateString(),
-    };
+      completion: Math.round((overall.delta / overall.total) * 100),
+      date: date.format("DD/MM/YYYY"),
+    });
+    // Backfill missed days
+    const missedDays = dayjs().diff(date, "days");
+    for (let i = 0; i < missedDays; i++) {
+      date = date.add(1, "day");
+      newSaves.push({
+        timers: state.state.timers,
+        completion: 0,
+        date: date.format("DD/MM/YYYY"),
+      });
+    }
+    // Add saves to state
     setState((prevState: State) => {
       return {
         state: {
           ...prevState.state,
-          saves: [...(prevState.state.saves || []), newSave],
+          saves: [...(prevState.state.saves || []), ...newSaves],
         },
       };
     });
   }
 
   function clearSaves() {
+    console.log("clearing saves");
+
     setState((prevState: State) => {
       return {
         state: {

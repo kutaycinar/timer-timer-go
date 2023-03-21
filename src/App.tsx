@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  FaAtom,
-  FaChartBar,
-  FaChartLine,
-  FaClock,
-  FaCog,
-  FaPlus,
-  FaTimes,
-  FaTimesCircle,
-} from "react-icons/fa";
+import { FaChartLine, FaClock, FaCog, FaPlus } from "react-icons/fa";
 import "./App.css";
 import Modal from "./components/Add";
 import Focus from "./components/Focus";
@@ -31,7 +22,6 @@ function App() {
     getOverall,
     countNext,
     editTimer,
-    saveAllTimers,
     clearSaves,
   } = useTimer();
 
@@ -90,7 +80,6 @@ function App() {
             <pre style={{ height: "63vh" }}>
               {JSON.stringify(state.state.saves, undefined, 2)}
             </pre>
-            <button onClick={() => saveAllTimers()}>Save</button>
             <button onClick={() => clearSaves()}>Clear Saves</button>
           </div>
         )}
