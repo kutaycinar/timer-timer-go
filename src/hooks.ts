@@ -219,8 +219,8 @@ export function useTimer() {
           focusRect: {
             width: rect.width,
             height: rect.height,
-            x: rect.x + rect.width / 2,
-            y: rect.y + rect.height / 2,
+            x: rect.x + rect.width,
+            y: rect.y + rect.height,
           },
         },
       };

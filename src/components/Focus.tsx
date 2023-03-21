@@ -1,6 +1,6 @@
 import { App } from "@capacitor/app";
 import { Capacitor } from "@capacitor/core";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import {
   buildStyles,
@@ -113,11 +113,7 @@ function Focus({ name, delta, total, counter, color, days }: TimerType) {
 
   const { width, height, x, y } = state.state.focusRect ?? emptyRect;
   return (
-    <motion.div
-      className="container"
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.75 }}
-    >
+    <div className="container">
       <button onClick={() => handleBack()} className="back-button">
         <FaChevronLeft size={32} />
       </button>
@@ -134,7 +130,7 @@ function Focus({ name, delta, total, counter, color, days }: TimerType) {
             opacity: 1,
           }}
           animate={{ width: 300, height: 300, x: 0, y: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 5 }}
         >
           <CircularProgressbarWithChildren
             strokeWidth={6}
@@ -223,7 +219,7 @@ function Focus({ name, delta, total, counter, color, days }: TimerType) {
           </button>
         </Add>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
