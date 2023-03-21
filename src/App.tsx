@@ -84,6 +84,7 @@ function App() {
       >
         {/* <pre style={{ height: 200 }}>{JSON.stringify(state, undefined, 2)}</pre> */}
 
+        {/* Animation for switching between pages */}
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={tab}

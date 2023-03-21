@@ -217,14 +217,10 @@ export function useTimer() {
         state: {
           ...prevState.state,
           focusRect: {
-            size: {
-              width: rect.width,
-              height: rect.height,
-            },
-            location: {
-              x: rect.x,
-              y: rect.y,
-            },
+            width: rect.width,
+            height: rect.height,
+            x: rect.x + rect.width / 2,
+            y: rect.y + rect.height / 2,
           },
         },
       };

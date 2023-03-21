@@ -14,8 +14,10 @@ export type TimerType = {
 };
 
 export type FocusRect = {
-  size: { height: number; width: number };
-  location: { x: number; y: number };
+  height: number;
+  width: number;
+  x: number;
+  y: number;
 };
 
 export type State = {
