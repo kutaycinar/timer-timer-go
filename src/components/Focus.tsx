@@ -8,6 +8,7 @@ import {
   FaUndoAlt,
   FaPlus,
   FaTrash,
+  FaForward,
 } from "react-icons/fa";
 import { TimerType } from "../types";
 import "./Focus.css";
@@ -144,7 +145,7 @@ function Focus({
             disabled={delta === 0}
           >
             {counter ? (
-              <FaPlus />
+              <FaForward />
             ) : isRunning ? (
               <FaPause />
             ) : (
