@@ -2,7 +2,7 @@
 
 This project is the base repository for developing Daily Focus. Built with React.js & Capacitor.js and basic hooks.
 
-In this simple MVP, you can add and delete timers, and after start, pause, or reset them. The timers run on the background and, with Capacitor, a notification will be displayed when the timer completes.
+In this simple MVP, you can add and delete timers, and then start, pause, or reset them. The timers run on the background and, with Capacitor, a notification will be displayed when the timer completes.
 
 ![play store downloads](https://playbadges.pavi2410.me/badge/downloads?id=com.dailyfocus.app) 
 ![play store reviews](https://playbadges.pavi2410.me/badge/ratings?id=com.dailyfocus.app)
